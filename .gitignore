@@ -4,7 +4,9 @@ ehthumbs.db
 
 # Folder config file
 Desktop.ini
-war/
+war/we/*
+war/WEB-INF/*
+gwt-unitCache/*
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 

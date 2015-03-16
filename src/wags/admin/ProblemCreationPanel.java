@@ -31,6 +31,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -145,6 +146,7 @@ public class ProblemCreationPanel extends Composite implements ProblemCreationPa
 					AbstractServerCall cmd = new AddMagnetLinkageCommand(stat.getMessage());
 					cmd.sendRequest();
 					
+
 					//Proxy.addMagnetLinkage(stat.getMessage()); // The title of the problem
 					// Remove added Helper Class widgets
 					for(int i = 1; i < vtPanelHelper.getWidgetCount(); i++){
