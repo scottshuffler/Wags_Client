@@ -1,0 +1,51 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui"> 
+	
+	<ui:style>
+	.base_panel{
+		min-height:100%;
+		min-width:100%;
+	}
+	
+	.pageSize {
+		height:80vh;
+	}
+
+	.border {
+		border: 2px solid grey;
+	}
+
+	.absolute {
+		position:absolute;
+	}
+	
+	</ui:style>
+
+	<g:FlowPanel ui:field="layout" addStyleNames="{style.base_panel}">
+	    <g:SplitLayoutPanel styleName='{style.base_panel} {style.absolute} {style.pageSize}'>
+		<g:east size="550">
+			<g:FlowPanel ui:field="codePanel"></g:FlowPanel>
+		</g:east>
+		<g:center>
+			<g:FlowPanel ui:field="constructPanel"></g:FlowPanel>
+		</g:center>
+		</g:SplitLayoutPanel>
+	    
+	    <!--
+	    <g:FlowPanel ui:field ="constructPanel" addStyleNames=" {style.pageSize} {style.border}"></g:FlowPanel>
+	    <g:FlowPanel ui:field="codePanel" addStyleNames=" {style.pageSize} {style.border}"></g:FlowPanel>
+	    -->
+	</g:FlowPanel>
+	<!-- 
+	<g:SplitLayoutPanel ui:field="layout" styleName='{style.base_panel}'>
+		<g:east size="550">
+			<g:LayoutPanel ui:field="codePanel"></g:LayoutPanel>
+		</g:east>
+		<g:center>
+			<g:LayoutPanel ui:field="constructPanel"></g:LayoutPanel>
+		</g:center>
+	</g:SplitLayoutPanel>
+	-->
+</ui:UiBinder> 
