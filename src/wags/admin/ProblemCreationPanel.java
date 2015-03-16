@@ -145,7 +145,6 @@ public class ProblemCreationPanel extends Composite implements ProblemCreationPa
 					
 					AbstractServerCall cmd = new AddMagnetLinkageCommand(stat.getMessage());
 					cmd.sendRequest();
-					
 
 					//Proxy.addMagnetLinkage(stat.getMessage()); // The title of the problem
 					// Remove added Helper Class widgets
