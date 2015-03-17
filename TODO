@@ -8,3 +8,5 @@
 - FileBrowser should talk to server asking for directories and files in /.
   If a directory is expanded then fetch directories and files inside there, show them.
   CodeBrowser....don't know yet.
+
+- Prolog Code Magnet Parser
