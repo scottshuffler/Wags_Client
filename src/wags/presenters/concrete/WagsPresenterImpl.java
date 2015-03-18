@@ -96,6 +96,7 @@ public class WagsPresenterImpl implements WagsPresenter, AcceptsOneWidget
 	public void onLogoutClick() {
 		AbstractServerCall cmd = new LogoutCommand();
 		cmd.sendRequest();
+		Window.Location.reload();
 	}
 	
 	@Override
