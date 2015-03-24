@@ -4,8 +4,6 @@ ehthumbs.db
 
 # Folder config file
 Desktop.ini
-war/we/*
-war/WEB-INF/*
 gwt-unitCache/*
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
@@ -43,5 +41,3 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-war/we/we.nocache.js
-war/we/we.nocache.js
