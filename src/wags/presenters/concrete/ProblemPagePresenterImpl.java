@@ -1,6 +1,7 @@
 package wags.presenters.concrete;
 import java.util.List;
 
+import wags.Common.Model;
 import wags.Common.Tokens;
 import wags.ProxyFramework.AbstractServerCall;
 import wags.ProxyFramework.LoadAssignedProblemsCommand;
@@ -11,6 +12,7 @@ import wags.views.interfaces.ProblemPageView;
 
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.UIObject;
@@ -28,7 +30,7 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 	public static final String EMPTY_LABEL = "No Magnet Exercises Assigned!";
 
 	private ProblemPageView view;
-	private ProblemPageModel model;
+	protected ProblemPageModel model;
 
 	/**
 	 * Basic constructor for the presenter. The presenter initializes a new model, 
@@ -42,6 +44,7 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 		this.view = view;
 		model = new ProblemPageModel();
 		model.registerObserver(this, false);
+		
 		AbstractServerCall cmd = new LoadAssignedProblemsCommand(model);
 		cmd.sendRequest();
 	}
@@ -77,7 +80,18 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 	 */
 	@Override
 	public void update(List<String> data) {
-		int pageState = new Integer(data.get(0));
+		int pageState = 0;
+		if (History.getToken().contains("logical"))
+		{
+			pageState = 1;
+		}
+		//When we put database problems back in
+		/*
+		else if(History.getToken().contains("database"))
+		{
+			pageState = 2;
+		}*/
+		
 		
 		// load the panels we need
 		ComplexPanel magnets = view.getMagnetPanel();
@@ -131,25 +145,24 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 		
 		// Update page state
 		setPageState(pageState);
-		
 	}
 
 	@Override
 	public void onMagnetCategoryClick() {
-		model.setPageState(MAGNET_STATE, true);
 		History.newItem(Tokens.CODE);
+		model.setPageState(MAGNET_STATE, true);
 	}
 
 	@Override
 	public void onLogicalCategoryClick() {
-		model.setPageState(LOGICAL_STATE, true);
 		History.newItem(Tokens.LOGICAL);
+		model.setPageState(LOGICAL_STATE, true);
 	}
 
 	@Override
 	public void onDatabaseCategoryClick() {
-		model.setPageState(DATABASE_STATE, true);
 		History.newItem(Tokens.DBMAIN);
+		model.setPageState(DATABASE_STATE, true);
 	}
 
 	/**
@@ -173,6 +186,7 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 		
 		magnetCategory.removeStyleName("category_selected");
 		logicalCategory.removeStyleName("category_selected");
+		
 		switch (pageState) {
 		case MAGNET_STATE:
 			magnets.setVisible(true);

@@ -42,6 +42,7 @@
 				<g:cell horizontalAlignment = "ALIGN_LEFT" verticalAlignment = "ALIGN_BOTTOM">
 				    <g:Button styleName="{style.top_adjust}" visible="false" ui:field="removeStudentButton">Remove Student</g:Button>
 				</g:cell>
+				
 			</g:VerticalPanel>
 		</g:HorizontalPanel>
 	</g:VerticalPanel>

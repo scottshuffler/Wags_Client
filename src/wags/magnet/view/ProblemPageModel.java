@@ -3,6 +3,9 @@ package wags.magnet.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
+
 import wags.Common.Model;
 import wags.presenters.concrete.ProblemType;
 
@@ -47,6 +50,23 @@ public class ProblemPageModel extends Model {
 	}
 	
 	public void setPageState(int pageState, boolean toUpdate) {
+		
+		if (History.getToken().contains("magnet"))
+		{
+			if (pageState != 0)
+			{
+				toUpdate = true;
+			}
+			pageState = 0;
+		}
+		else if (History.getToken().contains("logical"))
+		{
+			if (pageState != 1)
+			{
+				toUpdate = true;
+			}
+			pageState = 1;
+		}
 		this.pageState = pageState;
 		if (toUpdate) {
 			notifyObservers();

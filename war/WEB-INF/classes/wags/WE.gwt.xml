@@ -46,5 +46,5 @@
          value="true" />
          
   
-
+<inherits name="org.gwtbootstrap3.GwtBootstrap3"/>
 </module>

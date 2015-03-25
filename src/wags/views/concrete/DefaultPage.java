@@ -38,6 +38,7 @@ public class DefaultPage extends Composite implements DefaultPageView {
 	@UiField ValueBoxBase<String> password;
 	@UiField Button loginButton;
 	@UiField Button problemsButton;
+	@UiField Button logicalCodeButton;
 	@UiField Row loginScreen;
 	@UiField UIObject makeAccount;
 	
@@ -57,6 +58,13 @@ public class DefaultPage extends Composite implements DefaultPageView {
 	void onEditorClick(ClickEvent event)
 	{
 		presenter.onProblemsClick();
+	}
+	
+	/** Takes the user to the problems page */
+	@UiHandler("logicalCodeButton")
+	void onLogicalClick(ClickEvent event)
+	{
+		presenter.onLogicalClick();
 	}
 	
 	/**
@@ -156,6 +164,12 @@ public class DefaultPage extends Composite implements DefaultPageView {
 	@Override
 	public boolean isAdmin() {
 		return false;
+	}
+
+	@Override
+	public UIObject getLogicalCodeButton() {
+		// TODO Auto-generated method stub
+		return logicalCodeButton;
 	}
 
 }

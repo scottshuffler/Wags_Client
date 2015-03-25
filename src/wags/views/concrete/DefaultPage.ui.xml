@@ -54,7 +54,7 @@
 			color: #fff;
 			background: linear-gradient(to left, #222, #000);
 			height: 25vw;
-			width: 13.1%;
+			width: 5%;
 			margin-top: 0;
 			top: 0;
 			left: 0 !important;
@@ -71,7 +71,7 @@
 			color: #fff;
 			background: linear-gradient(to right, #222, #000);
 			height: 25vw;
-			width: 13.1%;
+			width: 5%;
 			margin-top: 0;
 			top: 0;
 			left: 0;
@@ -105,10 +105,10 @@
 			margin-left: auto;
 			margin-right: auto;
 			padding-top: 20px;
-			background-color: #222;
-			width: 40%;
+			background-color: #333;
+			max-width: 420px;
 			padding-bottom: 20px;
-			border: .2vw solid #fed130;
+			border: 1px solid grey;
 			border-radius: 6px;
 			-moz-border-radius: 6px;
 			-webkit-border-radius: 6px;
@@ -129,7 +129,7 @@
 			line-height: 30px;
 			text-align: center;
 			max-width: 100%;
-			padding: 8vw;
+			padding: 2vw;
 			color: inherit;
 			background-color: #222;
 			border-radius: 6px;
@@ -172,6 +172,9 @@
 			width: 100%;
 			margin-left: 0;
 		}
+		.legendColor {
+			color: #fed130 !important;
+		}
                                                                                                        
 }  
 
@@ -179,44 +182,46 @@
 
 	<b:Container addStyleNames="{style.content}">
 	    <c:Carousel c:id="carousel-captions" addStyleNames="{style.carousel}">
-	        <c:CarouselIndicators>
+	        <!--<c:CarouselIndicators>
 	        	<c:CarouselIndicator dataTarget="#carousel-captions" dataSlideTo="0" active="true"/>
 	        	<c:CarouselIndicator dataTarget="#carousel-captions" dataSlideTo="1"/>
 	        	<c:CarouselIndicator dataTarget="#carousel-captions" dataSlideTo="2"/>
-	        </c:CarouselIndicators>
+	        </c:CarouselIndicators> -->
 	        <c:CarouselInner>
 	            <c:CarouselSlide active="true">
 	                <b:Image addStyleNames="{style.carouselImg}" url="banner.png"/>
 	            </c:CarouselSlide>
 	            <c:CarouselSlide>
 	                <b:Image addStyleNames="{style.carouselImg}" url="carousel0.png"/>
+	                <!--  
 	                <c:CarouselCaption addStyleNames="{style.carouselCaption}">
 	                	<b:Paragraph text="Students using WAGS"/>
-	                </c:CarouselCaption>
+	                </c:CarouselCaption>-->
 	            </c:CarouselSlide>
 	            <c:CarouselSlide>
 	                <b:Image addStyleNames="{style.carouselImg}" url="carousel1.png"/>
-	                <c:CarouselCaption addStyleNames="{style.carouselCaption}">
+	                <!-- <c:CarouselCaption addStyleNames="{style.carouselCaption}">
 	                    <b:Paragraph text="Great for tablets"/>
-	                </c:CarouselCaption>
+	                </c:CarouselCaption>-->
 	            </c:CarouselSlide>
 	        </c:CarouselInner>
 	        <c:CarouselControl addStyleNames="{style.carouselControlLeft}" dataTarget="#carousel-captions" prev="true" iconType="CHEVRON_LEFT"/>
 	        <c:CarouselControl addStyleNames="{style.carouselControlRight}" dataTarget="#carousel-captions"  next="true" iconType="CHEVRON_RIGHT"/>
 	    </c:Carousel>
 	    <b:Row>
-			<b:Button size="LARGE" addStyleNames="{style.button}" ui:field='problemsButton'>Assigned Problems</b:Button>
+	        <b:Column size = "12">
+				<b:Button size="SMALL" addStyleNames="{style.button}" ui:field='problemsButton'>Magnet Problems</b:Button>
+				<b:Button size="SMALL" addStyleNames="{style.button}" ui:field='logicalCodeButton'>Logical Problems</b:Button>
+			</b:Column>
 		</b:Row>
 		<b:Row ui:field="loginScreen" addStyleNames="{style.login}">
 		    <b:Column size="4">
 			<b:Row addStyleNames="{style.row}">
-	        	<b:TextBox placeholder="username" ui:field="username" addStyleNames="{style.textBox}"/>
+	        	<c:TextBox placeholder="username" ui:field="username" addStyleNames="{style.textBox}"/>
 			</b:Row>
 	    	<b:Row addStyleNames="{style.row}">
 			    <b:PasswordTextBox placeholder="password" ui:field="password" addStyleNames="{style.textBox}"/>
 			</b:Row>
-			</b:Column>
-			<b:Column size="4">
 	        <b:Row addStyleNames="{style.row}">
 	            <b:Button addStyleNames="btn, {style.makeAccount1}" ui:field="loginButton">Login</b:Button>
 	            <b:Button addStyleNames="btn, {style.makeAccount1}" ui:field="guestLoginButton">Guest</b:Button>
@@ -227,6 +232,7 @@
 	        </b:Column>
 	     </b:Row>
 		<b:Row addStyleNames="{style.aboutContain}">
+		    <b:Legend addStyleNames="{style.legendColor}">What can Wags do for you?</b:Legend>
 		      <b:Accordion>
 		          <b:AccordionGroup addStyleNames="{style.about}" heading="What features does WAGS provide?" defaultOpen="false" icon="CHEVRON_DOWN" iconPosition="RIGHT">
 		              <b:Accordion>
