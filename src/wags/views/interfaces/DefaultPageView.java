@@ -8,8 +8,6 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.ValueBoxBase;
 
 public interface DefaultPageView extends View{
-	public UIObject getProblemsButton();
-	public UIObject getLogicalCodeButton();
 	ValueBoxBase<String> getUsernameField();
 	ValueBoxBase<String> getPasswordField();
 	public UIObject getLoginButton();

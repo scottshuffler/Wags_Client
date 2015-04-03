@@ -51,8 +51,6 @@ public class DefaultPagePresenterImpl implements DefaultPagePresenter, AcceptsOn
 	@Override
 	public void update(List<String> data) {
 		boolean isLoggedIn = data.get(0).equals(TRUE);
-		def.getProblemsButton().setVisible(isLoggedIn);
-		def.getLogicalCodeButton().setVisible(isLoggedIn);
 		def.getUsernameField().setVisible(!isLoggedIn);
 		def.getPasswordField().setVisible(!isLoggedIn);
 		def.getLoginButton().setVisible(!isLoggedIn);
