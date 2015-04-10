@@ -17,6 +17,7 @@
 
 		}
 		.navButton {
+			font-size: 90%;
 			cursor: pointer;
 		}
 		.navButton:hover {
@@ -42,7 +43,7 @@
 			    <b:Nav>
 			        <b:NavLink ui:field="problems" addStyleNames="{style.navButton}">Magnet Problems</b:NavLink>
 			        <b:NavLink ui:field="lproblems" addStyleNames="{style.navButton}">Graph Problems</b:NavLink>
-			        <b:NavLink ui:field="dproblems" addStyleNames="{style.navButton}">Database Problems</b:NavLink>
+			       <!-- <b:NavLink ui:field="dproblems" addStyleNames="{style.navButton}">Database Problems</b:NavLink>-->
 			    </b:Nav>
 			    <b:Nav alignment="RIGHT">
 			        <b:Dropdown text="Admin" ui:field="admin" addStyleNames="{style.navButton}">
@@ -54,7 +55,12 @@
                         <b:NavLink ui:field="studentManagement">Student Management</b:NavLink>
                         <b:NavLink ui:field="review">Review Problems</b:NavLink>
 			        </b:Dropdown>
-                    <b:NavLink ui:field="logout">Logout</b:NavLink>
+			        <b:Dropdown text="User Options" ui:field="admin2" addStyleNames="{style.navButton}">
+			        <!--    <b:NavLink ui:field="accountPage">Your account</b:NavLink>
+			            <b:NavLink ui:field="classPage">Your classes</b:NavLink>-->
+			            <b:NavLink ui:field="logout">Log out</b:NavLink>
+			        </b:Dropdown>
+                    <!-- <b:NavLink ui:field="logout">Logout</b:NavLink>-->
              	</b:Nav>
 			    
 			</b:NavCollapse>

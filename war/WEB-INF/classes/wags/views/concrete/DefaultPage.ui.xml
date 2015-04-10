@@ -130,9 +130,7 @@
 			line-height: 30px;
 			text-align: center;
 			max-width: 100%;
-			padding: 2vw;
-			color: #fff;
-			background-color: #34495e;
+			color: #000;
 			border-radius: 0px;
 		}
 
@@ -181,10 +179,53 @@
 		}
 		.loginPanels {
 			margin-right:1% !important;
-			width:19% !important;
 		}
 		.loginRow {
 			margin-left: 0px !important;
+		}
+		.p {
+	 		font-size: 1em;
+	 		line-height: 1.421em;
+	 		color: #000;
+	 		margin: 0px 0px 1.421em 0px;
+	 		font-family: "Open Sans";
+	 		font-weight: 400;
+	 		font-style: normal;
+  			text-align: left !important;
+		}
+
+		.pIntro {
+	 		font-family: "Open Sans";
+	 		font-size: 1.5em;
+	 		border-top: 0px;
+	 		border-bottom: 1px;
+			border-left: 0px;
+			border-right: 0px;
+	 		padding: 1.154em;
+	 		text-align: center;
+	 		border-style: solid;
+	 		line-height: 1.5em;
+	 		margin: 1.9em 0px;
+	 		font-weight: 400;
+	 		font-style: normal;
+			color: #34495E;
+			border-color: #4CA8A1;
+		}
+		.pIntroHead {
+	 		font-family: "Open Sans";
+	 		font-size: 1.5em;
+	 		border-top: 0px;
+	 		border-bottom: 0px;
+			border-left: 0px;
+			border-right: 0px;
+	 		text-align: center;
+	 		border-style: solid;
+	 		line-height: 1.5em;
+	 		margin: 1.038em 0px;
+	 		font-weight: 400;
+	 		font-style: normal;
+			color: #34495E;
+			border-color: #4CA8A1;
 		}
                                                                                                        
 }  
@@ -220,16 +261,28 @@
 	        <c:CarouselControl addStyleNames="{style.carouselControlLeft}" dataTarget="#carousel-captions" prev="true" iconType="CHEVRON_LEFT"/>
 	        <c:CarouselControl addStyleNames="{style.carouselControlRight}" dataTarget="#carousel-captions"  next="true" iconType="CHEVRON_RIGHT"/>
 	    </c:Carousel>
-	    
 	    <b:Row ui:field="loginScreen" addStyleNames="{style.loginRow}">
-	        <b:Legend>Login or create an account</b:Legend>
+	        <b:Column size="4">
+	        	<b:Paragraph addStyleNames="{style.pIntroHead}">Login to an existing account</b:Paragraph>
 	            <b:Form type="INLINE">
 					<b:TextBox ui:field="username" addStyleNames="{style.loginPanels}" alternateSize="SMALL" placeholder="Username"/>
 					<b:PasswordTextBox ui:field="password" addStyleNames="{style.loginPanels}" alternateSize="SMALL" placeholder="Password"/>
-					<b:Button ui:field="loginButton" addStyleNames="{style.loginBtn}">Sign in</b:Button>
-					<b:Button ui:field="makeAccount" addStyleNames="{style.loginBtn}">Request an Account</b:Button>
-					<b:Button ui:field="guestLoginButton" addStyleNames="{style.loginBtn}">Guest Account</b:Button>
+					<b:Button type="PRIMARY" ui:field="loginButton" addStyleNames="{style.loginBtn}">Sign in</b:Button>
 				</b:Form>
+			</b:Column>
+			<b:Column size="3">
+			    <b:Paragraph addStyleNames="{style.pIntroHead}">Request a new account</b:Paragraph>
+	            <b:Form type="INLINE">
+					<b:Button type="INFO" ui:field="makeAccount" addStyleNames="{style.loginBtn}">Request an Account</b:Button>
+					</b:Form>
+			</b:Column>
+			
+			<b:Column size="3">
+			    <b:Paragraph addStyleNames="{style.pIntroHead}">Try a guest account</b:Paragraph>
+	            <b:Form type="INLINE">
+					<b:Button type="WARNING" ui:field="guestLoginButton" addStyleNames="{style.loginBtn}">Guest Account</b:Button>
+				</b:Form>
+			</b:Column>
 	        </b:Row>
 		<!-- <b:Row ui:field="loginScreen" addStyleNames="{style.login}">
 		    <b:Column size="4">
@@ -249,61 +302,20 @@
 	        </b:Column>
 	     </b:Row> -->
 		<b:Row addStyleNames="{style.aboutContain}">
-		    <b:Legend addStyleNames="{style.legendColor}">What can Wags do for you?</b:Legend>
-	
-		            		<b:Paragraph><b:Icon type="BOLT" size ="FOUR_TIMES"></b:Icon> Select a tab to complete from the currently visible microlabs</b:Paragraph>
-		            		<b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> View results on labs currently being attempted or already completed</b:Paragraph>
-		            		<b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Review labs already completed, typically done in preparation for an exam</b:Paragraph>
-		           			<b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Enroll students into the system</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Activate each lab session</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Monitor completion of lab activities; this can be done on a real-time basis during class</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> View the number of attempts made by each student</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Download performance in a CSV format</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Allow students to review labs already completed</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Modify existing code magnet labs or create new labs</b:Paragraph>
-							<b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Binary Trees: Tree traversals (pre, in, post, level); insert into BST; build BST from postorder; build binary tree from pre/inorder</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Graphs: MST Kruskal, MST Prim</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Max Heaps: Insertion; Deletion, Build Heap</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Min Heaps: Insertion; Deletion, Build Heap</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Sorting: Heap Sort, Radix Sort</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Hashing: Linear probing; quadratic probing</b:Paragraph>
-		        			<b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Class Operations: five labs</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Control Structures: If: four labs; While: four labs; For: four labs</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Arrays and ArrayLists: Arrays: five labs; ArrayLists: three labs</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Binary Trees: preorder traversal, inorder traversal, postorder traversal, insert into BST; build BST from postorder; build binary tree from pre/inorder</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Max Heaps: Insertion; Deletion, Build heap</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Searching: Iterative Linear Search; Iterative Binary Search, Recursive Linear Search; Recursive Binary Search</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> HashMaps: Create and insert, Remove, Reverse Lookup, Merge Maps</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Sorting: Iterative Selection Sort; Recursive Insertion Sort; Iterative Insertion Sort, Radix Sort: seven labs, Quicksort, Bubblesort, NegPosPartition, NegPosPartition checker</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Strings: Count Occurrences; Palindrome; Word Count, Double Word, Double Letter</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Lists: Big Integer: Add, Big Integer: digit multiply, Big Integer: Multiply</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Stacks and Queues: Postfix Evaluation; Balance Checker; Josephus Algorithm</b:Paragraph>
-		        			<b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> List Operations: deleteFirstOccurrence, myFlatten, myReverse, replace, removeAdjacentDuplicates, sublist, myAppend, deleteAll, myLength</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Numeric Operations: convert, allCombinations, primeFactors</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Tree Operations: buildBST, countLeaves, Preorder Traversal, Inorder Traversal</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Other: Family Tree: four labs; Graphs: two labs, N Queens</b:Paragraph>
-		        			<b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Control Structures: While: Log2; For: sumGeometricSeries</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Searching and Sorting: Recursive Binary Search, Recursive Insertion Sort</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Binary Trees: insert into BST</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Max Heaps: Insertion; Deletion</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Lists: Big Integer: Add, BigInteger: digit multiply, Big Integer: Multiply</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Stacks and Queues: Josephus Algorithm, Stacks: Balance Checker</b:Paragraph>
-		        			<b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Students solve a conceptual problem by arranging icons on a screen, such as building a binary tree, or by selecting icons in a correct sequence when finding a minimum spanning tree</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Typically there are three or four variations for each topic, each with different data</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Students can attempt the same lab multiple times until they discover a solution</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> If not completed during class, students can be given additional time to complete outside of class</b:Paragraph>
-		           			<b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Students construct a method by arranging given code magnets inside the method</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Magnets can be nested inside control structure magnets</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> The languages currently supported are Java, C/C++, and Prolog</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> The student code is compiled and subjected to unit testing; feedback guides the student toward a correct solution; multiple attempts are allowed</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> If not completed during class, students can be given additional time to complete ouside of class</b:Paragraph>
-		        			<b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Students first build some of the needed magnets</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Magnet builders may exist for while, if, and for control structures and assignment and return statements</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> The magnet itself has pull down menus where the student makes a selection from the choices</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> All statements of the same type share a single magnet builder for that statement</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> The developer sets the maximum number of magnets allowed for each type</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> Other magnets may be given as standard magnets; both types of magnets are then used to build the desired method or methods</b:Paragraph>
-		        		    <b:Paragraph><b:Icon type="CIRCLE" addStyleNames="{style.aboutIcon}"></b:Icon> These labs are substantially more challenging and typically are completed outside of lecture</b:Paragraph>
+		    <b:Paragraph addStyleNames="{style.pIntro}">What is WAGS?</b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.p}">WAGS is a web application that is designed for Computer Science classrooms. It allows teachers to quickly and easily develop problems for students. Teachers can either build their own personal problems or use any of our preset problems we have generated for many different types Computer Science problems. </b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.pIntro}">How are the problems solved?</b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.p}">There are two types of problems currently available in WAGS, Logical and Magnet problems. Logical problems are designed for graphs and the student will traverse trees or place blocks in their correct positions. Magnet problems are designed for code problems. Students will be given code blocks and they will be asked to place them in their correct positions.<br/><br/></b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.pIntro}">What languages are supported?</b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.p}">WAGS currently supports Java, C, C++, Prolog, Python. However many more are on their way. <br/><br/></b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.pIntro}">What graph problems are supported?</b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.p}">Yes! We support many graph problems that include: Prims, Kruskals, heaps, tree traversals, hashing, probing, and sorting.</b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.pIntro}">As a teacher what can I do?</b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.p}">Basically anything you want! You can create sections, add students to a specific section, view who has attempted problems that have been assigned, and download a CSV file with student performances. </b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.pIntro}">Can I try it first?</b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.p}">Yes! Simply click the 'Guest Account' button at the top of the page.</b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.pIntro}"><span/><span/>How do I sign up?</b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.p}">Currently sign up is private so you'll have to click the 'Request an Account' button and fill out the form. This process normally only takes one business day.</b:Paragraph>
 		</b:Row>
 		
 	</b:Container>

@@ -27,6 +27,7 @@ public class WagsViewImpl extends Composite implements WagsView
 	//@UiField Label HomeOut;
 	@UiField UIObject admin;
 	@UiField UIObject problems;
+	@UiField UIObject lproblems;
 	@UiField UIObject logout;
 	@UiField UIObject logicalProblemManagement;
 	@UiField UIObject logicalProblemCreation;
@@ -47,6 +48,7 @@ public class WagsViewImpl extends Composite implements WagsView
 	{
 		initWidget(uiBinder.createAndBindUi(this));
 		//north.getElement().getParentElement().getStyle().setOverflow(Overflow.VISIBLE);
+		
 	}
 
 	@UiHandler("Home")
@@ -57,6 +59,11 @@ public class WagsViewImpl extends Composite implements WagsView
 	@UiHandler("problems")
 	void onMagnetsClick(ClickEvent event) {
 		presenter.onProblemsClick();
+	}
+	
+	@UiHandler("lproblems")
+	void onlMagnetsClick(ClickEvent event) {
+		presenter.onLogicalClick();
 	}
 
 	@UiHandler("logout") 
