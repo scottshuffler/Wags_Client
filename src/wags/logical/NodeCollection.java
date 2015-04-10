@@ -47,8 +47,17 @@ public class NodeCollection implements IsSerializable
 	{
 		for(int i = 0; i < nodes.size(); i++)
 		{
-			if(nodes.get(i).getLabel() == l)
+			if(nodes.get(i).getLabel().getText() == l.getText())
 			{
+				return nodes.get(i);
+			}
+		}
+		throw new NoSuchElementException();
+	}
+	
+	public Node getNodeByLabelText(String labelText) {
+		for (int i = 0; i < nodes.size(); i++) {
+			if (nodes.get(i).getLabel().getText() == labelText) {
 				return nodes.get(i);
 			}
 		}
@@ -108,6 +117,10 @@ public class NodeCollection implements IsSerializable
 	public void emptyNodes()
 	{
 		nodes.clear();
+	}
+	
+	public int size() {
+		return nodes.size();
 	}
 
 }

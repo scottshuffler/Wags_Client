@@ -252,25 +252,23 @@ public class WEStatus {
 			// Pretty much just passes the database information into the LogicalMicrolab constructor.
 			// The real "parsing" of information happens in LogicalMicrolab.getProblem, which uses
 			// the 'genre' of the LogicalMicrolab to determine what sort of problem should be returned
-			
-			int edgeRul = handleInt(messageMap, "edgeRules");
-			int edgeRem = handleInt(messageMap, "edgesRemovable");
-			
-			myObject = new LogicalMicrolab(messageMap.get("title"), 
+						
+			myObject = new LogicalProblem(Integer.parseInt(messageMap.get("id")),
+					messageMap.get("title"), 
 					messageMap.get("problemText"),
 					messageMap.get("nodes"), 
 					messageMap.get("xPositions"), 
 					messageMap.get("yPositions"),
 					messageMap.get("insertMethod"), 
 					messageMap.get("edges"), 
-					Integer.parseInt(messageMap.get("evaluation")), 
-					edgeRul,
 					messageMap.get("arguments"),
-					edgeRem,
+					Integer.parseInt(messageMap.get("evaluation")), 
+					Integer.parseInt(messageMap.get("edgeRules")),
+					Integer.parseInt(messageMap.get("edgesRemovable")),
 					Integer.parseInt(messageMap.get("nodesDraggable")), 
 					messageMap.get("nodeType"), 
-					Integer.parseInt(messageMap.get("group")), 
-					messageMap.get("genre"));
+					messageMap.get("genre"),
+					Integer.parseInt(messageMap.get("group")));
 		} else if (objType == "DatabaseProblem") {
 			
 			

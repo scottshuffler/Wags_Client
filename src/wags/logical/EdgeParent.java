@@ -75,6 +75,7 @@ public abstract class EdgeParent implements IsSerializable
 	}
 	
 	public abstract void drawEdge();
+	public abstract void drawEdges(int[][] lineDims);
 	
 	
 }

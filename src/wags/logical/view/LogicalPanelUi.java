@@ -1,11 +1,13 @@
 package wags.logical.view;
 
-import com.allen_sauer.gwt.dnd.client.PickupDragController;
-import com.github.gwtbootstrap.client.ui.FluidRow;
-import com.github.gwtbootstrap.client.ui.Legend;
+import com.allen_sauer.gwt.dnd.client.DragController;
+import com.allen_sauer.gwt.dnd.client.DragEndEvent;
+import com.allen_sauer.gwt.dnd.client.DragStartEvent;
+import com.allen_sauer.gwt.dnd.client.DragHandler;
 import com.github.gwtbootstrap.client.ui.Paragraph;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -19,67 +21,57 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 
-import java.util.ArrayList;
-
 import org.gwtbootstrap3.client.ui.Heading;
 import org.vaadin.gwtgraphics.client.DrawingArea;
 
 import wags.LogicalMicrolab;
 import wags.Common.Tokens;
-import wags.logical.DataStructureTool;
-import wags.logical.DisplayManager;
-import wags.logical.DSTConstants;
 import wags.logical.EdgeCollection;
-import wags.logical.EdgeParent;
 import wags.logical.Node;
 import wags.logical.NodeCollection;
 import wags.logical.NodeDragController;
+import wags.logical.NodeDropController;
 import wags.logical.Problem;
-import wags.logical.ProblemServiceImpl;
-import wags.logical.TreeProblems.TreeProblem;
-import wags.logical.TreeProblems.RedBlackProblems.TreeTypeDisplayManager;
 import wags.LogicalProblem;
 
+/**
+ * Sort of acts as a button/information panel for the logical problems.
+ */
 public class LogicalPanelUi extends Composite {
 	
 	private static LogicalPanelUiUiBinder uiBinder = GWT.create(LogicalPanelUiUiBinder.class);
 			
 	interface LogicalPanelUiUiBinder extends UiBinder<Widget, LogicalPanelUi>{}
 	
-	public Node n;
-	public Node n2;
-	public NodeCollection nc;
-	public NodeDragController controller;
-	public Label label;
-	public Label label2;
 	public String directions;
 	public String name;
 	public TextArea submitText;
+	private String[] xpositions;
+	private String[] ypositions;
+	private boolean isDrag = false;
+	protected AbsolutePanel boundary;
+	protected DrawingArea canvas = new DrawingArea(600,600);
+	protected EdgeCollection ec;
 	protected Problem problem;
+	protected LogicalPanel panel;
 	protected LogicalProblem logProb;
 	protected LogicalMicrolab logMicro;
-	protected DataStructureTool dst;
-	public DisplayManager dm;
+	protected NodeCollection nc;
 	
+	@UiField AbsolutePanel dragPanel;
 	@UiField Paragraph instructions;
 	@UiField Heading title;
-	@UiField AbsolutePanel dragPanel;
 	@UiField ComplexPanel layoutPanel;
 	@UiField Button backButton;
 	@UiField Button resetButton;
-	//@UiField Button addButton;
-	//@UiField Button removeButton;
+	@UiField Button addButton;
+	@UiField Button removeButton;
 	@UiField Button evaluateButton;
 	
 	public LogicalPanelUi(LogicalPanel panel, LogicalProblem problem) {
 		initWidget(uiBinder.createAndBindUi(this));
-		
-		layoutPanel.add(backButton);
-		layoutPanel.add(resetButton);
-		//layoutPanel.add(addButton);
-		//layoutPanel.add(removeButton);
-		layoutPanel.add(evaluateButton);
-		
+		logProb = problem;
+		initialize();
 		
 	}
 	
@@ -90,49 +82,126 @@ public class LogicalPanelUi extends Composite {
 	
 	@UiHandler("resetButton")
 	void handleResetClick(ClickEvent e) {
-		/**if (problem.getNodeType() == "clickable" || problem.getNodeType() == "node") {
-			
+
+		for (int i = 0; i < nc.size(); i++) {
+			dragPanel.remove(nc.getNode(i).getLabel());
 		}
-		else {
-		dm = dst.getDisplayManager();
-		NodeCollection nc = dm.getNodeCollection();
-		nc.resetNodes(dst.panel);
-		TreeTypeDisplayManager dmtt = (TreeTypeDisplayManager)dm;
-		DrawingArea canvas = dmtt.getCanvas();
-		EdgeCollection ec = dmtt.getEdgeCollection();
-		ArrayList<EdgeParent> ep = dm.getEdges();
-		for (int i = 0; i < ep.size(); i++) {
-			canvas.remove(dmtt.getEdges().get(i).getLine());
-		}
-		ec.emptyEdges();
-		}*/
-		Window.Location.reload();
+		nc.emptyNodes();
+		//initialize();
 	}
 	
-/**	@UiHandler("addButton")
+	@UiHandler("addButton")
 	void handleAddClick(ClickEvent e) { 
 		
 	}
 	
 	@UiHandler("removeButton")
 	void handleRemoveClick(ClickEvent e) {
-		TreeTypeDisplayManager dmtt = (TreeTypeDisplayManager) dm;
-		EdgeCollection ec = dmtt.getEdgeCollection();
-		ArrayList<EdgeParent> ep = ec.getEdges();
-		ep.get(0).getLine();
+
 	}
-	*/
+	
 	@UiHandler("evaluateButton")
 	void handleEvaluateClick(ClickEvent e) {
-		Window.alert(problem.evaluate());
+		//logProb.evaluation.evaluate(logProb.title, logProb.arguments, 
+			//	LogicalProblemCreator.getNodes().getNodes(), );
 	}
+	
+	
+	
+	public void initialize() {
+		removeButton.setVisible(logProb.edgesRemovable);
+		setInstructions(logProb.directions);
+		setTitle(logProb.title);
+		dragPanel.setStyleName("drag_panel");
+		canvas.setStyleName("canvas");
+		dragPanel.add(canvas);
+		ec = new EdgeCollection(logProb.edgeRules, new String[]{"", ""},
+				true);
+		
+		createPanel();
+		
+	}
+	
+	public void createPanel() {
+		if (!isDrag)
+			registerDragController(ec);
+		nc = new NodeCollection();
+		String temp = logProb.nodes;
+		String[] nodeList = temp.split(" ");
+		for (int i = 0; i < nodeList.length; i++) {
+			nc.addNode(new Node(nodeList[i], new Label(nodeList[i])));
+		}
+		addNodesToPanel();
+	}
+	
+	public void addNodesToPanel() {
+		
+		xpositions = logProb.xPositions.split(",");
+		ypositions = logProb.yPositions.split(",");
+		if (xpositions[0] != "" || ypositions[0] != "") {
+			
+			for (int i = 0; i < nc.size(); i++) {
+				dragPanel.add(nc.getNode(i).getLabel(), Integer.parseInt(xpositions[i]), Integer.parseInt(ypositions[i]));
+				nc.getNode(i).getLabel().setStyleName("node");
+				nc.getNode(i).addDoubleClickHandler();
+				nc.getNode(i).setTop(Integer.parseInt(ypositions[i]));
+				nc.getNode(i).setLeft(Integer.parseInt(xpositions[i]));
+				if (logProb.nodesDraggable)
+					NodeDragController.getInstance().makeDraggable(nc.getNode(i).getLabel());
+				}
+			String[] edges = logProb.edges.split(",");
+			ec.setCanvas(canvas);
+			if (edges[0] != "") {
+				ec.insertEdges(edges, nc);
+			}
+		}
+		else
+		{
+			for (int i = 0; i < nc.size(); i++) {
+				dragPanel.add(nc.getNode(i).getLabel(), 5 + (50*i),5);
+				nc.getNode(i).getLabel().setStyleName("node");
+				nc.getNode(i).addDoubleClickHandler();
+				if (logProb.nodesDraggable)
+					NodeDragController.getInstance().makeDraggable(nc.getNode(i).getLabel());
+			}
+			
+		}
+	}
+	
+	public void resetNodes() {
 
-	public ComplexPanel getPanel() {
-		return layoutPanel;
+		for (int i = 0; i < nc.size(); i++)
+		{
+			dragPanel.remove(nc.getNode(i).getLabel());
+		}
+		/**
+		if (xpositions[0] != "" || ypositions[0] != "") {
+			
+			for (int i = 0; i < nc.size(); i++) {
+				nc.getNode(i).setTop(Integer.parseInt(ypositions[i]));
+				nc.getNode(i).setLeft(Integer.parseInt(xpositions[i]));
+			}
+		}
+		
+		else 
+		{
+			for (int i = 0; i < nc.size(); i++) {
+				nc.getNode(i).setTop(5);
+				nc.getNode(i).setLeft(5 + (50*i));
+			}
+		}*/
 	}
 	
 	public String getInstructions() {
 		return directions;
+	}
+	
+	public void registerDragController(EdgeCollection ec) {
+		NodeDragController.setFields(dragPanel, true, ec);
+		NodeDropController.setFields(dragPanel, ec);
+		NodeDragController.getInstance().registerDropController(
+				NodeDropController.getInstance());
+		isDrag = true;
 	}
 	
 	public void setInstructions(String directions) {
@@ -145,16 +214,11 @@ public class LogicalPanelUi extends Composite {
 		title.setText(name);
 	}
 	
-	public void setDragPanel(AbsolutePanel dragPanel) {
-		this.dragPanel = dragPanel;
-		layoutPanel.add(dragPanel);
+	public void setPanel(AbsolutePanel canvas) {
+		dragPanel = canvas;
 	}
 	
 	public void setProblem(Problem p) {
 		problem = p;
-	}
-	
-	public void setDST(DataStructureTool dst) {
-		this.dst = dst;
 	}
 }

@@ -111,7 +111,7 @@ public class TreeTypeDisplayManager extends DisplayManager implements
 				edgeCollection.insertGraphEdges(problem.getEdges(), getNodes());
 			}
 			else{
-				edgeCollection.insertEdges(problem.getEdges(), getNodes());
+				//edgeCollection.insertEdges(problem.getEdges(), getNodes());
 			}
 		}
 	}

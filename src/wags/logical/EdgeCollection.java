@@ -2,6 +2,7 @@ package wags.logical;
 
 import java.util.ArrayList;
 
+import org.vaadin.gwtgraphics.client.DrawingArea;
 import org.vaadin.gwtgraphics.client.Line;
 
 import wags.logical.TreeProblems.RedBlackProblems.TreeTypeDisplayManager;
@@ -24,6 +25,7 @@ public class EdgeCollection implements IsSerializable {
 	private TreeTypeDisplayManager dm;
 	private HandlerRegistration[] edgeHandlers;
 	private AddEdgeRules rules;
+	private DrawingArea panel;
 	private boolean removable;
 	private NodeCollection graphNodeCollection = new NodeCollection();
 
@@ -37,8 +39,13 @@ public class EdgeCollection implements IsSerializable {
 		numNodesSelected = 0;
 	}
 
+	// I plan to remove this, just give me time to replace it
 	public void setDisplayManager(DisplayManager dm) {
 		this.dm = (TreeTypeDisplayManager) dm;
+	}
+	
+	public void setCanvas(DrawingArea panel) {
+		this.panel = panel;
 	}
 	
 	public DisplayManager getDisplayManager() {
@@ -57,7 +64,6 @@ public class EdgeCollection implements IsSerializable {
 				} else if (selectedNode != firstNodeSelected) {
 					Node n1 = getNodeByLabel(firstNodeSelected);
 					Node n2 = getNodeByLabel(selectedNode);
-
 					if (n2.getTop() < n1.getTop()) {
 						Node temp = n2;
 						n2 = n1;
@@ -136,7 +142,42 @@ public class EdgeCollection implements IsSerializable {
 		}
 	}
 
-	public void insertEdges(String[] edgePairs, ArrayList<Node> nodes) {
+	public void insertEdges(String[] edgePairs, NodeCollection nc) {
+		EdgeUndirected eu;
+		if (removable) {
+			eu = new EdgeUndirected(this, handler, removable);
+		}
+		else {
+			eu = new EdgeUndirected(this, removable);
+		}
+		int[][] toBeDrawn = new int[edgePairs.length][4];
+		for (int x = 0; x < edgePairs.length; x++) {
+			//edgePairs is already split by nodes to have a line drawn between them, 
+			//now split the two node labels into separate Strings
+			String[] temp = edgePairs[x].split(" ");
+			//Next few lines seem unnecessary, but I thought it was the easiest way:
+			//basically, just take the two nodes a line is drawn between and set their
+			//x1,y1,x2,y2 coordinates respectively
+			toBeDrawn[x][0] = nc.getNodeByLabelText(temp[0]).getLeft();
+			toBeDrawn[x][1] = nc.getNodeByLabelText(temp[0]).getTop();
+			toBeDrawn[x][2] = nc.getNodeByLabelText(temp[1]).getLeft();
+			toBeDrawn[x][3] = nc.getNodeByLabelText(temp[1]).getTop();
+		}
+		
+		eu.drawEdges(toBeDrawn);
+		
+		/**
+		for (int i = 0; i <= nc.size() / 2; i += 2) {
+			Label a = new Label(newEdgePairs[i]);
+			Label b = new Label(newEdgePairs[i + 1]);
+			Node parentNode = nc.getNodeByLabel(a);
+			Node childNode = nc.getNodeByLabel(b);
+            EdgeUndirected eu = new EdgeUndirected(parentNode, childNode, getInstance(), handler, removable);
+            eu.drawEdge();
+            edges.add(eu);
+		}
+		
+		
 		// finding which nodes are used
 		ArrayList<String> usedNodes = new ArrayList<String>();
 		ArrayList<String> duplicates = new ArrayList<String>();
@@ -186,16 +227,16 @@ public class EdgeCollection implements IsSerializable {
 									distance = (int) Math.sqrt((Math.pow(Math.abs(n1.getLeft()-n2.getLeft()),2)+Math.pow((n2.getTop()-n1.getTop()),2)));
 									parentNode = n1;
 									childNode = n2;
+						            EdgeUndirected eu = new EdgeUndirected(parentNode, childNode, getInstance(), handler, removable);
+						            eu.drawEdge();
+						            edges.add(eu);
 								}
 							}
 						}
 					}
 				}
 			}
-            EdgeUndirected eu = new EdgeUndirected(parentNode, childNode, getInstance(), handler, removable);
-            eu.drawEdge();
-            edges.add(eu);
-		}
+		}*/
 		
 	}
 	
@@ -232,11 +273,11 @@ public class EdgeCollection implements IsSerializable {
 
 	public void addEdgeToCanvas(Line line) {
 		line.setStrokeWidth(10);
-		dm.drawEdge(line);
+		panel.add(line);
 	}
 
 	public void removeEdgeFromCanvas(Line line) {
-		dm.removeEdge(line);
+		panel.remove(line);
 	}
 
 	public void updateEdgeDrawings() {
@@ -301,8 +342,7 @@ public class EdgeCollection implements IsSerializable {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			dm.removeWidgetsFromPanel();
-			dm.addEdgeCancel();
+			//panel.remove(currElement);
 			//dm.resetRemoveEdgeButton();
 
 			if (currElement != null)
@@ -334,16 +374,8 @@ public class EdgeCollection implements IsSerializable {
 				//@Override
 				//public void onClick(ClickEvent event) {
 				if (delete == true){	
-				edges.remove(getEdgeByLine(currElement));
-					for (int i = 0; i < edges.size(); i++) {
-						EdgeUndirected e = (EdgeUndirected) edges.get(i);
-						System.out.println(e.getN1().getValue() + " "
-								+ e.getN2().getValue());
+						panel.remove(currElement);
 					}
-					dm.removeEdge(currElement);
-					dm.resetEdgeStyles();
-					dm.removeWidgetsFromPanel();
-				}
 				}
 			}
 			//return b;
@@ -371,7 +403,7 @@ public class EdgeCollection implements IsSerializable {
 		return nodeSelectionInstructions[1];
 	}
 	public void addWeightLabel(Label l, int x, int y, EdgeUndirected edge){
-		dm.addWeightLabel(l, x, y);
+		//dm.addWeightLabel(l, x, y);
 		graphNodeCollection.addNode(new NodeClickable(l.getText(),l, dm.getTravCont(), false, edge, this));
 	}
 	public NodeCollection getGraphNodeCollection(){

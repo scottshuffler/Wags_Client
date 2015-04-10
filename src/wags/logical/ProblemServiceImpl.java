@@ -1,4 +1,10 @@
-package wags.logical;
+/** Commenting out for now, but I would LOVE to just delete this
+ *  Just making sure it won't break everything. From now on, we're
+ *  using the database for this
+ 
+  
+  package wags.logical;
+ 
 
 import wags.logical.HashingProblems.Evaluation_Hashing;
 import wags.logical.HashingProblems.HashingProblem;
@@ -27,7 +33,7 @@ import wags.logical.TreeProblems.RedBlackProblems.RedBlackProblem;
 
 public class ProblemServiceImpl 
 {	
-	public static Problem getProblem(int id /*String problem*/) {
+	public static Problem getProblem(int id String problem) {
 		AddEdgeRules_TreeMode rules = new AddEdgeRules_TreeMode();
 		Evaluation_PostOrderBST eval = new Evaluation_PostOrderBST();
 		Evaluation_Preorder preEval = new Evaluation_Preorder();
@@ -1003,7 +1009,7 @@ public class ProblemServiceImpl
 					noEdgeAddition,
 					false,
 					false,
-					DSTConstants.NODE_DRAGGABLE);*/
+					DSTConstants.NODE_DRAGGABLE);
 			case 89: return new HashingProblem("Hashing 1",
 					"Hashing 1: Working from left to right use the hash function h(x) = x mod 13 to insert the data into the hash table using linear probing.",
 					"7 29 39 30 58 11 72 91",
@@ -1637,3 +1643,4 @@ public class ProblemServiceImpl
 		return y;
 	}
 }
+*/
