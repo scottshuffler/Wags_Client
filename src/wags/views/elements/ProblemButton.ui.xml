@@ -20,6 +20,7 @@
 	.icon {
 		position:relative;
 		top:2em;
+  		background-position: 14px 14px !important;
 	}
 	    
 	</ui:style>

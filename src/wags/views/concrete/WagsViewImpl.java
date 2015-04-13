@@ -27,7 +27,7 @@ public class WagsViewImpl extends Composite implements WagsView
 	//@UiField Label HomeOut;
 	@UiField UIObject admin;
 	@UiField UIObject problems;
-	@UiField UIObject lproblems;
+	//@UiField UIObject lproblems;
 	@UiField UIObject logout;
 	@UiField UIObject logicalProblemManagement;
 	@UiField UIObject logicalProblemCreation;
@@ -61,10 +61,10 @@ public class WagsViewImpl extends Composite implements WagsView
 		presenter.onProblemsClick();
 	}
 	
-	@UiHandler("lproblems")
+	/*@UiHandler("lproblems")
 	void onlMagnetsClick(ClickEvent event) {
 		presenter.onLogicalClick();
-	}
+	}*/
 
 	@UiHandler("logout") 
 	void onLogoutClick(ClickEvent event) {

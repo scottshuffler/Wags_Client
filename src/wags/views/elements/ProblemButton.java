@@ -43,14 +43,14 @@ public class ProblemButton extends Composite {
 		}
 		button.setText(title);
 		
-		/*if (status == 0) {
+		if (status == 0) {
 			statusIcon.setIcon(IconType.EXCLAMATION);
 			button.addStyleName("problem_due");
 		} else if (status == 1) {
 			button.addStyleName("problem_complete");
 		} else {
 			button.addStyleName("problem_review");
-		}*/
+		}
 		
 		button.addClickHandler(new ClickHandler() {
 			@Override
