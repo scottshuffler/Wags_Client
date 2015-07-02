@@ -108,7 +108,7 @@ public class TreeTypeDisplayManager extends DisplayManager implements
 
 		if (problem.getEdges().length > 0){
 			if(isMST()){
-				edgeCollection.insertGraphEdges(problem.getEdges(), getNodes());
+				//edgeCollection.insertGraphEdges(problem.getEdges(), getNodes());
 			}
 			else{
 				//edgeCollection.insertEdges(problem.getEdges(), getNodes());
@@ -141,7 +141,7 @@ public class TreeTypeDisplayManager extends DisplayManager implements
 				makeNodesNotDraggable();
 				addEdgeStart();
 				edgeCollection.selectFirstNodeOfEdge((Label) event.getSource());
-				edgeCollection.addNextEdge();
+				//edgeCollection.addNextEdge();
 				setEdgeNodeSelectionInstructions(edgeCollection.getSecondInstructions());
 			}
 		}
@@ -158,7 +158,7 @@ public class TreeTypeDisplayManager extends DisplayManager implements
 			resetEdgeStyles();
 			makeNodesNotDraggable();
 			addEdgeStart();
-			edgeCollection.addNextEdge();
+			//edgeCollection.addNextEdge();
 		}
 	}
 

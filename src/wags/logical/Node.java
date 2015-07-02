@@ -1,27 +1,51 @@
 package wags.logical;
 
+import java.util.ArrayList;
+
+import com.google.gwt.core.client.Duration;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.DoubleClickEvent;
-import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 
+import org.vaadin.gwtgraphics.client.DrawingArea;
+import org.vaadin.gwtgraphics.client.Line;
+
+import wags.logical.view.LogicalPanelUi;
+import wags.logical.view.LogicalPanelUi.Color;
+
 public class Node {
+
+	public static final int LEFTOFFSET = 20;
+	public static final int TOPOFFSET = 20;
+	
+	public static final int CLICKTIME = 100;
+	private static final int OFFSET = 20;
+	private long lastTime = 0;				// Default value, so that first click won't throw error - shows no previous click
 	protected String value;
 	protected Label label;
+	protected Label n1 = null;
+	protected Label n2 = null;
+	public EdgeCollection ec;
+	protected NodeCollection nc;
 	protected NodeDragController drag;
-	protected boolean visited = false;
+	private NodeState ns;
+	private boolean visited = false;
 	private int top = 0;
 	private int left = 0;
 	
-	public Node (String value, Label label) {
+	public Node(String value, Label label) {
 		this.value = value;
 		this.label = label;
 	}
+	
+	public void drawEdge(Node node) {
+		EdgeUndirected eu = new EdgeUndirected(this, node, ec, true);
+		eu.drawEdge();
+	}
 
 	public void setValue(String value) {
-		this.value = value;javascript:;
+		this.value = value;
 	}
 	
 	public void setTop(int top) {
@@ -30,6 +54,33 @@ public class Node {
 	
 	public void setLeft(int left) {
 		this.left = left;
+	}
+	
+	public void setState(int state) {
+		
+	}
+	
+	@Override
+	public boolean equals(Object otherNode) {
+		if (this == null || otherNode == null) {
+			return false;
+		}
+		return (this.getLabel().getText() == ((Node)otherNode).getLabel().getText());
+	}
+	
+	public boolean edgeExists(Node node) {
+		ArrayList<EdgeParent> edges = ec.getEdges();
+		for (int i = 0; i < edges.size(); i++) {
+			if ((edges.get(i).getN1() == this && edges.get(i).getN2() == node)
+					|| (edges.get(i).getN1() == node && edges.get(i).getN2() == this)) {
+						return true;
+					}
+		}
+		return false;
+	}
+	
+	public NodeState getState() {
+		return ns;
 	}
 	
 	public String getValue() {
@@ -42,16 +93,66 @@ public class Node {
 	
 	public int getTop() {
 		if (top == 0) {
-			return label.getOffsetHeight();
+			// Looks bad, but isn't: Get the Node's exact pixel position off the screen, subtract the 
+			// amount its parent (canvas) is offset from the top of the screen, and add 20 for half the
+			// height of the node. Easy.
+			return label.getElement().getAbsoluteTop() - label.getElement().getOffsetParent().getAbsoluteTop() + TOPOFFSET;
 		}
 		return top;
 	}
 	
 	public int getLeft() {
 		if (left == 0) {
-			return label.getOffsetWidth();
+			// See above comment for getTop()
+			return label.getElement().getAbsoluteLeft() - label.getElement().getOffsetParent().getAbsoluteLeft() + LEFTOFFSET;
 		}
 		return left;
+	}
+	
+	/**
+	 * Checks if a binary tree's node has too many children to add more
+	 * 
+	 * @return true if node already has two or more children, false otherwise
+	 */
+	public boolean hasChildren() {
+		int numChildren = 0;
+		ArrayList<EdgeParent> edges = ec.getEdges();
+		for (int i = 0; i < edges.size(); i++) {
+			// if node 1 is the node that this method is being called on
+			if (edges.get(i).getN1().equals(this)) {
+				// This line was originally the other way, edges.get(i).getN2().getTop() < getTop())
+				// because I'm checking that N2 is a child of N1, same with corresponding line below
+				if (edges.get(i).getN2().getTop() > getTop()) {
+					numChildren++;
+				}
+			}
+			// if node 2 is the node that this method is being called on
+			else if (edges.get(i).getN2().equals(this)) {
+				// Same comment as above
+				if (edges.get(i).getN1().getTop() > getTop()) {
+					numChildren++;
+				}
+			}
+		}
+		
+		return (numChildren > 1);
+	}
+	
+	public boolean hasParent() {
+		ArrayList<EdgeParent> edges = ec.getEdges();
+		for (int i = 0; i < edges.size(); i++) {
+			if (edges.get(i).getN1().equals(this)) {
+				if (edges.get(i).getN2().getTop() < getTop()) {
+					return true;
+				}
+			}
+			else if (edges.get(i).getN2().equals(this)) {
+				if (edges.get(i).getN1().getTop() < getTop()) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	public void setVisited(boolean v) {
@@ -62,10 +163,18 @@ public class Node {
 		return visited;
 	}
 	
-	public void addDoubleClickHandler() {
-		label.addDoubleClickHandler(new DoubleClickHandler() {
-			public void onDoubleClick(DoubleClickEvent event) {
-				Window.alert("You double-clicked a node");
+	public void addClickHandler() {
+		label.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				//Checking for a double click, with a timeout of 500 ms
+				if ((System.currentTimeMillis() - lastTime) < 500 && ns.state == 1) {
+					ns.doubleClick();
+				}
+				else {
+					ns.click();
+				}
+				lastTime = System.currentTimeMillis();
+				
 			}
 		});
 	}
@@ -73,6 +182,29 @@ public class Node {
 	@Override
 	public String toString(){
 		return this.getValue();
+	}
+	
+	public void setNodeCollection(NodeCollection nc) {
+		this.nc = nc;
+		ns = new NodeState(this);
+	}
+	
+	public void setEdgeCollection(EdgeCollection ec) {
+		this.ec = ec;
+	}
+	
+	public NodeCollection getNodeCollection() {
+		return nc;
+	}
+	
+	public void selected(Label l) {
+		l.removeStyleName("node");
+		l.addStyleName("selected_node");
+	}
+	
+	public void deselected(Label l) {
+		l.removeStyleName("selected_node");
+		l.addStyleName("node");
 	}
 }	
 
