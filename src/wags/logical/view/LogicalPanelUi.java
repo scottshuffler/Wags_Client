@@ -59,7 +59,7 @@ public class LogicalPanelUi extends Composite {
 	public String directions;
 	public String name;
 	public TextArea submitText;
-	private static boolean isDrag = false;
+	private static boolean isDrag = false;		// Boolean to find if drag controller exists
 	private LogicalMicrolab logMicro;
 	private LogicalPanel panel;
 	private static LogicalProblem logProb;
@@ -84,7 +84,6 @@ public class LogicalPanelUi extends Composite {
 	public LogicalPanelUi(LogicalPanel panel, LogicalProblem problem) {
 		initWidget(uiBinder.createAndBindUi(this));
 		logProb = problem;
-		//isDrag = logProb.nodesDraggable;
 		initialize();
 		
 	}
@@ -143,7 +142,7 @@ public class LogicalPanelUi extends Composite {
 	}
 	
 	public void createPanel() {
-		if (!isDrag)
+		if (!isDrag)   					// if no drag controller exists, create one
 			registerDragController(ec);
 		nc = new NodeCollection();
 		String temp = logProb.nodes;
