@@ -25,9 +25,6 @@ package wags.Common;
  */
 import java.util.HashMap;
 
-import wags.logical.DataStructureTool;
-import wags.logical.Problem;
-import wags.logical.ProblemServiceImpl;
 import wags.ProxyFramework.AbstractServerCall;
 import wags.ProxyFramework.BuildDatabaseCommand;
 import wags.ProxyFramework.GetLogicalProblemCommand;

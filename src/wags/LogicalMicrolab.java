@@ -20,7 +20,6 @@ import wags.logical.AddEdgeRules;
 import wags.logical.DSTConstants;
 import wags.logical.Evaluation;
 import wags.logical.Problem;
-import wags.logical.ProblemServiceImpl;
 import wags.logical.HashingProblems.HashingProblem;
 import wags.logical.QuickSortProblems.QuickSortProblem;
 import wags.logical.RadixProblems.Evaluation_RadixSortWithHelp;
@@ -89,7 +88,7 @@ public class LogicalMicrolab {
 
 		// Only difference from heapDelete is status of boolean getting passed
 		// to "getHeap_Location" methods
-		if (genre.equals("heapInsert")) {
+/**		if (genre.equals("heapInsert")) {
 			return new TreeProblem(title, problemText, nodes, insertMethod,
 					ProblemServiceImpl.getHeapXLocations(true, nodes),
 					ProblemServiceImpl.getHeapYLocations(true, nodes),
@@ -102,7 +101,7 @@ public class LogicalMicrolab {
 					ProblemServiceImpl.getHeapYLocations(false, nodes),
 					edgeList, args, evaluation, edgeRules, edgesRemovable,
 					nodesDraggable, nodeType);
-		}
+		}*/
 
 		// Everything from here on requires positions
 		int[] xPos = getLocations(xPositions);

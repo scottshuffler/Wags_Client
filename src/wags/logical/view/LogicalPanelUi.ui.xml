@@ -6,10 +6,17 @@
 	xmlns:new="urn:import:org.gwtbootstrap3.client.ui">
 	<ui:style>
 	
+	.allButtonPanel {
+		/*background-color: #1abc9c;*/
+		background-color: #3c9;
+		height: 40px;	
+	}
+
 	.base {
 		border: 3px solid #325c74;
 		background-color: #fff;
-		position: relative;
+		margin-left: auto;
+		margin-right: auto;
 	}
 
 	.buttonPanelLeft {
@@ -51,26 +58,43 @@
 
 	}
 
-	.drag {
+	.dragPanel {
+		height: 60%;
 	}
 
 	.lgButton {
 		margin-right: 1%;
 		margin-left: 1%;
+		margin-top: .7%;
 		padding-top: 2px;
-		width: 20%;
+		width: 15%;
+	}
+
+	.message {
+		background-color: #fff;
+		border: 1px solid #fff;
+		border-radius: 20px;
+		font-size: 1.3em;
+		height: 1.3vw;
+		margin-left: auto;
+		margin-right: auto;
+		margin-top: 1%;
+		padding: 2%;
+		text-align: center;
+		width: 80%;
 	}
 
 	.smButton {
 		margin-right: 1%;
 		margin-left: 1%;
+		margin-top: .7%;
 		padding-top: 2px;
-		width: 15%;
+		width: 10%;
 	}
 
 	</ui:style>
 
-	<b:Column size="6">
+	<b:Column size="12" styleName='{style.base}'>
 	    <g:FlowPanel ui:field='layoutPanel' styleName='{style.base}'>
 	    <b:FluidRow>
 	    	<g:ScrollPanel styleName="{style.directionsPanel}">
@@ -80,15 +104,21 @@
 	       		</g:AbsolutePanel>
 	    	</g:ScrollPanel>
 		</b:FluidRow>	
-	    <b:FluidRow styleName="{style.buttonPanelLeft}">
-	        <g:Button ui:field="backButton" styleName="{style.smButton}" height="28px">Back</g:Button>
-	        <g:Button ui:field="resetButton" styleName="{style.smButton}" height="28px">Reset</g:Button>
+		<b:FluidRow styleName="{style.allButtonPanel}">
+	    	<b:FluidRow styleName="{style.buttonPanelLeft}">
+	        	<g:Button ui:field="backButton" styleName="{style.smButton}" height="28px">Back</g:Button>
+	        	<g:Button ui:field="resetButton" styleName="{style.smButton}" height="28px">Reset</g:Button>
+	    	</b:FluidRow>
+	    	<b:FluidRow styleName="{style.buttonPanelRight}">
+	      		<g:Button ui:field="addButton" styleName="{style.lgButton}" height="28px">Add Edge</g:Button>
+	      		<g:Button ui:field="removeButton" styleName="{style.lgButton}" height="28px">Remove Edge</g:Button>
+	       		<g:Button ui:field="evaluateButton" styleName="{style.lgButton}" height="28px">Evaluate</g:Button>
+	   		</b:FluidRow>
 	    </b:FluidRow>
-	    <b:FluidRow styleName="{style.buttonPanelRight}">
-	      
-	        <g:Button ui:field="evaluateButton" styleName="{style.lgButton}" height="28px">Evaluate</g:Button>
+	    <b:FluidRow>
+			<b:Paragraph ui:field="message" styleName="{style.message}" />
 	    </b:FluidRow>
-	    <g:AbsolutePanel ui:field='dragPanel' styleName="{style.drag}"/>
+	    <g:AbsolutePanel ui:field="boundaryPanel"></g:AbsolutePanel>
     </g:FlowPanel>
        </b:Column>
 </ui:UiBinder> 

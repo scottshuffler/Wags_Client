@@ -3,14 +3,24 @@ package wags.logical;
 
 import org.vaadin.gwtgraphics.client.Line;
 
+import wags.logical.view.LogicalProblem;
 import wags.logical.TreeProblems.TreeDisplayManager;
+import wags.logical.view.LogicalPanelUi;
 
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.ui.Label;
 
+
 public class EdgeUndirected extends EdgeParent implements IsSerializable
 {
+	
+	//I'm sorry about the magic, buuut the nodes are 40x40, this evens out the getLeft() and getTop() method results
+	public static final int OFF = 20;
+	public boolean removable;
+	
 	public void addWeightLabel(){
 		// MAGIC, MAGIC EVERYWHERE... MAY GOD HAVE MERCY ON MY SOUL       
 		// Why you ask? Because Chrome.
@@ -29,45 +39,106 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 		super(n1, n2, ec, ch, removable);
 	}
 	
-	public EdgeUndirected(Node n1, Node n2)
+	public EdgeUndirected(Node n1, Node n2, EdgeCollection ec, boolean removable) {
+		super(n1, n2, ec, null, removable);	
+		this.removable = removable;
+	}
+	
+	public EdgeUndirected(Node n1, Node n2, EdgeCollection ec)
 	{
-		super(n1, n2, null, null, false);
+		super(n1, n2, ec, null, false);
 	}
 	public EdgeUndirected(Node n1, Node n2, EdgeCollection ec, ClickHandler ch, boolean removable, int weight)
 	{
 		super(n1, n2, ec, ch, removable, weight);
 	}
 	
+	public EdgeUndirected(EdgeCollection ec, ClickHandler ch, boolean removable) {
+		super(null,null,ec,ch,removable);
+	}
+
+	public EdgeUndirected(EdgeCollection ec, boolean removable) {
+		super(null,null,ec,null,removable);
+		this.removable = removable;
+		}
+	
 	@Override
-	public void drawEdge()
-	{
-		int parentTopOffset = 105; // I do not like these numbers
-		int childTopOffset = 115;  // I do not like them.
-		int leftOffset = 20;
-		int scrollOffset = 0;
+	public void drawEdge() {
+		int leftOffset = 0;
+		int topOffset = 0;
 		
-		/*
-		 * This fixes an issue where if the browser is scrolled down at all, 
-		 * edges are drawn above where they need to be.
-		 */
-		if (this.ec.getDisplayManager() instanceof TreeDisplayManager) {
-			TreeDisplayManager tdm = (TreeDisplayManager) this.ec.getDisplayManager();
-			scrollOffset = tdm.panel.getParent().getElement().getScrollTop();
+		if(n1 != null && n2 != null) {
+		line = new Line((int)(n1.getLeft() + leftOffset), 
+						n1.getTop() + topOffset,
+						n2.getLeft() + leftOffset, 
+						n2.getTop() + topOffset);
+		if (removable) {
+			line.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					Line selected = (Line)event.getSource();
+					selected.setStrokeColor("yellow");
+					if(Window.confirm("Would you like to remove this edge?")) { 
+						//LogicalPanelUi.getPanel().remove(selected);
+						ec.removeEdgeFromCanvas(selected);
+					}
+					else
+						selected.setStrokeColor("#444");
+						
+				}
+			});
 		}
-		
-		if(n1.getLabel().getStyleName().equals("mini_node")){
-			parentTopOffset = 120;
-			leftOffset = 10;
-		}
-		
-		// What is this 30????
-		line = new Line(n1.getLeft()+leftOffset, 
-						n1.getTop()-parentTopOffset-30+scrollOffset,
-						n2.getLeft()+leftOffset, 
-						n2.getTop()-childTopOffset-30+scrollOffset);
-		if(removable)  
-			line.addClickHandler(handler);
+		line.setStrokeColor("#444");
 		line.setStrokeWidth(3);
+		super.setLine(line);
+		ec.addEdge(this);
+		ec.addLine(line);
 		ec.addEdgeToCanvas(line);
+	}
+	}
+	
+	@Override
+	public void drawEdges(int[][] lineDims) {		
+		
+		//Create edges using 2D array of line dimensions passed in by EdgeCollection
+		for (int i = 0; i < lineDims.length; i++) {
+			line = new Line(lineDims[i][0] + OFF,
+							lineDims[i][1] + OFF,
+							lineDims[i][2] + OFF,
+							lineDims[i][3] + OFF);
+			switch (LogicalPanelUi.getGenre()) {
+			case "traversal":
+				if (removable) {
+					line.addClickHandler(new ClickHandler() {
+						public void onClick(ClickEvent event) {
+							Line selected = (Line)event.getSource();
+							selected.setStrokeColor("yellow");
+							if(Window.confirm("Would you like to remove this edge?")) 
+								LogicalPanelUi.getPanel().remove(selected);
+							else
+								selected.setStrokeColor("#444");
+								
+						}
+					});
+				}
+				break;
+			case "mst":
+				
+				line.addClickHandler(new ClickHandler() {
+					public void onClick(ClickEvent event) {
+						Line selected = (Line)event.getSource();
+						
+						selected.setStrokeColor("#27f500");
+						
+					    getN1().getLabel().setStyleName("immobilized_node");
+					    getN2().getLabel().setStyleName("immobilized_node");							
+					}
+				});
+				break;
+			}
+			line.setStrokeColor("#444");
+			line.setStrokeWidth(3);
+			super.setLine(line);
+			ec.addEdgeToCanvas(line);
+		}
 	}
 }

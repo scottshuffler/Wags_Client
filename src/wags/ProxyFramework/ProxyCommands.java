@@ -31,6 +31,7 @@ public abstract class ProxyCommands
     public static final String DSTReview = "DSTReview";
     public static final String StudentReview = "StudentReview";
     public static final String GetLogicalMicrolab = "GetLogicalMicrolab";
+    public static final String GetLogicalProblem = "GetLogicalProblem";
     public static final String GetLMAssigned = "GetLMAssigned";
     public static final String GetMMAssigned = "GetMMAssigned";
     public static final String LogicalExercises = "LogicalExercises";

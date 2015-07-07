@@ -36,14 +36,6 @@
 
 	</ui:style>
 	<b:Column size="12" ui:field="panel">
-	    <b:FluidRow>
-	        <g:Button ui:field="backButton" styleName="{style.smButton}" height="28px">Back</g:Button>
-	        <g:Button ui:field="resetButton" styleName="{style.smButton}" height="28px">Reset</g:Button>
-	        <g:Button ui:field="addButton" styleName="{style.lgButton}" height="28px">Add Edge</g:Button>
-	        <g:Button ui:field="removeButton" styleName="{style.lgButton}" height="28px">Remove Edge</g:Button>
-	        <g:Button ui:field="evaluateButton" styleName="{style.lgButton}" height="28px">Evaluate</g:Button>
-	        
-	    </b:FluidRow>
 		<b:FluidRow>
 	    	<g:ScrollPanel styleName="{style.directionsPanel}">
 	       		<g:AbsolutePanel ui:field="instructions" styleName="{style.directionsContent}"></g:AbsolutePanel>
