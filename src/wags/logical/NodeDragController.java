@@ -1,6 +1,7 @@
 package wags.logical;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 

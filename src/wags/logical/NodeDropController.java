@@ -1,7 +1,11 @@
 package wags.logical;
 
+import wags.logical.view.LogicalPanelUi;
+import wags.logical.view.LogicalPanelUi.Color;
+
 import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 
@@ -35,6 +39,7 @@ public class NodeDropController extends AbsolutePositionDropController implement
 	{
 		super.onDrop(context);
 		ec.updateEdgeDrawings();
+		LogicalPanelUi.setMessage("", Color.None);
 	}
 	
 }

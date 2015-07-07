@@ -240,7 +240,7 @@ public class DataStructureTool  extends AbsolutePanel
 		return dm;
 	}
 
-	public AbsolutePanel initialize(Problem p, AcceptsOneWidget page)
+	/**public AbsolutePanel initialize(Problem p, AcceptsOneWidget page)
 	{
 		this.page = page;
 		// Hide the buttons and stuff
@@ -268,6 +268,6 @@ public class DataStructureTool  extends AbsolutePanel
 		dm = p.createDisplayManager(panel, canvas);
 		dm.displayProblem();
 		return panel;
-	}
+	}*/
 	
 }

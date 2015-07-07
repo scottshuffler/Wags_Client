@@ -11,7 +11,13 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
 import wags.Common.Presenter;
+import wags.logical.EdgeCollection;
+import wags.logical.NodeCollection;
 
+/** 
+ * I would like for this to become the location for everything LogicalProblem-related, that
+ * way every attribute of Logical Problems can be easily accessed.
+ */
 public class LogicalProblem extends Composite implements LogicalProblemView {
 
 	private static LogicalProblemUiBinder uiBinder = 
@@ -22,13 +28,14 @@ public class LogicalProblem extends Composite implements LogicalProblemView {
 	
 	private Presenter presenter;
 	
+	public static AbsolutePanel dragPanel;
+	
+	public static EdgeCollection ec;
+	public static NodeCollection nc;
+	public static String[] edgePairs;
+	
 	@UiField Column panel;
 	@UiField Panel instructions;
-	@UiField Button backButton;
-	@UiField Button resetButton;
-	@UiField Button addButton;
-	@UiField Button removeButton;
-	@UiField Button evaluateButton;
 	
 	public LogicalProblem() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -47,6 +54,38 @@ public class LogicalProblem extends Composite implements LogicalProblemView {
 	@Override 
 	public Presenter getPresenter() {
 		return presenter;
+	}
+	
+	public static AbsolutePanel getDragPanel() {
+		return dragPanel;
+	}
+	
+	public static EdgeCollection getEdgeCollection() {
+		return ec;
+	}
+	
+	public static String[] getEdgePairs() {
+		return edgePairs;
+	}
+	
+	public static NodeCollection getNodeCollection() {
+		return nc;
+	}
+	
+	public static void setDragPanel(AbsolutePanel panel) {
+		dragPanel = panel;
+	}
+	
+	public static void setEdgeCollection(EdgeCollection newEdges) {
+		ec = newEdges;
+	}
+	
+	public static void setEdgePairs(String[] edges) {
+		edgePairs = edges;
+	}
+	
+	public static void setNodeCollection(NodeCollection newNodes) {
+		nc = newNodes;
 	}
 	
 	@Override 
