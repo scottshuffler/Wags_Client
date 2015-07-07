@@ -16,4 +16,5 @@ public interface WagsPresenter extends Presenter
 	void onReviewClick();
 	void onProgrammingManagementClick();
 	void onStudentManagementClick();
+	void onLogicalClick();
 }

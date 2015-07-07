@@ -37,7 +37,6 @@ public class DefaultPage extends Composite implements DefaultPageView {
 	@UiField ValueBoxBase<String> username;
 	@UiField ValueBoxBase<String> password;
 	@UiField Button loginButton;
-	@UiField Button problemsButton;
 	@UiField Row loginScreen;
 	@UiField UIObject makeAccount;
 	
@@ -50,13 +49,6 @@ public class DefaultPage extends Composite implements DefaultPageView {
 	public DefaultPage() {
 		initWidget(uiBinder.createAndBindUi(this));
 		//Proxy.isAdmin(adminButton, magnetPCButton, logicalPCButton,databasePCButton);
-	}
-	
-	/** Takes the user to the problems page */
-	@UiHandler("problemsButton")
-	void onEditorClick(ClickEvent event)
-	{
-		presenter.onProblemsClick();
 	}
 	
 	/**
@@ -149,13 +141,9 @@ public class DefaultPage extends Composite implements DefaultPageView {
 	}
 
 	@Override
-	public UIObject getProblemsButton() {
-		return problemsButton;
-	}
-
-	@Override
 	public boolean isAdmin() {
 		return false;
 	}
+
 
 }
