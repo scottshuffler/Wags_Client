@@ -292,6 +292,7 @@ function we(){
   $stats && $stats({moduleName:'we', sessionId:$sessionId_0, subSystem:'startup', evtGroup:'bootstrap', millis:(new Date).getTime(), type:'selectingPermutation'});
   if (!isHostedMode()) {
     try {
+
       unflattenKeylistIntoAnswers(['ie8'], '2239957B8FE94E96ABF924A533673780');
       unflattenKeylistIntoAnswers(['gecko1_8'], '4C7285FEC2D5254163BA4029CC61C025');
       unflattenKeylistIntoAnswers(['ie9'], '6084C9E88C15B00F444A7268851D1DB2');

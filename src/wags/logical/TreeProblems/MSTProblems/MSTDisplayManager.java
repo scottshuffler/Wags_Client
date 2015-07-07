@@ -39,7 +39,7 @@ public class MSTDisplayManager extends TreeDisplayManager implements
 		}
 
 		if (problem.getEdges().length > 0) {
-			edgeCollection.insertGraphEdges(problem.getEdges(), getNodes());
+			//edgeCollection.insertGraphEdges(problem.getEdges(), getNodes());
 
 		}
 	}

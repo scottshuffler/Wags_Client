@@ -35,6 +35,20 @@ public abstract class EdgeParent implements IsSerializable
 		this.weight=weight;
 	}
 	
+	@Override
+	public boolean equals(Object compare) {
+		try {
+			EdgeParent ep = (EdgeParent) compare;
+			if ((getN1().equals(ep.getN1()) && getN2().equals(ep.getN2())) 
+					|| (getN2().equals(ep.getN1()) && getN1().equals(ep.getN2()))) {
+					return true;
+			}
+			return false;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
 	public Node getN1()
 	{
 		return n1;
@@ -43,6 +57,10 @@ public abstract class EdgeParent implements IsSerializable
 	public Node getN2()
 	{
 		return n2;
+	}
+	
+	public void setLine(Line line) {
+		this.line = line;
 	}
 	
 	public void setN1(Node node)
@@ -60,11 +78,6 @@ public abstract class EdgeParent implements IsSerializable
 		return line;
 	}
 	
-	public void redraw()
-	{
-		ec.removeEdgeFromCanvas(line);
-		drawEdge();
-	}
 	public boolean isWeightedEdge(){
 		return weight!=0;
 	}
@@ -75,6 +88,7 @@ public abstract class EdgeParent implements IsSerializable
 	}
 	
 	public abstract void drawEdge();
+	public abstract void drawEdges(int[][] lineDims);
 	
 	
 }
