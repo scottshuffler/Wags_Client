@@ -122,7 +122,9 @@ public class LogicalPanelUi extends Composite {
 	
 	
 	public void initialize() {
+		
 		dragPanel = new AbsolutePanel();
+		dragPanel.getElement().getStyle().setProperty("left", "15%");
 		itemsInPanel = new ArrayList<Widget>();
 		canvas = new DrawingArea(Window.getClientWidth(), Window.getClientHeight());
 		boundaryPanel.add(dragPanel);
@@ -133,6 +135,11 @@ public class LogicalPanelUi extends Composite {
 		dragPanel.setStyleName("drag_panel");
 		canvas.setStyleName("canvas");
 		dragPanel.add(canvas);
+		
+		dragPanel.getElement().getStyle().setProperty("min-height", "600px");
+		dragPanel.getElement().getStyle().setProperty("min-width", "600px");
+		canvas.getElement().getStyle().setProperty("margin", "0px");
+		//canvas.getElement().getStyle().setProperty("margin-left", "0px");
 		ec = new EdgeCollection(logProb.edgeRules, new String[]{"", ""},
 				logProb.edgesRemovable);
 		ec.setCanvas(canvas);

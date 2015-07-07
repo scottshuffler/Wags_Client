@@ -1,4 +1,4 @@
-war/we/
+war/we/*
 war/we/we.nocache.js
 war/WEB-INF/classes
 war/WEB-INF/deploy
