@@ -152,7 +152,7 @@ public class EdgeCollection implements IsSerializable {
 		int[][] toBeDrawn = new int[edgePairs.length][4];
 		for (int x = 0; x < edgePairs.length; x++) {
 			eu = new EdgeUndirected(this, removable);
-			
+			//Window.alert("Here");
 			//edgePairs is already split by nodes to have a line drawn between them, 
 			//now split the two node labels into separate Strings
 			String[] temp = edgePairs[x].split(" ");
@@ -168,7 +168,9 @@ public class EdgeCollection implements IsSerializable {
 
 			edges.add((EdgeParent) eu);
 			eu.drawEdges(toBeDrawn);
+			//eu.addWeightLabel();
 			lines.add(eu.getLine());
+			
 		}
 		
 	}

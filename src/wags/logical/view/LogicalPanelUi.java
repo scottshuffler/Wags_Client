@@ -84,6 +84,7 @@ public class LogicalPanelUi extends Composite {
 	public LogicalPanelUi(LogicalPanel panel, LogicalProblem problem) {
 		initWidget(uiBinder.createAndBindUi(this));
 		logProb = problem;
+		//Window.alert(""+logProb);
 		initialize();
 		
 	}
@@ -114,6 +115,7 @@ public class LogicalPanelUi extends Composite {
 	
 	@UiHandler("evaluateButton")
 	void handleEvaluateClick(ClickEvent e) {
+		//Window.alert("THIS ONE");
 		setMessage("Current traversal: " + nc.getTraversal(0), Color.Notification);
 		//logProb.evaluation.evaluate(logProb.title, logProb.arguments, 
 			//LogicalProblemCreator.getNodes().getNodes(), );
@@ -124,7 +126,7 @@ public class LogicalPanelUi extends Composite {
 	public void initialize() {
 		
 		dragPanel = new AbsolutePanel();
-		dragPanel.getElement().getStyle().setProperty("left", "15%");
+		//boundaryPanel.getElement().getStyle().setProperty("margin-left", "15%");
 		itemsInPanel = new ArrayList<Widget>();
 		canvas = new DrawingArea(Window.getClientWidth(), Window.getClientHeight());
 		boundaryPanel.add(dragPanel);
@@ -143,7 +145,6 @@ public class LogicalPanelUi extends Composite {
 		ec = new EdgeCollection(logProb.edgeRules, new String[]{"", ""},
 				logProb.edgesRemovable);
 		ec.setCanvas(canvas);
-		
 		createPanel();
 		
 	}
