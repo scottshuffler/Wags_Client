@@ -39,6 +39,13 @@
 		margin-left:auto;
 		margin-right:auto;
 	}
+	.listBoxContainer {
+		text-align:center;
+		width:80%;
+		margin-top:2%;
+		margin-left:auto;
+		margin-right:auto;
+	}
 		 
 	</ui:style>
 	
@@ -48,7 +55,12 @@
 	        	<b:Button ui:field="logicalCategory" size="LARGE" icon="OK" addStyleNames="{style.problemCategory}">Logical</b:Button>
 		<!-- 	<b:Button ui:field="databaseCategory" size="LARGE" icon="OK" addStyleNames="{style.problemCategory}">Database</b:Button>   Disabled until database problems are made-->	
 	    </b:FluidRow>
-	    <b:FluidRow>
+	    
+	    <b:FluidRow addStyleNames="{style.listBoxContainer}">
+	       <b:ListBox ui:field="subjectListBox"></b:ListBox>
+	    </b:FluidRow>
+	    
+	    <b:FluidRow addStyleNames="{style.problemCategoryContainer}">
 	    	<b:incubator.Table visible="false" ui:field="magnetPanel">
 		    </b:incubator.Table>
 		    

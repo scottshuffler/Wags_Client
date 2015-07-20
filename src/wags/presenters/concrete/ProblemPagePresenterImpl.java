@@ -1,9 +1,11 @@
 package wags.presenters.concrete;
 import java.util.List;
 
+import wags.ProxyFacilitator;
 import wags.Common.Model;
 import wags.Common.Tokens;
 import wags.ProxyFramework.AbstractServerCall;
+import wags.ProxyFramework.GetMMGroupsCommand;
 import wags.ProxyFramework.LoadAssignedProblemsCommand;
 import wags.magnet.view.ProblemPageModel;
 import wags.presenters.interfaces.ProblemPagePresenter;
@@ -15,6 +17,7 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.UIObject;
 
 /**
@@ -47,7 +50,10 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 		
 		AbstractServerCall cmd = new LoadAssignedProblemsCommand(model);
 		cmd.sendRequest();
+		
 	}
+	
+	
 	
 	@Override
 	public void go(HasWidgets container) {
@@ -96,6 +102,7 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 		// load the panels we need
 		ComplexPanel magnets = view.getMagnetPanel();
 		ComplexPanel logical = view.getLogicalPanel();
+		ListBox subjectList = view.getListBox();
 		
 		//Only execute if problems have not already been loaded
 		if( data.size() > 1) {
@@ -114,7 +121,8 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 				String title = titles[i];
 				int status = new Integer(statuses[i]);
 				int type = new Integer(types[i]);
-				
+				//Window.alert("Test: " + title + " type: " + type);
+				subjectList.addItem(title);
 				if (type == magnetType) {
 					if ( status == 0) {
 						magnetDue = true;
@@ -201,6 +209,14 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 			magnets.setVisible(true);
 			magnetCategory.addStyleName("category_selected");
 		}
+		
+	}
+
+
+
+	@Override
+	public void listboxClick() {
+		// TODO Auto-generated method stub
 		
 	}
 }

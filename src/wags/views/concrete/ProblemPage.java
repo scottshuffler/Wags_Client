@@ -5,6 +5,7 @@ import wags.presenters.interfaces.ProblemPagePresenter;
 import wags.views.interfaces.ProblemPageView;
 
 import com.github.gwtbootstrap.client.ui.Button;
+import com.github.gwtbootstrap.client.ui.ListBox;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -36,6 +37,8 @@ public class ProblemPage extends Composite implements ProblemPageView {
 	@UiField ComplexPanel magnetPanel;
 	@UiField ComplexPanel logicalPanel;
     @UiField ComplexPanel databasePanel; //Disabled until database problems are made
+    
+    @UiField ListBox subjectListBox;
 	
 	@UiField Button magnetCategory;
 	@UiField Button logicalCategory;
@@ -90,12 +93,23 @@ public class ProblemPage extends Composite implements ProblemPageView {
 		//Window.alert("Logical Problems are currently under construction, please try again later!");
 	}
 	
+	@UiHandler ("subjectListBox") 
+	public void onListboxCLick(ClickEvent event) {
+		presenter.listboxClick();
+		//Window.alert("Logical Problems are currently under construction, please try again later!");
+	}
+	
 	/** Disabled until database problems are made
 	@UiHandler ("databaseCategory")
 	public void onDatabaseCategoryClick(ClickEvent event) {
 		presenter.onDatabaseCategoryClick();
 	}
 	*/
+	
+	@Override
+	public ListBox getListBox() {
+		return subjectListBox;
+	}
 
 	@Override
 	public Button getMagnetCategory() {

@@ -3,6 +3,7 @@ package wags.logical;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 
 public class NodeClickable extends Node {
@@ -23,12 +24,15 @@ public class NodeClickable extends Node {
 
 	public NodeClickable(String value, Label label,
 			TraversalContainer traversal, boolean forceEval, EdgeUndirected edge, EdgeCollection ec) {
+		
 		super(value, label);
+		Window.alert("In NC in NC");
 		isSelected = false;
 		this.traversal = traversal;
 		this.forceEval = forceEval;
 		this.edge = edge;
 		this.ec = ec;
+		Window.alert("NC nodeclickable");
 		label.addClickHandler(new WeightClickHandler());
 	}
 
@@ -47,13 +51,14 @@ public class NodeClickable extends Node {
 				isSelected = false;
 				traversal.removeFromTraversal(value);
 			}
-
 		}
 	}
 
 	private class WeightClickHandler implements ClickHandler {
+		
 		@Override
 		public void onClick(ClickEvent event) {
+			Window.alert("WCH in Nodeclickabke");
 			if (!isSelected) {
 				label.setStyleName("selected_edge_weight");
 				edge.line.setStrokeColor("#27F500");

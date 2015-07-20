@@ -148,7 +148,7 @@ public class EdgeCollection implements IsSerializable {
 
 	public void insertEdges(String[] edgePairs, NodeCollection nc) {
 		EdgeUndirected eu;
-
+		
 		int[][] toBeDrawn = new int[edgePairs.length][4];
 		for (int x = 0; x < edgePairs.length; x++) {
 			eu = new EdgeUndirected(this, removable);
@@ -156,6 +156,10 @@ public class EdgeCollection implements IsSerializable {
 			//edgePairs is already split by nodes to have a line drawn between them, 
 			//now split the two node labels into separate Strings
 			String[] temp = edgePairs[x].split(" ");
+//			for (int i = 0; i < temp.length; i++)
+//			{
+//				Window.alert(temp[i]);
+//			}
 			//Next few lines seem unnecessary, but I thought it was the easiest way:
 			//basically, just take the two nodes a line is drawn between and set their
 			//x1,y1,x2,y2 coordinates respectively
@@ -165,11 +169,11 @@ public class EdgeCollection implements IsSerializable {
 			toBeDrawn[x][3] = nc.getNodeByLabelText(temp[1]).getTop();
 			eu.setN1(nc.getNodeByLabelText(temp[0]));
 			eu.setN2(nc.getNodeByLabelText(temp[1]));
-
+			
 			edges.add((EdgeParent) eu);
 			eu.drawEdges(toBeDrawn);
-			//eu.addWeightLabel();
 			lines.add(eu.getLine());
+			eu.addWeightLabel();
 			
 		}
 		
@@ -332,7 +336,9 @@ public class EdgeCollection implements IsSerializable {
 	}
 	public void addWeightLabel(Label l, int x, int y, EdgeUndirected edge){
 		//dm.addWeightLabel(l, x, y);
-		graphNodeCollection.addNode(new NodeClickable(l.getText(),l, dm.getTravCont(), false, edge, this));
+		Window.alert("AWL in EC");
+		
+		graphNodeCollection.addNode(new Node(l.getText(),l));
 	}
 	public NodeCollection getGraphNodeCollection(){
 		return graphNodeCollection;

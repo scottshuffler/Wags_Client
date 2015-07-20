@@ -261,7 +261,7 @@
 	        <c:CarouselControl addStyleNames="{style.carouselControlLeft}" dataTarget="#carousel-captions" prev="true" iconType="CHEVRON_LEFT"/>
 	        <c:CarouselControl addStyleNames="{style.carouselControlRight}" dataTarget="#carousel-captions"  next="true" iconType="CHEVRON_RIGHT"/>
 	    </c:Carousel>
-	    <b:Row ui:field="loginScreen" addStyleNames="{style.loginRow}">
+	    <b:FluidRow ui:field="loginScreen" addStyleNames="{style.loginRow}">
 	        <b:Column size="4">
 	        	<b:Paragraph addStyleNames="{style.pIntroHead}">Login to an existing account</b:Paragraph>
 	            <b:Form type="INLINE">
@@ -270,20 +270,20 @@
 					<b:Button type="PRIMARY" ui:field="loginButton" addStyleNames="{style.loginBtn}">Sign in</b:Button>
 				</b:Form>
 			</b:Column>
-			<b:Column size="3">
+			<b:Column size="4">
 			    <b:Paragraph addStyleNames="{style.pIntroHead}">Request a new account</b:Paragraph>
 	            <b:Form type="INLINE">
 					<b:Button type="INFO" ui:field="makeAccount" addStyleNames="{style.loginBtn}">Request an Account</b:Button>
 					</b:Form>
 			</b:Column>
 			
-			<b:Column size="3">
+			<b:Column size="4">
 			    <b:Paragraph addStyleNames="{style.pIntroHead}">Try a guest account</b:Paragraph>
 	            <b:Form type="INLINE">
 					<b:Button type="WARNING" ui:field="guestLoginButton" addStyleNames="{style.loginBtn}">Guest Account</b:Button>
 				</b:Form>
 			</b:Column>
-	        </b:Row>
+	    </b:FluidRow>
 		<!-- <b:Row ui:field="loginScreen" addStyleNames="{style.login}">
 		    <b:Column size="4">
 			<b:Row addStyleNames="{style.row}">

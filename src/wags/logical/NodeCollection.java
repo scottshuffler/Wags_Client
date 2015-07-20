@@ -34,13 +34,16 @@ public class NodeCollection implements IsSerializable
 	
 	public void addNodesToPanel(AbsolutePanel panel) {
 		if (!LogicalPanelUi.hasPositions())
-		{	for (int i = 0; i < nodes.size(); i++) {
+		{	
+			//Window.alert("IF");
+			for (int i = 0; i < nodes.size(); i++) {
 				panel.add(nodes.get(i).getLabel(), 5 + (50 * i), 5);
 			}
 		} else {
+			//Window.alert("ELSE");
 			for (int i = 0; i < nodes.size(); i++) {
 				if (!LogicalPanelUi.isDraggable()) {
-					Window.alert(nodes.get(i).getLabel().toString());
+					//Window.alert(nodes.get(i).getLabel().toString());
 					panel.add(nodes.get(i).getLabel(), 
 							nodes.get(i).getLeft(), nodes.get(i).getTop());
 				}
@@ -88,7 +91,6 @@ public class NodeCollection implements IsSerializable
 		String[] traversal = new String[nodes.size()];
 		String traversalString = "";
 		Node root = getNode(0);
-		
 		switch (traversalType) {
 		case PREORDER:
 			ArrayList<Node> preorderNodes = new ArrayList<Node>();
