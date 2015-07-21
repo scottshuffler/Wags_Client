@@ -51,6 +51,8 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 		AbstractServerCall cmd = new LoadAssignedProblemsCommand(model);
 		cmd.sendRequest();
 		
+		
+		
 	}
 	
 	
@@ -108,12 +110,36 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 		if( data.size() > 1) {
 			boolean magnetDue = false;
 			boolean logicalDue = false;
+			boolean duplicate = false;
 			
 			String[] ids = data.get(1).split("&");
 			String[] titles = data.get(2).split("&");
 			String[] statuses = data.get(3).split("&");
 			String[] types = data.get(4).split("&");
+			String[] groups = data.get(5).split("&");
+			String[] uniqueGroups = new String[groups.length];
 			
+			uniqueGroups[0] = groups[0];
+			int uniqueIndex = 0;
+			
+			for (int i = 0; i < groups.length; i++) {
+				for (int j = i+1; j < groups.length - 1; j++) {
+					if (groups[i].equals(groups[j])) {
+						duplicate = true;
+					}
+				}
+				if (!duplicate) {
+					uniqueGroups[uniqueIndex] = groups[i];
+					uniqueIndex++;
+				}
+				duplicate = false;
+			}
+			
+			for(int it = 0; it < uniqueGroups.length; it++) {
+				if (uniqueGroups[it] != null) {
+					subjectList.addItem(uniqueGroups[it]);
+				}
+			}
 			//take this out of the loop for efficiency
 			int magnetType = ProblemType.TypeToVal(ProblemType.MAGNET_PROBLEM);
 			for(int i = 0; i < ids.length; i++) {
@@ -121,8 +147,9 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 				String title = titles[i];
 				int status = new Integer(statuses[i]);
 				int type = new Integer(types[i]);
+				String group = groups[i];
 				//Window.alert("Test: " + title + " type: " + type);
-				subjectList.addItem(title);
+				//subjectList.addItem(group);
 				if (type == magnetType) {
 					if ( status == 0) {
 						magnetDue = true;

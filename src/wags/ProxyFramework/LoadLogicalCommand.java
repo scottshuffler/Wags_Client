@@ -37,7 +37,7 @@ public class LoadLogicalCommand extends AbstractServerCall {
 			int stat = Integer.parseInt(problems[i+1]);
 			int id = Integer.parseInt(problems[i+2]);
 
-			model.addProblem(id, title, stat, ProblemType.LOGICAL_PROBLEM);
+			model.addProblem(id, title, stat, "TEST", ProblemType.LOGICAL_PROBLEM);
 		}
 		model.notifyObservers();
 	}
