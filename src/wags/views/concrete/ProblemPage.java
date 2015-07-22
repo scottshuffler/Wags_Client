@@ -39,6 +39,7 @@ public class ProblemPage extends Composite implements ProblemPageView {
     @UiField ComplexPanel databasePanel; //Disabled until database problems are made
     
     @UiField ListBox subjectListBox;
+    @UiField ListBox logicalListBox;
 	
 	@UiField Button magnetCategory;
 	@UiField Button logicalCategory;
@@ -96,7 +97,11 @@ public class ProblemPage extends Composite implements ProblemPageView {
 	@UiHandler ("subjectListBox") 
 	public void onListboxCLick(ClickEvent event) {
 		presenter.listboxClick();
-		//Window.alert("Logical Problems are currently under construction, please try again later!");
+	}
+	
+	@UiHandler ("logicalListBox") 
+	public void onlogicalListboxCLick(ClickEvent event) {
+		presenter.logicalListboxClick();
 	}
 	
 	/** Disabled until database problems are made
@@ -109,6 +114,11 @@ public class ProblemPage extends Composite implements ProblemPageView {
 	@Override
 	public ListBox getListBox() {
 		return subjectListBox;
+	}
+	
+	@Override
+	public ListBox getlogicalListBox() {
+		return logicalListBox;
 	}
 
 	@Override

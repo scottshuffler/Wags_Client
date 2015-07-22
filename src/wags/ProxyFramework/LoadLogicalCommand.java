@@ -31,13 +31,13 @@ public class LoadLogicalCommand extends AbstractServerCall {
 		 */
 		String[] problems = status.getMessageArray();
 
-		for (int i = 0; i < problems.length - 2; i += 3) {
+		for (int i = 0; i < problems.length - 2; i += 4) {
 			//Message string is the format of "title","status","id"
 			String title = problems[i];
 			int stat = Integer.parseInt(problems[i+1]);
 			int id = Integer.parseInt(problems[i+2]);
-
-			model.addProblem(id, title, stat, "TEST", ProblemType.LOGICAL_PROBLEM);
+			String group = problems[i+3];
+			model.addProblem(id, title, stat, group, ProblemType.LOGICAL_PROBLEM);
 		}
 		model.notifyObservers();
 	}

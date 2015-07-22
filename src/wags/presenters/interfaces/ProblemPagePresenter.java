@@ -24,4 +24,5 @@ public interface ProblemPagePresenter extends Presenter {
 	
 	public void setPageState(int pageState);
 	public void listboxClick();
+	public void logicalListboxClick();
 }

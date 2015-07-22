@@ -34,6 +34,7 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 
 	private ProblemPageView view;
 	protected ProblemPageModel model;
+	private List<String> serverData;
 
 	/**
 	 * Basic constructor for the presenter. The presenter initializes a new model, 
@@ -88,6 +89,7 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 	 */
 	@Override
 	public void update(List<String> data) {
+		serverData = data;
 		int pageState = 0;
 		if (History.getToken().contains("logical"))
 		{
@@ -105,6 +107,10 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 		ComplexPanel magnets = view.getMagnetPanel();
 		ComplexPanel logical = view.getLogicalPanel();
 		ListBox subjectList = view.getListBox();
+		ListBox logicalList = view.getlogicalListBox();
+		
+		subjectList.addItem("All");
+		logicalList.addItem("All");
 		
 		//Only execute if problems have not already been loaded
 		if( data.size() > 1) {
@@ -119,11 +125,13 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 			String[] groups = data.get(5).split("&");
 			String[] uniqueGroups = new String[groups.length];
 			
+			//Strips duplicate groups out of the array 
+			//And then adds them to the listbox
 			uniqueGroups[0] = groups[0];
 			int uniqueIndex = 0;
 			
 			for (int i = 0; i < groups.length; i++) {
-				for (int j = i+1; j < groups.length - 1; j++) {
+				for (int j = i+1; j < groups.length; j++) {
 					if (groups[i].equals(groups[j])) {
 						duplicate = true;
 					}
@@ -134,10 +142,37 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 				}
 				duplicate = false;
 			}
-			
+			//This definetly should be done statically like this
+			//If a new logical problem category was added it would end up in the wrong box
+			//Works for now though.
 			for(int it = 0; it < uniqueGroups.length; it++) {
 				if (uniqueGroups[it] != null) {
-					subjectList.addItem(uniqueGroups[it]);
+					switch(uniqueGroups[it]) {
+					case "Binary Trees":
+						logicalList.addItem(uniqueGroups[it]);
+						break;
+					case "Heaps":
+						logicalList.addItem(uniqueGroups[it]);
+						break;
+					case "Hashing":
+						logicalList.addItem(uniqueGroups[it]);
+						break;
+					case "Graphs":
+						logicalList.addItem(uniqueGroups[it]);
+						break;
+					case "RadixSort":
+						logicalList.addItem(uniqueGroups[it]);
+						break;
+					case "Quicksort":
+						logicalList.addItem(uniqueGroups[it]);
+						break;
+					case "Created":
+						logicalList.addItem(uniqueGroups[it]);
+						break;
+					default:
+						subjectList.addItem(uniqueGroups[it]);
+					}
+					
 				}
 			}
 			//take this out of the loop for efficiency
@@ -211,6 +246,8 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 	public void setPageState(int pageState) {
 		ComplexPanel magnets = view.getMagnetPanel();
 		ComplexPanel logical = view.getLogicalPanel();
+		ListBox subjectList = view.getListBox();
+		ListBox logicalList = view.getlogicalListBox();
 		
 		UIObject magnetCategory = view.getMagnetCategory();
 		UIObject logicalCategory = view.getLogicalCategory();
@@ -218,6 +255,8 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 		//update the tab (see end of this function
 		magnets.setVisible(false);
 		logical.setVisible(false);
+		subjectList.setVisible(false);
+		logicalList.setVisible(false);
 		
 		magnetCategory.removeStyleName("category_selected");
 		logicalCategory.removeStyleName("category_selected");
@@ -225,10 +264,12 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 		switch (pageState) {
 		case MAGNET_STATE:
 			magnets.setVisible(true);
+			subjectList.setVisible(true);
 			magnetCategory.addStyleName("category_selected");
 			break;
 		case LOGICAL_STATE:
 			logical.setVisible(true);
+			logicalList.setVisible(true);
 			logicalCategory.addStyleName("category_selected");
 			break;
 		case DATABASE_STATE: //fall through
@@ -239,11 +280,92 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 		
 	}
 
+	@Override
+	public void listboxClick() {
+		ListBox subjectList = view.getListBox();
+		String title = subjectList.getValue(subjectList.getSelectedIndex());
+		//Window.alert("CLICKED " + title);
+		filterByGroupName("magnet", title);
+	}
+
 
 
 	@Override
-	public void listboxClick() {
-		// TODO Auto-generated method stub
+	public void logicalListboxClick() {
+		ListBox logicalList = view.getlogicalListBox();
+		String title = logicalList.getValue(logicalList.getSelectedIndex());
+		//Window.alert("CLICKED " + title);
+		filterByGroupName("logical", title);
+	}
+	
+	public void filterByGroupName(String panelType, String panelGroup) {
+		ComplexPanel panel;
+		if (panelType.equalsIgnoreCase("magnet")) {
+			panel = view.getMagnetPanel();
+		}
+		else {
+			panel = view.getLogicalPanel();
+		}
+		panel.clear();
 		
+		if( serverData.size() > 1) {
+			boolean magnetDue = false;
+			boolean logicalDue = false;
+			boolean duplicate = false;
+			
+			String[] ids = serverData.get(1).split("&");
+			String[] titles = serverData.get(2).split("&");
+			String[] statuses = serverData.get(3).split("&");
+			String[] types = serverData.get(4).split("&");
+			String[] groups = serverData.get(5).split("&");
+			
+			int magnetType = ProblemType.TypeToVal(ProblemType.MAGNET_PROBLEM);
+			for(int i = 0; i < ids.length; i++) {
+				int id = new Integer(ids[i]);
+				String title = titles[i];
+				int status = new Integer(statuses[i]);
+				int type = new Integer(types[i]);
+				String group = groups[i];
+				//Window.alert("Test: " + title + " type: " + type);
+				//subjectList.addItem(group);
+				if (panelGroup.equalsIgnoreCase("All")) {
+					
+				}
+				else {
+					Window.alert("magnet group: " + group + " parameter group: " + "panelGroup");
+					if (group.equalsIgnoreCase(panelGroup)) {
+						if (type == magnetType) {
+							if ( status == 0) {
+								magnetDue = true;
+							}
+							panel.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+						} else { 	
+							//Is a logical problem
+							if (status == 0)  {
+								logicalDue = true;
+							}
+							panel.add(new ProblemButton(id, title, status, ProblemType.LOGICAL_PROBLEM));
+						}
+					}
+				}
+				
+				// Expand these statements for database problems at a later date
+			}
+			if (magnetDue) {
+				view.getMagnetCategory().setIcon(IconType.EXCLAMATION);
+				view.getMagnetCategory().addStyleName("problem_due");
+			} else {
+				view.getMagnetCategory().addStyleName("problem_complete");
+			}
+			if (logicalDue) {
+				view.getLogicalCategory().setIcon(IconType.EXCLAMATION);
+				view.getLogicalCategory().addStyleName("problem_due");
+			} else {
+				view.getLogicalCategory().addStyleName("problem_category");
+			}
+		}
+		
+		// Update page state
+		//setPageState(pageState);
 	}
 }

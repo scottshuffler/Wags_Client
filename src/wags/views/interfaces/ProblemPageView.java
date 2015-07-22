@@ -16,4 +16,5 @@ public interface ProblemPageView extends View {
 	public Button getLogicalCategory();
 	//public Button getDatabaseCategory(); Disabled until database problems are made
 	ListBox getListBox();
+	ListBox getlogicalListBox();
 }
