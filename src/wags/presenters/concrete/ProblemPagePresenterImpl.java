@@ -14,11 +14,14 @@ import wags.views.interfaces.ProblemPageView;
 
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.UIObject;
+
+import sun.awt.AWTAccessor.WindowAccessor;
 
 /**
  * @author Dakota Murray
@@ -35,6 +38,8 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 	private ProblemPageView view;
 	protected ProblemPageModel model;
 	private List<String> serverData;
+	private boolean wasLoaded = false;
+	private int globalPageState;
 
 	/**
 	 * Basic constructor for the presenter. The presenter initializes a new model, 
@@ -51,12 +56,7 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 		
 		AbstractServerCall cmd = new LoadAssignedProblemsCommand(model);
 		cmd.sendRequest();
-		
-		
-		
 	}
-	
-	
 	
 	@Override
 	public void go(HasWidgets container) {
@@ -89,6 +89,7 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 	 */
 	@Override
 	public void update(List<String> data) {
+		//Window.alert("update");
 		serverData = data;
 		int pageState = 0;
 		if (History.getToken().contains("logical"))
@@ -109,8 +110,11 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 		ListBox subjectList = view.getListBox();
 		ListBox logicalList = view.getlogicalListBox();
 		
-		subjectList.addItem("All");
-		logicalList.addItem("All");
+		if (wasLoaded == false) {
+			subjectList.addItem("All Magnet Problems");
+			logicalList.addItem("All Logical Problems");
+			wasLoaded = true;
+		}
 		
 		//Only execute if problems have not already been loaded
 		if( data.size() > 1) {
@@ -214,25 +218,38 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 		}
 		
 		// Update page state
+		globalPageState = pageState;
 		setPageState(pageState);
 	}
 
 	@Override
 	public void onMagnetCategoryClick() {
-		History.newItem(Tokens.CODE);
-		model.setPageState(MAGNET_STATE, true);
+		if (globalPageState != 0) {
+			History.newItem(Tokens.CODE);
+			//model.setPageState(MAGNET_STATE, true);
+			setPageState(0);
+			globalPageState = 0;
+		}
 	}
 
 	@Override
 	public void onLogicalCategoryClick() {
-		History.newItem(Tokens.LOGICAL);
-		model.setPageState(LOGICAL_STATE, true);
+		if (globalPageState != 1) {
+			History.newItem(Tokens.LOGICAL);
+			//model.setPageState(LOGICAL_STATE, true);
+			setPageState(1);
+			globalPageState = 1;
+		}
 	}
 
 	@Override
 	public void onDatabaseCategoryClick() {
-		History.newItem(Tokens.DBMAIN);
-		model.setPageState(DATABASE_STATE, true);
+		if (globalPageState != 2) {
+			History.newItem(Tokens.DBMAIN);
+			//model.setPageState(DATABASE_STATE, true);
+			setPageState(2);
+			globalPageState = 2;
+		}
 	}
 
 	/**
@@ -244,6 +261,7 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 	 */
 	@Override
 	public void setPageState(int pageState) {
+		//Window.alert("setPageState");
 		ComplexPanel magnets = view.getMagnetPanel();
 		ComplexPanel logical = view.getLogicalPanel();
 		ListBox subjectList = view.getListBox();
@@ -284,7 +302,6 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 	public void listboxClick() {
 		ListBox subjectList = view.getListBox();
 		String title = subjectList.getValue(subjectList.getSelectedIndex());
-		//Window.alert("CLICKED " + title);
 		filterByGroupName("magnet", title);
 	}
 
@@ -294,7 +311,6 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 	public void logicalListboxClick() {
 		ListBox logicalList = view.getlogicalListBox();
 		String title = logicalList.getValue(logicalList.getSelectedIndex());
-		//Window.alert("CLICKED " + title);
 		filterByGroupName("logical", title);
 	}
 	
@@ -307,17 +323,17 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 			panel = view.getLogicalPanel();
 		}
 		panel.clear();
-		
-		if( serverData.size() > 1) {
+		List<String> localData = serverData;
+		if( localData.size() > 1) {
 			boolean magnetDue = false;
 			boolean logicalDue = false;
 			boolean duplicate = false;
 			
-			String[] ids = serverData.get(1).split("&");
-			String[] titles = serverData.get(2).split("&");
-			String[] statuses = serverData.get(3).split("&");
-			String[] types = serverData.get(4).split("&");
-			String[] groups = serverData.get(5).split("&");
+			String[] ids = localData.get(1).split("&");
+			String[] titles = localData.get(2).split("&");
+			String[] statuses = localData.get(3).split("&");
+			String[] types = localData.get(4).split("&");
+			String[] groups = localData.get(5).split("&");
 			
 			int magnetType = ProblemType.TypeToVal(ProblemType.MAGNET_PROBLEM);
 			for(int i = 0; i < ids.length; i++) {
@@ -326,21 +342,27 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 				int status = new Integer(statuses[i]);
 				int type = new Integer(types[i]);
 				String group = groups[i];
-				//Window.alert("Test: " + title + " type: " + type);
-				//subjectList.addItem(group);
-				if (panelGroup.equalsIgnoreCase("All")) {
-					
+				if (panelGroup.equalsIgnoreCase("All Magnet Problems") || panelGroup.equalsIgnoreCase("All Logical Problems")) {
+					if (type == magnetType && panelType.equalsIgnoreCase("magnet")) {
+						if ( status == 0) {
+							magnetDue = true;
+						}
+						panel.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+					} else if (type == 1 && panelType.equalsIgnoreCase("logical")){
+						if (status == 0)  {
+							logicalDue = true;
+						}
+						panel.add(new ProblemButton(id, title, status, ProblemType.LOGICAL_PROBLEM));
+					}
 				}
 				else {
-					Window.alert("magnet group: " + group + " parameter group: " + "panelGroup");
 					if (group.equalsIgnoreCase(panelGroup)) {
 						if (type == magnetType) {
 							if ( status == 0) {
 								magnetDue = true;
 							}
 							panel.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
-						} else { 	
-							//Is a logical problem
+						} else {
 							if (status == 0)  {
 								logicalDue = true;
 							}
@@ -348,8 +370,6 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 						}
 					}
 				}
-				
-				// Expand these statements for database problems at a later date
 			}
 			if (magnetDue) {
 				view.getMagnetCategory().setIcon(IconType.EXCLAMATION);
@@ -364,8 +384,5 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 				view.getLogicalCategory().addStyleName("problem_category");
 			}
 		}
-		
-		// Update page state
-		//setPageState(pageState);
 	}
 }

@@ -57,8 +57,8 @@
 	    </b:FluidRow>
 	    
 	    <b:FluidRow addStyleNames="{style.listBoxContainer}">
-	       <b:ListBox ui:field="subjectListBox"></b:ListBox>
-	       <b:ListBox ui:field="logicalListBox"></b:ListBox>
+	       <b:ListBox ui:field="subjectListBox" visible="false"></b:ListBox>
+	       <b:ListBox ui:field="logicalListBox" visible="false"></b:ListBox>
 	    </b:FluidRow>
 	    
 	    <b:FluidRow addStyleNames="{style.problemCategoryContainer}">
