@@ -5,6 +5,7 @@ import wags.presenters.interfaces.ProblemPagePresenter;
 import wags.views.interfaces.ProblemPageView;
 
 import com.github.gwtbootstrap.client.ui.Button;
+import com.github.gwtbootstrap.client.ui.Legend;
 import com.github.gwtbootstrap.client.ui.ListBox;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -43,6 +44,9 @@ public class ProblemPage extends Composite implements ProblemPageView {
 	
 	@UiField Button magnetCategory;
 	@UiField Button logicalCategory;
+	
+	@UiField Legend logicalLegend;
+	@UiField Legend magnetLegend;
     //@UiField Button databaseCategory; Disabled until database problems are made
 	
 	private ProblemPagePresenter presenter;
@@ -119,6 +123,16 @@ public class ProblemPage extends Composite implements ProblemPageView {
 	@Override
 	public ListBox getlogicalListBox() {
 		return logicalListBox;
+	}
+	
+	@Override
+	public Legend getLogicalLegend() {
+		return logicalLegend;
+	}
+	
+	@Override
+	public Legend getMagnetLegend() {
+		return magnetLegend;
 	}
 
 	@Override

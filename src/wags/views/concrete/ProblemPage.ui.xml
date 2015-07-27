@@ -31,7 +31,6 @@
 		display:inline-block;
 		margin-top:1em;
 		float:none;
-		border: 2px solid black;
 	}
 	.problemCategoryContainer {
 		text-align:center;
@@ -50,11 +49,19 @@
 	</ui:style>
 	
 	<b:FluidRow>
+	    
+	    <b:FluidRow addStyleNames="{style.problemCategoryContainer}">
+	    	<b:Legend ui:field="magnetLegend" visible="false">Code Problems</b:Legend>
+	    	<b:Legend ui:field="logicalLegend" visible="false">Logical Problems</b:Legend>
+	    </b:FluidRow>
+	    
 	    <b:FluidRow addStyleNames="{style.problemCategoryContainer}">
 	        	<b:Button ui:field="magnetCategory" size="LARGE" icon="OK" addStyleNames="{style.problemCategory}">Code</b:Button>
 	        	<b:Button ui:field="logicalCategory" size="LARGE" icon="OK" addStyleNames="{style.problemCategory}">Logical</b:Button>
 		<!-- 	<b:Button ui:field="databaseCategory" size="LARGE" icon="OK" addStyleNames="{style.problemCategory}">Database</b:Button>   Disabled until database problems are made-->	
 	    </b:FluidRow>
+	    
+	    
 	    
 	    <b:FluidRow addStyleNames="{style.listBoxContainer}">
 	       <b:ListBox ui:field="subjectListBox" visible="false"></b:ListBox>

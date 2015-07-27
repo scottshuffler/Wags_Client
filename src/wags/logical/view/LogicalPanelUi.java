@@ -175,7 +175,7 @@ public class LogicalPanelUi extends Composite {
 	}
 	
 	public void addNodesToPanel() {
-		Window.alert("Tryihg to add");
+		Window.alert("CHRISAHMAR to add");
 		xpositions = logProb.xPositions.split(",");
 		ypositions = logProb.yPositions.split(",");
 		

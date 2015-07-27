@@ -12,6 +12,7 @@ import wags.presenters.interfaces.ProblemPagePresenter;
 import wags.views.elements.ProblemButton;
 import wags.views.interfaces.ProblemPageView;
 
+import com.github.gwtbootstrap.client.ui.Legend;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
@@ -269,12 +270,18 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 		
 		UIObject magnetCategory = view.getMagnetCategory();
 		UIObject logicalCategory = view.getLogicalCategory();
+		
+		Legend logicalLegend = view.getLogicalLegend();
+		Legend magnetLegend = view.getMagnetLegend();
+		
 		//begin by setting everything to invisible to avoid visual mishaps and make it easy to 
 		//update the tab (see end of this function
 		magnets.setVisible(false);
 		logical.setVisible(false);
 		subjectList.setVisible(false);
 		logicalList.setVisible(false);
+		logicalLegend.setVisible(false);
+		magnetLegend.setVisible(false);
 		
 		magnetCategory.removeStyleName("category_selected");
 		logicalCategory.removeStyleName("category_selected");
@@ -284,16 +291,21 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 			magnets.setVisible(true);
 			subjectList.setVisible(true);
 			magnetCategory.addStyleName("category_selected");
+			magnetLegend.setVisible(true);
+			//magnetCategory.getElement().getStyle().setProperty("border", "2px solid black !important");
 			break;
 		case LOGICAL_STATE:
 			logical.setVisible(true);
 			logicalList.setVisible(true);
 			logicalCategory.addStyleName("category_selected");
+			logicalLegend.setVisible(true);
 			break;
 		case DATABASE_STATE: //fall through
 		default:
 			magnets.setVisible(true);
+			subjectList.setVisible(true);
 			magnetCategory.addStyleName("category_selected");
+			magnetLegend.setVisible(true);
 		}
 		
 	}
