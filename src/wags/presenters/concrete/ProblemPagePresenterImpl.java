@@ -12,6 +12,7 @@ import wags.presenters.interfaces.ProblemPagePresenter;
 import wags.views.elements.ProblemButton;
 import wags.views.interfaces.ProblemPageView;
 
+import com.github.gwtbootstrap.client.ui.Label;
 import com.github.gwtbootstrap.client.ui.Legend;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.user.client.History;
@@ -108,8 +109,17 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 		// load the panels we need
 		ComplexPanel magnets = view.getMagnetPanel();
 		ComplexPanel logical = view.getLogicalPanel();
+		
+		ComplexPanel magnetsDue = view.getMagnetDuePanel();
+		ComplexPanel magnetsCompleted = view.getMagnetCompletedPanel();
+		ComplexPanel magnetsReview = view.getMagnetReviewPanel();
+		
 		ListBox subjectList = view.getListBox();
 		ListBox logicalList = view.getlogicalListBox();
+		
+		Label newLab = new Label();
+		newLab.setText("TEST");
+		magnets.add(newLab);
 		
 		if (wasLoaded == false) {
 			subjectList.addItem("All Magnet Problems");
@@ -193,8 +203,15 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 				if (type == magnetType) {
 					if ( status == 0) {
 						magnetDue = true;
+						magnetsDue.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
 					}
-					magnets.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+					else if(status == 1) {
+						magnetsCompleted.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+					}
+					
+					else {
+					magnetsReview.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+					}
 				} else { 	
 					//Is a logical problem
 					if (status == 0)  {
@@ -207,6 +224,7 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 			if (magnetDue) {
 				view.getMagnetCategory().setIcon(IconType.EXCLAMATION);
 				view.getMagnetCategory().addStyleName("problem_due");
+				
 			} else {
 				view.getMagnetCategory().addStyleName("problem_complete");
 			}

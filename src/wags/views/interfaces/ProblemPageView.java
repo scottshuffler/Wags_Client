@@ -20,4 +20,7 @@ public interface ProblemPageView extends View {
 	ListBox getlogicalListBox();
 	Legend getMagnetLegend();
 	Legend getLogicalLegend();
+	public ComplexPanel getMagnetReviewPanel();
+	public ComplexPanel getMagnetCompletedPanel();
+	public ComplexPanel getMagnetDuePanel();
 }

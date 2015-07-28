@@ -39,6 +39,10 @@ public class ProblemPage extends Composite implements ProblemPageView {
 	@UiField ComplexPanel logicalPanel;
     @UiField ComplexPanel databasePanel; //Disabled until database problems are made
     
+    @UiField ComplexPanel magnetDuePanel;
+    @UiField ComplexPanel magnetCompletedPanel;
+    @UiField ComplexPanel magnetReviewPanel;
+    
     @UiField ListBox subjectListBox;
     @UiField ListBox logicalListBox;
 	
@@ -80,7 +84,21 @@ public class ProblemPage extends Composite implements ProblemPageView {
 	public ComplexPanel getLogicalPanel() {
 		return logicalPanel;
 	}
-
+	
+	@Override
+	public ComplexPanel getMagnetDuePanel() {
+		return magnetDuePanel;
+	}
+	
+	@Override
+	public ComplexPanel getMagnetCompletedPanel() {
+		return magnetCompletedPanel;
+	}
+	
+	@Override
+	public ComplexPanel getMagnetReviewPanel() {
+		return magnetReviewPanel;
+	}
 	
 	@Override
 	public ComplexPanel getDatabasePanel() {

@@ -45,6 +45,12 @@
 		margin-left:auto;
 		margin-right:auto;
 	}
+
+	.backgroundColor {
+		background-color: #C0BDA9 !important;
+
+	}
+
 		 
 	</ui:style>
 	
@@ -70,6 +76,15 @@
 	    
 	    <b:FluidRow addStyleNames="{style.problemCategoryContainer}">
 	    	<b:incubator.Table visible="false" ui:field="magnetPanel">
+	    	    <b:incubator.Table addStyleNames="{style.backgroundColor}" visible="true" ui:field="magnetDuePanel">
+	    	        <b:Heading size="5">Due Problems</b:Heading>
+		    	</b:incubator.Table>
+		    	<b:incubator.Table visible="true" ui:field="magnetCompletedPanel">
+		    	    <b:Heading size="5">Completed Problems</b:Heading>
+		    	</b:incubator.Table>
+		    	<b:incubator.Table visible="true" ui:field="magnetReviewPanel">
+		    	    <b:Heading size="5">Review Problems</b:Heading>
+		    	</b:incubator.Table>
 		    </b:incubator.Table>
 		    
 	    	<b:incubator.Table visible="false" ui:field="logicalPanel">

@@ -22,7 +22,6 @@
 			margin-left: 35.2%;
 		}
 		.labelText{
-			width: 105px;
 			padding-top: 10px;
 			font-size: 20px;
 		}
