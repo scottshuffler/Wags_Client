@@ -12,6 +12,7 @@ import wags.presenters.interfaces.ProblemPagePresenter;
 import wags.views.elements.ProblemButton;
 import wags.views.interfaces.ProblemPageView;
 
+import com.github.gwtbootstrap.client.ui.Heading;
 import com.github.gwtbootstrap.client.ui.Label;
 import com.github.gwtbootstrap.client.ui.Legend;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
@@ -110,16 +111,16 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 		ComplexPanel magnets = view.getMagnetPanel();
 		ComplexPanel logical = view.getLogicalPanel();
 		
-		ComplexPanel magnetsDue = view.getMagnetDuePanel();
-		ComplexPanel magnetsCompleted = view.getMagnetCompletedPanel();
-		ComplexPanel magnetsReview = view.getMagnetReviewPanel();
+		ComplexPanel magnetsDuePane = view.getMagnetDuePanel();
+		ComplexPanel magnetsCompletedPane = view.getMagnetCompletedPanel();
+		ComplexPanel magnetsReviewPane = view.getMagnetReviewPanel();
+		
+		ComplexPanel logicalDuePane = view.getLogicalDuePanel();
+		ComplexPanel logicalCompletedPane = view.getLogicalCompletedPanel();
+		ComplexPanel logicalReviewPane = view.getLogicalReviewPanel();
 		
 		ListBox subjectList = view.getListBox();
 		ListBox logicalList = view.getlogicalListBox();
-		
-		Label newLab = new Label();
-		newLab.setText("TEST");
-		magnets.add(newLab);
 		
 		if (wasLoaded == false) {
 			subjectList.addItem("All Magnet Problems");
@@ -203,21 +204,34 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 				if (type == magnetType) {
 					if ( status == 0) {
 						magnetDue = true;
-						magnetsDue.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+						magnetsDuePane.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+						magnetsDuePane.setVisible(true);
 					}
 					else if(status == 1) {
-						magnetsCompleted.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+						magnetsCompletedPane.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+						magnetsCompletedPane.setVisible(true);
 					}
 					
 					else {
-					magnetsReview.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+					magnetsReviewPane.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+					magnetsReviewPane.setVisible(true);
 					}
 				} else { 	
 					//Is a logical problem
 					if (status == 0)  {
 						logicalDue = true;
+						logicalDuePane.add(new ProblemButton(id, title, status, ProblemType.LOGICAL_PROBLEM));
+						logicalDuePane.setVisible(true);
 					}
-					logical.add(new ProblemButton(id, title, status, ProblemType.LOGICAL_PROBLEM));
+					else if(status == 1) {
+						logicalCompletedPane.add(new ProblemButton(id, title, status, ProblemType.LOGICAL_PROBLEM));
+						logicalCompletedPane.setVisible(true);
+					}
+					else{
+						logicalReviewPane.add(new ProblemButton(id, title, status, ProblemType.LOGICAL_PROBLEM));
+						logicalReviewPane.setVisible(true);
+					}
+					
 				}
 				// Expand these statements for database problems at a later date
 			}
@@ -346,13 +360,43 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 	
 	public void filterByGroupName(String panelType, String panelGroup) {
 		ComplexPanel panel;
+		ComplexPanel duePanel;
+		ComplexPanel completedPanel;
+		ComplexPanel reviewPanel;
+		
 		if (panelType.equalsIgnoreCase("magnet")) {
 			panel = view.getMagnetPanel();
+			duePanel = view.getMagnetDuePanel();
+			completedPanel = view.getMagnetCompletedPanel();
+			reviewPanel = view.getMagnetReviewPanel();
 		}
 		else {
 			panel = view.getLogicalPanel();
+			duePanel = view.getLogicalDuePanel();
+			completedPanel = view.getLogicalCompletedPanel();
+			reviewPanel = view.getLogicalReviewPanel();
 		}
 		panel.clear();
+		panel.add(duePanel);
+		panel.add(completedPanel);
+		panel.add(reviewPanel);
+		
+		Heading h1 = new Heading(5,"Uncompleted Problems");
+		Heading h2 = new Heading(5,"Completed Problems");
+		Heading h3 = new Heading(5,"Review Problems");
+		
+		duePanel.clear();
+		completedPanel.clear();
+		reviewPanel.clear();
+		
+		duePanel.add(h1);
+		completedPanel.add(h2);
+		reviewPanel.add(h3);
+		
+		duePanel.setVisible(false);
+		completedPanel.setVisible(false);
+		reviewPanel.setVisible(false);
+		
 		List<String> localData = serverData;
 		if( localData.size() > 1) {
 			boolean magnetDue = false;
@@ -376,13 +420,33 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 					if (type == magnetType && panelType.equalsIgnoreCase("magnet")) {
 						if ( status == 0) {
 							magnetDue = true;
+							duePanel.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+							duePanel.setVisible(true);
 						}
-						panel.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+						else if (status == 1) {
+							completedPanel.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+							completedPanel.setVisible(true);
+						}
+						else {
+							reviewPanel.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+							reviewPanel.setVisible(true);
+						}
+						//panel.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
 					} else if (type == 1 && panelType.equalsIgnoreCase("logical")){
-						if (status == 0)  {
+						if ( status == 0) {
 							logicalDue = true;
+							duePanel.add(new ProblemButton(id, title, status, ProblemType.LOGICAL_PROBLEM));
+							duePanel.setVisible(true);
 						}
-						panel.add(new ProblemButton(id, title, status, ProblemType.LOGICAL_PROBLEM));
+						else if (status == 1) {
+							completedPanel.add(new ProblemButton(id, title, status, ProblemType.LOGICAL_PROBLEM));
+							completedPanel.setVisible(true);
+						}
+						else {
+							reviewPanel.add(new ProblemButton(id, title, status, ProblemType.LOGICAL_PROBLEM));
+							reviewPanel.setVisible(true);
+						}
+						//panel.add(new ProblemButton(id, title, status, ProblemType.LOGICAL_PROBLEM));
 					}
 				}
 				else {
@@ -390,13 +454,33 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 						if (type == magnetType) {
 							if ( status == 0) {
 								magnetDue = true;
+								duePanel.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+								duePanel.setVisible(true);
 							}
-							panel.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+							else if (status == 1) {
+								completedPanel.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+								completedPanel.setVisible(true);
+							}
+							else {
+								reviewPanel.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
+								reviewPanel.setVisible(true);
+							}
+							//panel.add(new ProblemButton(id, title, status, ProblemType.MAGNET_PROBLEM));
 						} else {
-							if (status == 0)  {
+							if ( status == 0) {
 								logicalDue = true;
+								duePanel.add(new ProblemButton(id, title, status, ProblemType.LOGICAL_PROBLEM));
+								duePanel.setVisible(true);
 							}
-							panel.add(new ProblemButton(id, title, status, ProblemType.LOGICAL_PROBLEM));
+							else if (status == 1) {
+								completedPanel.add(new ProblemButton(id, title, status, ProblemType.LOGICAL_PROBLEM));
+								completedPanel.setVisible(true);
+							}
+							else {
+								reviewPanel.add(new ProblemButton(id, title, status, ProblemType.LOGICAL_PROBLEM));
+								reviewPanel.setVisible(true);
+							}
+							//panel.add(new ProblemButton(id, title, status, ProblemType.LOGICAL_PROBLEM));
 						}
 					}
 				}

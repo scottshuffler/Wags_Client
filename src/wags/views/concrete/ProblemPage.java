@@ -43,6 +43,10 @@ public class ProblemPage extends Composite implements ProblemPageView {
     @UiField ComplexPanel magnetCompletedPanel;
     @UiField ComplexPanel magnetReviewPanel;
     
+    @UiField ComplexPanel logicalDuePanel;
+    @UiField ComplexPanel logicalCompletedPanel;
+    @UiField ComplexPanel logicalReviewPanel;
+    
     @UiField ListBox subjectListBox;
     @UiField ListBox logicalListBox;
 	
@@ -98,6 +102,22 @@ public class ProblemPage extends Composite implements ProblemPageView {
 	@Override
 	public ComplexPanel getMagnetReviewPanel() {
 		return magnetReviewPanel;
+	}
+	
+	
+	@Override
+	public ComplexPanel getLogicalDuePanel() {
+		return logicalDuePanel;
+	}
+	
+	@Override
+	public ComplexPanel getLogicalCompletedPanel() {
+		return logicalCompletedPanel;
+	}
+	
+	@Override
+	public ComplexPanel getLogicalReviewPanel() {
+		return logicalReviewPanel;
 	}
 	
 	@Override

@@ -23,4 +23,7 @@ public interface ProblemPageView extends View {
 	public ComplexPanel getMagnetReviewPanel();
 	public ComplexPanel getMagnetCompletedPanel();
 	public ComplexPanel getMagnetDuePanel();
+	public ComplexPanel getLogicalDuePanel();
+	public ComplexPanel getLogicalCompletedPanel();
+	public ComplexPanel getLogicalReviewPanel();
 }

@@ -47,7 +47,7 @@
 	}
 
 	.backgroundColor {
-		background-color: #C0BDA9 !important;
+		background-color: transparent !important;
 
 	}
 
@@ -76,18 +76,27 @@
 	    
 	    <b:FluidRow addStyleNames="{style.problemCategoryContainer}">
 	    	<b:incubator.Table visible="false" ui:field="magnetPanel">
-	    	    <b:incubator.Table addStyleNames="{style.backgroundColor}" visible="true" ui:field="magnetDuePanel">
-	    	        <b:Heading size="5">Due Problems</b:Heading>
+	    	    <b:incubator.Table addStyleNames="{style.backgroundColor}" visible="false" ui:field="magnetDuePanel">
+	    	        <b:Heading size="5">Uncompleted Problems</b:Heading>
 		    	</b:incubator.Table>
-		    	<b:incubator.Table visible="true" ui:field="magnetCompletedPanel">
+		    	<b:incubator.Table addStyleNames="{style.backgroundColor}" visible="false" ui:field="magnetCompletedPanel">
 		    	    <b:Heading size="5">Completed Problems</b:Heading>
 		    	</b:incubator.Table>
-		    	<b:incubator.Table visible="true" ui:field="magnetReviewPanel">
+		    	<b:incubator.Table addStyleNames="{style.backgroundColor}" visible="false" ui:field="magnetReviewPanel">
 		    	    <b:Heading size="5">Review Problems</b:Heading>
 		    	</b:incubator.Table>
 		    </b:incubator.Table>
 		    
 	    	<b:incubator.Table visible="false" ui:field="logicalPanel">
+	    	    <b:incubator.Table addStyleNames="{style.backgroundColor}" visible="false" ui:field="logicalDuePanel">
+	    	        <b:Heading size="5">Uncompleted Problems</b:Heading>
+		    	</b:incubator.Table>
+		    	<b:incubator.Table addStyleNames="{style.backgroundColor}" visible="false" ui:field="logicalCompletedPanel">
+		    	    <b:Heading size="5">Completed Problems</b:Heading>
+		    	</b:incubator.Table>
+		    	<b:incubator.Table addStyleNames="{style.backgroundColor}" visible="false" ui:field="logicalReviewPanel">
+		    	    <b:Heading size="5">Review Problems</b:Heading>
+		    	</b:incubator.Table>
 		    </b:incubator.Table>
 		     
 	   	    <b:incubator.Table visible="false" ui:field="databasePanel">

@@ -14,7 +14,8 @@
 
 	.button {
 		padding-top:4%;
-		padding-bottom:4%
+		padding-bottom:4%;
+		box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.25);
 	}
 
 	.icon {
@@ -28,13 +29,13 @@
 	
 	<b:FluidRow addStyleNames="{style.buttonContainer}">
 	    <b:Column size="1">
-	       <b:Icon type="OK" size="LARGE" alignment="RIGHT" ui:field="statusIcon" addStyleNames="{style.icon}"/> 
+	       <b:Icon type="OK" size="LARGE" alignment="RIGHT" ui:field="statusIcon" addStyleNames="{style.icon}" visible="false"/> 
 	    </b:Column>
 	    <b:Column size="10">
 	        <b:Button ui:field="button" block="true" addStyleNames="{style.button}"></b:Button>
 	    </b:Column>
 	    <b:Column size="1">
-	        <b:Icon type="CHEVRON_RIGHT" size="LARGE" alignment="LEFT" addStyleNames="{style.icon}"/>
+	        <b:Icon type="CHEVRON_RIGHT" size="LARGE" alignment="LEFT" addStyleNames="{style.icon}" visible="false"/>
 	    </b:Column>
 	</b:FluidRow>
 </ui:UiBinder>
