@@ -99,7 +99,9 @@ public class LogicalPanelUi extends Composite {
 	@UiHandler("resetButton")
 	void handleResetClick(ClickEvent e) {
 		ec.emptyEdges();
-		resetNodes();
+		ec.clearEdgeNodeSelections();
+		//resetNodes();
+		nc.removeSelectedState();
 		setMessage("Nodes reset", Color.Notification);
 	}
 	

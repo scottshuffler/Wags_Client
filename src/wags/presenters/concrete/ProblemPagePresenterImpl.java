@@ -12,9 +12,11 @@ import wags.presenters.interfaces.ProblemPagePresenter;
 import wags.views.elements.ProblemButton;
 import wags.views.interfaces.ProblemPageView;
 
+import com.github.gwtbootstrap.client.ui.Button;
 import com.github.gwtbootstrap.client.ui.Heading;
 import com.github.gwtbootstrap.client.ui.Label;
 import com.github.gwtbootstrap.client.ui.Legend;
+import com.github.gwtbootstrap.client.ui.constants.ButtonType;
 import com.github.gwtbootstrap.client.ui.constants.IconType;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
@@ -235,19 +237,19 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 				}
 				// Expand these statements for database problems at a later date
 			}
-			if (magnetDue) {
-				view.getMagnetCategory().setIcon(IconType.EXCLAMATION);
-				view.getMagnetCategory().addStyleName("problem_due");
-				
-			} else {
-				view.getMagnetCategory().addStyleName("problem_complete");
-			}
-			if (logicalDue) {
-				view.getLogicalCategory().setIcon(IconType.EXCLAMATION);
-				view.getLogicalCategory().addStyleName("problem_due");
-			} else {
-				view.getLogicalCategory().addStyleName("problem_category");
-			}
+//			if (magnetDue) {
+//				view.getMagnetCategory().setIcon(IconType.EXCLAMATION);
+//				view.getMagnetCategory().addStyleName("problem_due");
+//				
+//			} else {
+//				view.getMagnetCategory().addStyleName("problem_complete");
+//			}
+//			if (logicalDue) {
+//				view.getLogicalCategory().setIcon(IconType.EXCLAMATION);
+//				view.getLogicalCategory().addStyleName("problem_due");
+//			} else {
+//				view.getLogicalCategory().addStyleName("problem_category");
+//			}
 		}
 		
 		// Update page state
@@ -294,6 +296,18 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 	 */
 	@Override
 	public void setPageState(int pageState) {
+		Button logicalButton = view.getLogicalCategory();
+		Button magnetButton = view.getMagnetCategory();
+		if (pageState == 1)
+		{
+			pageState = 1;
+			logicalButton.setEnabled(false);
+			magnetButton.setEnabled(true);
+		}
+		else {
+			magnetButton.setEnabled(false);
+			logicalButton.setEnabled(true);
+		}
 		//Window.alert("setPageState");
 		ComplexPanel magnets = view.getMagnetPanel();
 		ComplexPanel logical = view.getLogicalPanel();
@@ -359,6 +373,20 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 	}
 	
 	public void filterByGroupName(String panelType, String panelGroup) {
+		
+		Button logicalButton = view.getLogicalCategory();
+		Button magnetButton = view.getMagnetCategory();
+		int pageState = 0;
+		if (History.getToken().contains("logical"))
+		{
+			pageState = 1;
+			logicalButton.setEnabled(false);
+			magnetButton.setEnabled(true);
+		}
+		else {
+			magnetButton.setEnabled(false);
+			logicalButton.setEnabled(true);
+		}
 		ComplexPanel panel;
 		ComplexPanel duePanel;
 		ComplexPanel completedPanel;
@@ -485,18 +513,18 @@ public class ProblemPagePresenterImpl implements ProblemPagePresenter {
 					}
 				}
 			}
-			if (magnetDue) {
-				view.getMagnetCategory().setIcon(IconType.EXCLAMATION);
-				view.getMagnetCategory().addStyleName("problem_due");
-			} else {
-				view.getMagnetCategory().addStyleName("problem_complete");
-			}
-			if (logicalDue) {
-				view.getLogicalCategory().setIcon(IconType.EXCLAMATION);
-				view.getLogicalCategory().addStyleName("problem_due");
-			} else {
-				view.getLogicalCategory().addStyleName("problem_category");
-			}
+//			if (magnetDue) {
+//				view.getMagnetCategory().setIcon(IconType.EXCLAMATION);
+//				view.getMagnetCategory().addStyleName("problem_due");
+//			} else {
+//				view.getMagnetCategory().addStyleName("problem_complete");
+//			}
+//			if (logicalDue) {
+//				view.getLogicalCategory().setIcon(IconType.EXCLAMATION);
+//				view.getLogicalCategory().addStyleName("problem_due");
+//			} else {
+//				view.getLogicalCategory().addStyleName("problem_category");
+//			}
 		}
 	}
 }
