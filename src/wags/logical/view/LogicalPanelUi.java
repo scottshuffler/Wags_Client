@@ -64,12 +64,15 @@ public class LogicalPanelUi extends Composite {
 	private LogicalMicrolab logMicro;
 	private LogicalPanel panel;
 	private static LogicalProblem logProb;
+	private static LogicalProblem origProb;
 	private Problem problem;
 	private static boolean hasPositions = false;
 	private static DrawingArea canvas;
 	private String[] xpositions;
 	private String[] ypositions;
 	protected EdgeCollection ec;
+	private int count = 0;
+	private LogicalPanel origPanel;
 
 	@UiField AbsolutePanel boundaryPanel;
 	@UiField Button backButton;
@@ -85,6 +88,14 @@ public class LogicalPanelUi extends Composite {
 	public LogicalPanelUi(LogicalPanel panel, LogicalProblem problem) {
 		initWidget(uiBinder.createAndBindUi(this));
 		logProb = problem;
+		origProb = problem;
+		this.panel = panel;
+		
+		if (count == 0) {
+			origPanel = panel;
+		}
+		
+		count++;
 		//Window.alert(""+logProb);
 		initialize();
 		
@@ -98,11 +109,22 @@ public class LogicalPanelUi extends Composite {
 	
 	@UiHandler("resetButton")
 	void handleResetClick(ClickEvent e) {
-		ec.emptyEdges();
-		ec.clearEdgeNodeSelections();
+		//ec.emptyEdges();
+		//LogicalPanelUi lp = new LogicalPanelUi(origPanel, origProb);
+		
+		//Window.alert(""+logProb);
+		
+//		canvas.setHeight(0);
+//		canvas.setWidth(0);
+		//boundaryPanel.clear();
+		Window.Location.reload();
+		//initialize();
+		//ec.clearGraphNodeCollection();
+		//ec.clearEdgeNodeSelections();
 		//resetNodes();
-		nc.removeSelectedState();
-		setMessage("Nodes reset", Color.Notification);
+		//nc.removeSelectedState();
+		
+		//setMessage("Nodes reset", Color.Notification);
 	}
 	
 	@UiHandler("addButton")
@@ -119,15 +141,30 @@ public class LogicalPanelUi extends Composite {
 	@UiHandler("evaluateButton")
 	void handleEvaluateClick(ClickEvent e) {
 		//Window.alert("THIS ONE");
-		setMessage("Current traversal: " + nc.getTraversal(0), Color.Notification);
-		//logProb.evaluation.evaluate(logProb.title, logProb.arguments, 
-			//LogicalProblemCreator.getNodes().getNodes(), );
+		String[] args = logProb.arguments.split(",");
+		Boolean correct = true;
+		for (int i = 0; i < args.length; i++) {
+			args[i] = args[i].replace(" ", "");
+			String traversalResult = nc.getTraversal(i, ec.getEdges());
+			Window.alert(traversalResult);
+			if (!args[i].equalsIgnoreCase(traversalResult)) {
+				setMessage("Not equivalent",Color.Error);
+				correct = false;
+			}
+		}
+		if (correct) {
+			setMessage("CORRECT",Color.Notification);
+		}
+		Window.alert("args1: " + args[0] + " args2: " + args[1]);
+		//setMessage("Current traversal: " + nc.getTraversal(0, ec.getEdges()), Color.Notification);
+//		logProb.evaluation.evaluate(logProb.title, args, 
+//			LogicalProblemCreator.getNodes().getNodes(), ec.getEdges());
 	}
 	
 	
 	
 	public void initialize() {
-		Window.alert("Begin");
+		//Window.alert("Begin");
 		dragPanel = new AbsolutePanel();
 		//boundaryPanel.getElement().getStyle().setProperty("margin-left", "15%");
 		itemsInPanel = new ArrayList<Widget>();
@@ -177,7 +214,7 @@ public class LogicalPanelUi extends Composite {
 	}
 	
 	public void addNodesToPanel() {
-		Window.alert("CHRISAHMAR to add");
+		//Window.alert("CHRISAHMAR to add");
 		xpositions = logProb.xPositions.split(",");
 		ypositions = logProb.yPositions.split(",");
 		
@@ -215,6 +252,10 @@ public class LogicalPanelUi extends Composite {
 			
 		}
 		wags.logical.view.LogicalProblem.setDragPanel(dragPanel);
+	}
+	
+	public EdgeCollection getEdgeCollection(){
+		return ec;
 	}
 	
 	public void resetNodes() {
