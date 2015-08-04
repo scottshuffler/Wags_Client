@@ -143,19 +143,21 @@ public class LogicalPanelUi extends Composite {
 		//Window.alert("THIS ONE");
 		String[] args = logProb.arguments.split(",");
 		Boolean correct = true;
+		String preorderResult = nc.getTraversal(0, ec.getEdges());
+		String inorderResult = nc.getTraversal(1, ec.getEdges());
 		for (int i = 0; i < args.length; i++) {
 			args[i] = args[i].replace(" ", "");
 			String traversalResult = nc.getTraversal(i, ec.getEdges());
-			Window.alert(traversalResult);
+			//Window.alert(traversalResult);
 			if (!args[i].equalsIgnoreCase(traversalResult)) {
 				setMessage("Not equivalent",Color.Error);
 				correct = false;
 			}
 		}
 		if (correct) {
-			setMessage("CORRECT",Color.Notification);
+			setMessage("Correct",Color.Notification);
 		}
-		Window.alert("args1: " + args[0] + " args2: " + args[1]);
+		//Window.alert("args1: " + args[0] + " args2: " + args[1]);
 		//setMessage("Current traversal: " + nc.getTraversal(0, ec.getEdges()), Color.Notification);
 //		logProb.evaluation.evaluate(logProb.title, args, 
 //			LogicalProblemCreator.getNodes().getNodes(), ec.getEdges());
