@@ -21,9 +21,10 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 	public static final int OFF = 20;
 	public boolean removable;
 	
-	public void addWeightLabel(){
+	public void addWeightLabel(String incomingWeight){
 		// MAGIC, MAGIC EVERYWHERE... MAY GOD HAVE MERCY ON MY SOUL       
 		// Why you ask? Because Chrome.
+		weight = Integer.parseInt(incomingWeight);
 		Window.alert("AWL EU n1:" +n1+" n2:" +n2 + " line:"+line);
 		int width = Math.abs(n1.getLeft()-n2.getLeft());     // getOffset width returns a big fat 0 so we get an offset from the two nodes on the edge.
 		int height = Math.abs(n1.getTop()-n2.getTop());      // getOffset height returns a big fat 0 as well so we again get an offset from a two friendly neighborhood nodes.
@@ -80,6 +81,7 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 				public void onClick(ClickEvent event) {
 					Line selected = (Line)event.getSource();
 					selected.setStrokeColor("yellow");
+					//REMOVEEDGES
 					if(Window.confirm("Would you like to remove this edge?")) { 
 						//LogicalPanelUi.getPanel().remove(selected);
 						ec.removeEdgeFromCanvas(selected);
@@ -95,6 +97,7 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 		super.setLine(line);
 		ec.addEdge(this);
 		ec.addLine(line);
+		//addWeightLabel();
 		ec.addEdgeToCanvas(line);
 	}
 	}
@@ -141,6 +144,7 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 			line.setStrokeColor("#444");
 			line.setStrokeWidth(3);
 			super.setLine(line);
+			//addWeightLabel();
 			ec.addEdgeToCanvas(line);
 		}
 	}

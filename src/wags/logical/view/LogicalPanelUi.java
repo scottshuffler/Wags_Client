@@ -142,21 +142,38 @@ public class LogicalPanelUi extends Composite {
 	void handleEvaluateClick(ClickEvent e) {
 		//Window.alert("THIS ONE");
 		String[] args = logProb.arguments.split(",");
-		Boolean correct = true;
+		Boolean incorrect = true;
 		String preorderResult = nc.getTraversal(0, ec.getEdges());
 		String inorderResult = nc.getTraversal(1, ec.getEdges());
+		String postorderResult = nc.getTraversal(2, ec.getEdges());
 		for (int i = 0; i < args.length; i++) {
 			args[i] = args[i].replace(" ", "");
-			String traversalResult = nc.getTraversal(i, ec.getEdges());
+			//String traversalResult = nc.getTraversal(i, ec.getEdges());
 			//Window.alert(traversalResult);
-			if (!args[i].equalsIgnoreCase(traversalResult)) {
-				setMessage("Not equivalent",Color.Error);
-				correct = false;
+			if (args[i].equalsIgnoreCase(preorderResult)) { 
+				setMessage("Correct!",Color.Notification);
+				incorrect = false;
+			}
+			else if(args[i].equalsIgnoreCase(inorderResult)) {
+				setMessage("Correct!",Color.Notification);
+				incorrect = false;
+			}
+			else if(args[i].equalsIgnoreCase(postorderResult)) {
+				setMessage("Correct!",Color.Notification);
+				incorrect = false;
 			}
 		}
-		if (correct) {
-			setMessage("Correct",Color.Notification);
+		if (incorrect) {
+			setMessage("Incorrect! Your preorder traversal was: " + preorderResult + " and your inorder traversal was: " + inorderResult +"",Color.Error);
 		}
+		else {
+			setMessage("Correct!",Color.Notification);
+		}
+		
+//		ArrayList<Node> tempNodes = nc.getNodes();
+//		for (int i =1 ; i < tempNodes.size(); i++) {
+//			Window.alert(tempNodes.get(i).getLabel().getText());
+//		}
 		//Window.alert("args1: " + args[0] + " args2: " + args[1]);
 		//setMessage("Current traversal: " + nc.getTraversal(0, ec.getEdges()), Color.Notification);
 //		logProb.evaluation.evaluate(logProb.title, args, 

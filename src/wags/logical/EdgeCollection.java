@@ -173,7 +173,7 @@ public class EdgeCollection implements IsSerializable {
 			edges.add((EdgeParent) eu);
 			eu.drawEdges(toBeDrawn);
 			lines.add(eu.getLine());
-			eu.addWeightLabel();
+			//eu.addWeightLabel(weight);
 			
 		}
 		
@@ -346,7 +346,7 @@ public class EdgeCollection implements IsSerializable {
 	public void clearGraphNodeCollection(){
 		graphNodeCollection.emptyNodes();
 		for(EdgeParent ep: edges){
-			((EdgeUndirected)ep).addWeightLabel();
+			((EdgeUndirected)ep).addWeightLabel("");
 		}
 	}
 	
