@@ -26,6 +26,7 @@ public class ProblemPageModel extends Model {
 	
 	private ArrayList<Integer> ids;				//array of problem id numbers
 	private ArrayList<String> titles;		//array of problem names
+	private ArrayList<String> groups;		//array of problem names
 	private ArrayList<Integer> statuses;
 	private ArrayList<Integer> types;      //array of success values
 	private int pageState;
@@ -37,16 +38,18 @@ public class ProblemPageModel extends Model {
 		pageState = MAGNET_STATE;
 		ids = new ArrayList<Integer>();
 		titles = new ArrayList<String>();
+		groups = new ArrayList<String>();
 		statuses = new ArrayList<Integer>();
 		types = new ArrayList<Integer>();
 		isLoaded = false;
 	}
 
-	public void addProblem(int id, String title, int status, ProblemType type) {
+	public void addProblem(int id, String title, int status, String group, ProblemType type) {
 		ids.add(id);
 		titles.add(title);
 		statuses.add(status);
 		types.add(ProblemType.TypeToVal(type));
+		groups.add(group);
 	}
 	
 	public void setPageState(int pageState, boolean toUpdate) {
@@ -83,16 +86,20 @@ public class ProblemPageModel extends Model {
 			String titleData = "";
 			String statusData = "";
 			String typeData = "";
+			String groupData = "";
+			
 			for(int i = 0; i < ids.size(); i++) {
 				idData += ids.get(i) + "&";
 				titleData += titles.get(i) + "&";
 				statusData += statuses.get(i) + "&";
 				typeData += types.get(i) + "&";
+				groupData += groups.get(i) + "&";
 			}
 			list.add(idData);
 			list.add(titleData);
 			list.add(statusData);
 			list.add(typeData);
+			list.add(groupData);
 			isLoaded = true;
 		}
 		return list;

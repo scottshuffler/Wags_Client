@@ -58,8 +58,16 @@
 
 	}
 
-	.dragPanel {
-		height: 60%;
+	.drag_panel {
+		background: #D3D3D3;
+  		opacity: .5;
+  		min-height: 600px;
+  		min-width: 600px;
+  		width: 60%;
+  		margin-left: 20%;
+  		margin-right: 20%;
+  		height: 100%;
+  		margin-top: 1%;
 	}
 
 	.lgButton {

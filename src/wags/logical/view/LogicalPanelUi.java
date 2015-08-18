@@ -32,6 +32,7 @@ import org.vaadin.gwtgraphics.client.VectorObject;
 import wags.LogicalMicrolab;
 import wags.Common.Tokens;
 import wags.logical.EdgeCollection;
+import wags.logical.EdgeUndirected;
 import wags.logical.Node;
 import wags.logical.NodeCollection;
 import wags.logical.NodeDragController;
@@ -63,12 +64,15 @@ public class LogicalPanelUi extends Composite {
 	private LogicalMicrolab logMicro;
 	private LogicalPanel panel;
 	private static LogicalProblem logProb;
+	private static LogicalProblem origProb;
 	private Problem problem;
 	private static boolean hasPositions = false;
 	private static DrawingArea canvas;
 	private String[] xpositions;
 	private String[] ypositions;
 	protected EdgeCollection ec;
+	private int count = 0;
+	private LogicalPanel origPanel;
 
 	@UiField AbsolutePanel boundaryPanel;
 	@UiField Button backButton;
@@ -84,6 +88,15 @@ public class LogicalPanelUi extends Composite {
 	public LogicalPanelUi(LogicalPanel panel, LogicalProblem problem) {
 		initWidget(uiBinder.createAndBindUi(this));
 		logProb = problem;
+		origProb = problem;
+		this.panel = panel;
+		
+		if (count == 0) {
+			origPanel = panel;
+		}
+		
+		count++;
+		//Window.alert(""+logProb);
 		initialize();
 		
 	}
@@ -96,9 +109,22 @@ public class LogicalPanelUi extends Composite {
 	
 	@UiHandler("resetButton")
 	void handleResetClick(ClickEvent e) {
-		ec.emptyEdges();
-		resetNodes();
-		setMessage("Nodes reset", Color.Notification);
+		//ec.emptyEdges();
+		//LogicalPanelUi lp = new LogicalPanelUi(origPanel, origProb);
+		
+		//Window.alert(""+logProb);
+		
+//		canvas.setHeight(0);
+//		canvas.setWidth(0);
+		//boundaryPanel.clear();
+		Window.Location.reload();
+		//initialize();
+		//ec.clearGraphNodeCollection();
+		//ec.clearEdgeNodeSelections();
+		//resetNodes();
+		//nc.removeSelectedState();
+		
+		//setMessage("Nodes reset", Color.Notification);
 	}
 	
 	@UiHandler("addButton")
@@ -114,15 +140,52 @@ public class LogicalPanelUi extends Composite {
 	
 	@UiHandler("evaluateButton")
 	void handleEvaluateClick(ClickEvent e) {
-		setMessage("Current traversal: " + nc.getTraversal(0), Color.Notification);
-		//logProb.evaluation.evaluate(logProb.title, logProb.arguments, 
-			//LogicalProblemCreator.getNodes().getNodes(), );
+		//Window.alert("THIS ONE");
+		String[] args = logProb.arguments.split(",");
+		Boolean incorrect = true;
+		String preorderResult = nc.getTraversal(0, ec.getEdges());
+		String inorderResult = nc.getTraversal(1, ec.getEdges());
+		String postorderResult = nc.getTraversal(2, ec.getEdges());
+		for (int i = 0; i < args.length; i++) {
+			args[i] = args[i].replace(" ", "");
+			//String traversalResult = nc.getTraversal(i, ec.getEdges());
+			//Window.alert(traversalResult);
+			if (args[i].equalsIgnoreCase(preorderResult)) { 
+				setMessage("Correct!",Color.Notification);
+				incorrect = false;
+			}
+			else if(args[i].equalsIgnoreCase(inorderResult)) {
+				setMessage("Correct!",Color.Notification);
+				incorrect = false;
+			}
+			else if(args[i].equalsIgnoreCase(postorderResult)) {
+				setMessage("Correct!",Color.Notification);
+				incorrect = false;
+			}
+		}
+		if (incorrect) {
+			setMessage("Incorrect! Your preorder traversal was: " + preorderResult + " and your inorder traversal was: " + inorderResult +"",Color.Error);
+		}
+		else {
+			setMessage("Correct!",Color.Notification);
+		}
+		
+//		ArrayList<Node> tempNodes = nc.getNodes();
+//		for (int i =1 ; i < tempNodes.size(); i++) {
+//			Window.alert(tempNodes.get(i).getLabel().getText());
+//		}
+		//Window.alert("args1: " + args[0] + " args2: " + args[1]);
+		//setMessage("Current traversal: " + nc.getTraversal(0, ec.getEdges()), Color.Notification);
+//		logProb.evaluation.evaluate(logProb.title, args, 
+//			LogicalProblemCreator.getNodes().getNodes(), ec.getEdges());
 	}
 	
 	
 	
 	public void initialize() {
+		//Window.alert("Begin");
 		dragPanel = new AbsolutePanel();
+		//boundaryPanel.getElement().getStyle().setProperty("margin-left", "15%");
 		itemsInPanel = new ArrayList<Widget>();
 		canvas = new DrawingArea(Window.getClientWidth(), Window.getClientHeight());
 		boundaryPanel.add(dragPanel);
@@ -133,10 +196,14 @@ public class LogicalPanelUi extends Composite {
 		dragPanel.setStyleName("drag_panel");
 		canvas.setStyleName("canvas");
 		dragPanel.add(canvas);
+		
+		dragPanel.getElement().getStyle().setProperty("min-height", "600px");
+		dragPanel.getElement().getStyle().setProperty("min-width", "600px");
+		canvas.getElement().getStyle().setProperty("margin", "0px");
+		//canvas.getElement().getStyle().setProperty("margin-left", "0px");
 		ec = new EdgeCollection(logProb.edgeRules, new String[]{"", ""},
 				logProb.edgesRemovable);
 		ec.setCanvas(canvas);
-		
 		createPanel();
 		
 	}
@@ -147,6 +214,13 @@ public class LogicalPanelUi extends Composite {
 		nc = new NodeCollection();
 		String temp = logProb.nodes;
 		String[] nodeList = temp.split(" ");
+//		String[] edgeList = edges_temp.split(" |\\,");
+//		EdgeUndirected eu;
+//		for (int i = 0; i < edgeList.length; i++) {
+//			
+//			ec.addWeightLabel(edgeList[i], 20, 50, edge);
+//			Window.alert(edgeList[i]);
+//		}
 		for (int i = 0; i < nodeList.length; i++) {
 			nc.addNode(new Node(nodeList[i], new Label(nodeList[i])));
 		}
@@ -159,7 +233,7 @@ public class LogicalPanelUi extends Composite {
 	}
 	
 	public void addNodesToPanel() {
-		
+		//Window.alert("CHRISAHMAR to add");
 		xpositions = logProb.xPositions.split(",");
 		ypositions = logProb.yPositions.split(",");
 		
@@ -197,6 +271,10 @@ public class LogicalPanelUi extends Composite {
 			
 		}
 		wags.logical.view.LogicalProblem.setDragPanel(dragPanel);
+	}
+	
+	public EdgeCollection getEdgeCollection(){
+		return ec;
 	}
 	
 	public void resetNodes() {

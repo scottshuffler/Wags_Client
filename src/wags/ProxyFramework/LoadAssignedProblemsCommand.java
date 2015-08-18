@@ -5,6 +5,7 @@ import wags.magnet.view.ProblemPageModel;
 import wags.presenters.concrete.ProblemType;
 
 import com.google.gwt.http.client.Response;
+import com.google.gwt.user.client.Window;
 
 /**
  * @author Dakota Murray
@@ -28,17 +29,20 @@ public class LoadAssignedProblemsCommand extends AbstractServerCall {
 		
 		int magnetCount = Integer.parseInt(problems[0]);
 		int count = 0;
-		
+		//Window.alert("Before the for loop");
 		// Iterate over the problems list in steps of three, using the three
 		// data points to add a new problem to the model. 
-		for(int i = 1; i < problems.length - 2; i += 3){
+		for(int i = 1; i < problems.length - 2; i += 4){
 			int id = Integer.parseInt(problems[i]);
 			String title = problems[i+1];
 			int status = Integer.parseInt(problems[i+2]);
+			String group = problems[i+3];
+			
 			if ( count < magnetCount) {
-				model.addProblem(id, title, status, ProblemType.MAGNET_PROBLEM);
+				model.addProblem(id, title, status, group, ProblemType.MAGNET_PROBLEM);
 			} else {
-				model.addProblem(id, title, status, ProblemType.LOGICAL_PROBLEM);
+				//Window.alert("ID: " + id + " title: "  + title + " status :" + status + " group: " + group);
+				model.addProblem(id, title, status, group, ProblemType.LOGICAL_PROBLEM);
 			}
 			count++;
 		}
