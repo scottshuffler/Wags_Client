@@ -7,6 +7,7 @@ import wags.magnet.view.ResultsPanelUi;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
+import com.google.gwt.user.client.Window;
 
 public class MagnetReviewCommand extends AbstractServerCall {
 
@@ -18,7 +19,7 @@ public class MagnetReviewCommand extends AbstractServerCall {
 	{
 		WEStatus status = new WEStatus(response);
 		String note = "";
-		
+		//Window.alert("" + id);
 		switch(status.getStat()) {
 		case WEStatus.STATUS_SUCCESS:
 			note = "Success!";
@@ -37,6 +38,7 @@ public class MagnetReviewCommand extends AbstractServerCall {
 		
 		Notification.notify(status.getStat(), note);
 		String results = status.getMessage();
+		//Window.alert("Results: " + results);
 		results = results.replaceAll("<br />", "\n");
 		results = results.replaceAll("<tab/>", "\t");
 		ResultsPanelUi.setResultsText(results);

@@ -31,7 +31,6 @@
 		display:inline-block;
 		margin-top:1em;
 		float:none;
-		border: 2px solid black;
 	}
 	.problemCategoryContainer {
 		text-align:center;
@@ -39,20 +38,65 @@
 		margin-left:auto;
 		margin-right:auto;
 	}
+	.listBoxContainer {
+		text-align:center;
+		width:80%;
+		margin-top:2%;
+		margin-left:auto;
+		margin-right:auto;
+	}
+
+	.backgroundColor {
+		background-color: transparent !important;
+
+	}
+
 		 
 	</ui:style>
 	
 	<b:FluidRow>
+	    
 	    <b:FluidRow addStyleNames="{style.problemCategoryContainer}">
-	        	<b:Button ui:field="magnetCategory" size="LARGE" icon="OK" addStyleNames="{style.problemCategory}">Code</b:Button>
-	        	<b:Button ui:field="logicalCategory" size="LARGE" icon="OK" addStyleNames="{style.problemCategory}">Logical</b:Button>
+	    	<b:Legend ui:field="magnetLegend" visible="false">Code Problems</b:Legend>
+	    	<b:Legend ui:field="logicalLegend" visible="false">Logical Problems</b:Legend>
+	    </b:FluidRow>
+	    
+	    <b:FluidRow addStyleNames="{style.problemCategoryContainer}">
+	        	<b:Button ui:field="magnetCategory" size="LARGE" addStyleNames="{style.problemCategory}">Code</b:Button>
+	        	<b:Button ui:field="logicalCategory" size="LARGE" addStyleNames="{style.problemCategory}">Logical</b:Button>
 		<!-- 	<b:Button ui:field="databaseCategory" size="LARGE" icon="OK" addStyleNames="{style.problemCategory}">Database</b:Button>   Disabled until database problems are made-->	
 	    </b:FluidRow>
-	    <b:FluidRow>
+	    
+	    
+	    
+	    <b:FluidRow addStyleNames="{style.listBoxContainer}">
+	       <b:ListBox ui:field="subjectListBox" visible="false"></b:ListBox>
+	       <b:ListBox ui:field="logicalListBox" visible="false"></b:ListBox>
+	    </b:FluidRow>
+	    
+	    <b:FluidRow addStyleNames="{style.problemCategoryContainer}">
 	    	<b:incubator.Table visible="false" ui:field="magnetPanel">
+	    	    <b:incubator.Table addStyleNames="{style.backgroundColor}" visible="false" ui:field="magnetDuePanel">
+	    	        <b:Heading size="5">Uncompleted Problems</b:Heading>
+		    	</b:incubator.Table>
+		    	<b:incubator.Table addStyleNames="{style.backgroundColor}" visible="false" ui:field="magnetCompletedPanel">
+		    	    <b:Heading size="5">Completed Problems</b:Heading>
+		    	</b:incubator.Table>
+		    	<b:incubator.Table addStyleNames="{style.backgroundColor}" visible="false" ui:field="magnetReviewPanel">
+		    	    <b:Heading size="5">Review Problems</b:Heading>
+		    	</b:incubator.Table>
 		    </b:incubator.Table>
 		    
 	    	<b:incubator.Table visible="false" ui:field="logicalPanel">
+	    	    <b:incubator.Table addStyleNames="{style.backgroundColor}" visible="false" ui:field="logicalDuePanel">
+	    	        <b:Heading size="5">Uncompleted Problems</b:Heading>
+		    	</b:incubator.Table>
+		    	<b:incubator.Table addStyleNames="{style.backgroundColor}" visible="false" ui:field="logicalCompletedPanel">
+		    	    <b:Heading size="5">Completed Problems</b:Heading>
+		    	</b:incubator.Table>
+		    	<b:incubator.Table addStyleNames="{style.backgroundColor}" visible="false" ui:field="logicalReviewPanel">
+		    	    <b:Heading size="5">Review Problems</b:Heading>
+		    	</b:incubator.Table>
 		    </b:incubator.Table>
 		     
 	   	    <b:incubator.Table visible="false" ui:field="databasePanel">

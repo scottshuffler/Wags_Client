@@ -261,7 +261,7 @@
 	        <c:CarouselControl addStyleNames="{style.carouselControlLeft}" dataTarget="#carousel-captions" prev="true" iconType="CHEVRON_LEFT"/>
 	        <c:CarouselControl addStyleNames="{style.carouselControlRight}" dataTarget="#carousel-captions"  next="true" iconType="CHEVRON_RIGHT"/>
 	    </c:Carousel>
-	    <b:Row ui:field="loginScreen" addStyleNames="{style.loginRow}">
+	    <b:FluidRow ui:field="loginScreen" addStyleNames="{style.loginRow}">
 	        <b:Column size="4">
 	        	<b:Paragraph addStyleNames="{style.pIntroHead}">Login to an existing account</b:Paragraph>
 	            <b:Form type="INLINE">
@@ -270,20 +270,20 @@
 					<b:Button type="PRIMARY" ui:field="loginButton" addStyleNames="{style.loginBtn}">Sign in</b:Button>
 				</b:Form>
 			</b:Column>
-			<b:Column size="3">
+			<b:Column size="4">
 			    <b:Paragraph addStyleNames="{style.pIntroHead}">Request a new account</b:Paragraph>
 	            <b:Form type="INLINE">
 					<b:Button type="INFO" ui:field="makeAccount" addStyleNames="{style.loginBtn}">Request an Account</b:Button>
 					</b:Form>
 			</b:Column>
 			
-			<b:Column size="3">
+			<b:Column size="4">
 			    <b:Paragraph addStyleNames="{style.pIntroHead}">Try a guest account</b:Paragraph>
 	            <b:Form type="INLINE">
 					<b:Button type="WARNING" ui:field="guestLoginButton" addStyleNames="{style.loginBtn}">Guest Account</b:Button>
 				</b:Form>
 			</b:Column>
-	        </b:Row>
+	    </b:FluidRow>
 		<!-- <b:Row ui:field="loginScreen" addStyleNames="{style.login}">
 		    <b:Column size="4">
 			<b:Row addStyleNames="{style.row}">
@@ -303,19 +303,19 @@
 	     </b:Row> -->
 		<b:Row addStyleNames="{style.aboutContain}">
 		    <b:Paragraph addStyleNames="{style.pIntro}">What is WAGS?</b:Paragraph>
-    		<b:Paragraph addStyleNames="{style.p}">WAGS is a web application that is designed for Computer Science classrooms. It allows teachers to quickly and easily develop problems for students. Teachers can either build their own personal problems or use any of our preset problems we have generated for many different types Computer Science problems. </b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.p}">WAGS is a web application that is designed for Computer Science classrooms. It allows teachers to quickly and easily develop problems for students. Teachers can either build their own personal problems or use any of our preset problems we have generated for many different types of Computer Science problems. </b:Paragraph>
     		<b:Paragraph addStyleNames="{style.pIntro}">How are the problems solved?</b:Paragraph>
-    		<b:Paragraph addStyleNames="{style.p}">There are two types of problems currently available in WAGS, Logical and Magnet problems. Logical problems are designed for graphs and the student will traverse trees or place blocks in their correct positions. Magnet problems are designed for code problems. Students will be given code blocks and they will be asked to place them in their correct positions.<br/><br/></b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.p}">There are two types of problems currently available in WAGS: Logical and Magnet problems. Logical problems are designed for graphs. Students will traverse trees or place blocks in the correct positions. Magnet problems are designed for code problems. Students will be given code blocks and the blocks must be placed in the correct positions.<br/><br/></b:Paragraph>
     		<b:Paragraph addStyleNames="{style.pIntro}">What languages are supported?</b:Paragraph>
-    		<b:Paragraph addStyleNames="{style.p}">WAGS currently supports Java, C, C++, Prolog, Python. However many more are on their way. <br/><br/></b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.p}">WAGS currently supports Java, C, C++, Prolog, and Python. However, many more are on their way. <br/><br/></b:Paragraph>
     		<b:Paragraph addStyleNames="{style.pIntro}">What graph problems are supported?</b:Paragraph>
-    		<b:Paragraph addStyleNames="{style.p}">Yes! We support many graph problems that include: Prims, Kruskals, heaps, tree traversals, hashing, probing, and sorting.</b:Paragraph>
-    		<b:Paragraph addStyleNames="{style.pIntro}">As a teacher what can I do?</b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.p}">We support many graph problems that include: Prim's, Kruskal's, heaps, tree traversals, hashing, probing, and sorting.</b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.pIntro}">As a teacher, what can I do?</b:Paragraph>
     		<b:Paragraph addStyleNames="{style.p}">Basically anything you want! You can create sections, add students to a specific section, view who has attempted problems that have been assigned, and download a CSV file with student performances. </b:Paragraph>
     		<b:Paragraph addStyleNames="{style.pIntro}">Can I try it first?</b:Paragraph>
     		<b:Paragraph addStyleNames="{style.p}">Yes! Simply click the 'Guest Account' button at the top of the page.</b:Paragraph>
     		<b:Paragraph addStyleNames="{style.pIntro}"><span/><span/>How do I sign up?</b:Paragraph>
-    		<b:Paragraph addStyleNames="{style.p}">Currently sign up is private so you'll have to click the 'Request an Account' button and fill out the form. This process normally only takes one business day.</b:Paragraph>
+    		<b:Paragraph addStyleNames="{style.p}">Currently, sign up is private, so you'll have to click the 'Request an Account' button and fill out the form. This process normally only takes one business day.</b:Paragraph>
 		</b:Row>
 		
 	</b:Container>
