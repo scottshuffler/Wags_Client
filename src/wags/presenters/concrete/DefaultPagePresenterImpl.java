@@ -51,7 +51,6 @@ public class DefaultPagePresenterImpl implements DefaultPagePresenter, AcceptsOn
 	@Override
 	public void update(List<String> data) {
 		boolean isLoggedIn = data.get(0).equals(TRUE);
-		def.getProblemsButton().setVisible(isLoggedIn);
 		def.getUsernameField().setVisible(!isLoggedIn);
 		def.getPasswordField().setVisible(!isLoggedIn);
 		def.getLoginButton().setVisible(!isLoggedIn);
@@ -100,12 +99,17 @@ public class DefaultPagePresenterImpl implements DefaultPagePresenter, AcceptsOn
 	@Override
 	public void onProblemsClick() {
 		History.newItem(Tokens.CODE);
-		
 	}
 	
 	@Override
 	public void onCreationClick() {
 		History.newItem(Tokens.ACCOUNT);
+	}
+
+	@Override
+	public void onLogicalClick() {
+		History.newItem(Tokens.LOGICAL);
+		
 	}
 
 }

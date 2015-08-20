@@ -1,3 +1,10 @@
+war/we/*
+war/we/we.nocache.js
+war/WEB-INF/classes
+war/WEB-INF/deploy
+war/WEB-INF/lib
+gwt-unitCache/
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
@@ -40,3 +47,4 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+

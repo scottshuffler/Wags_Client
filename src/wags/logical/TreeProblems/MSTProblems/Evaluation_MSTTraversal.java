@@ -35,7 +35,6 @@ public class Evaluation_MSTTraversal extends Evaluation implements IsSerializabl
 			return "Feedback: Congratulatons, your MST is correct.";
 		}
 		else{
-			
 			AbstractServerCall DSTCmd = new SubmitDSTCommand(problemName, 0);
 			DSTCmd.sendRequest();
 			int i = 0;
