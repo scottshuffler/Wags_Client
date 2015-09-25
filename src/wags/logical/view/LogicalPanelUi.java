@@ -1,9 +1,12 @@
 package wags.logical.view;
 
+import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.DragController;
 import com.allen_sauer.gwt.dnd.client.DragEndEvent;
 import com.allen_sauer.gwt.dnd.client.DragStartEvent;
 import com.allen_sauer.gwt.dnd.client.DragHandler;
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.github.gwtbootstrap.client.ui.Paragraph;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -19,12 +22,17 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 
 import java.util.ArrayList;
 
+import org.gwtbootstrap3.client.ui.Column;
+import org.gwtbootstrap3.client.ui.Container;
 import org.gwtbootstrap3.client.ui.Heading;
+import org.gwtbootstrap3.client.ui.Row;
+import org.gwtbootstrap3.client.ui.constants.ColumnSize;
 import org.vaadin.gwtgraphics.client.DrawingArea;
 import org.vaadin.gwtgraphics.client.Line;
 import org.vaadin.gwtgraphics.client.VectorObject;
@@ -33,6 +41,8 @@ import wags.LogicalMicrolab;
 import wags.Common.Tokens;
 import wags.logical.EdgeCollection;
 import wags.logical.EdgeUndirected;
+import wags.logical.GridNodeDropController;
+import wags.logical.HashingDropController;
 import wags.logical.Node;
 import wags.logical.NodeCollection;
 import wags.logical.NodeDragController;
@@ -51,7 +61,7 @@ public class LogicalPanelUi extends Composite {
 	interface LogicalPanelUiUiBinder extends UiBinder<Widget, LogicalPanelUi>{}
 	
 	public enum Color {
-		Notification, Warning, Error, None
+		Success, Notification, Warning, Error, None
 	}
 
 	public AbsolutePanel dragPanel;
@@ -60,6 +70,7 @@ public class LogicalPanelUi extends Composite {
 	public String directions;
 	public String name;
 	public TextArea submitText;
+	private ArrayList<Column> grid = new ArrayList<Column>();;
 	private static boolean isDrag = false;		// Boolean to find if drag controller exists
 	private LogicalMicrolab logMicro;
 	private LogicalPanel panel;
@@ -73,6 +84,7 @@ public class LogicalPanelUi extends Composite {
 	protected EdgeCollection ec;
 	private int count = 0;
 	private LogicalPanel origPanel;
+	private PickupDragController hashingController;
 
 	@UiField AbsolutePanel boundaryPanel;
 	@UiField Button backButton;
@@ -81,6 +93,7 @@ public class LogicalPanelUi extends Composite {
 	@UiField Button removeButton;
 	@UiField Button evaluateButton;
 	@UiField ComplexPanel layoutPanel;
+	@UiField Container hashingBoxes;
 	@UiField Heading title;
 	@UiField Paragraph instructions;
 	@UiField static Paragraph message;
@@ -96,35 +109,19 @@ public class LogicalPanelUi extends Composite {
 		}
 		
 		count++;
-		//Window.alert(""+logProb);
 		initialize();
 		
 	}
 	
 	@UiHandler("backButton")
 	void handleBackClick(ClickEvent e) {
-		NodeDragController.getInstance().unregisterDropControllers();
-		History.newItem(Tokens.PROBLEMS);
+		NodeDragController.getInstance().unregisterDropControllers();		
+		History.newItem(Tokens.LOGICAL);
 	}
 	
 	@UiHandler("resetButton")
 	void handleResetClick(ClickEvent e) {
-		//ec.emptyEdges();
-		//LogicalPanelUi lp = new LogicalPanelUi(origPanel, origProb);
-		
-		//Window.alert(""+logProb);
-		
-//		canvas.setHeight(0);
-//		canvas.setWidth(0);
-		//boundaryPanel.clear();
 		Window.Location.reload();
-		//initialize();
-		//ec.clearGraphNodeCollection();
-		//ec.clearEdgeNodeSelections();
-		//resetNodes();
-		//nc.removeSelectedState();
-		
-		//setMessage("Nodes reset", Color.Notification);
 	}
 	
 	@UiHandler("addButton")
@@ -140,52 +137,21 @@ public class LogicalPanelUi extends Composite {
 	
 	@UiHandler("evaluateButton")
 	void handleEvaluateClick(ClickEvent e) {
-		//Window.alert("THIS ONE");
-		String[] args = logProb.arguments.split(",");
-		Boolean incorrect = true;
-		String preorderResult = nc.getTraversal(0, ec.getEdges());
-		String inorderResult = nc.getTraversal(1, ec.getEdges());
-		String postorderResult = nc.getTraversal(2, ec.getEdges());
-		for (int i = 0; i < args.length; i++) {
-			args[i] = args[i].replace(" ", "");
-			//String traversalResult = nc.getTraversal(i, ec.getEdges());
-			//Window.alert(traversalResult);
-			if (args[i].equalsIgnoreCase(preorderResult)) { 
-				setMessage("Correct!",Color.Notification);
-				incorrect = false;
-			}
-			else if(args[i].equalsIgnoreCase(inorderResult)) {
-				setMessage("Correct!",Color.Notification);
-				incorrect = false;
-			}
-			else if(args[i].equalsIgnoreCase(postorderResult)) {
-				setMessage("Correct!",Color.Notification);
-				incorrect = false;
-			}
+		switch (logProb.genre) {
+		case "traversal":
+		case  "heapInsert":
+			traversalEvaluate();
+			break;
+		case "hashing":
+			hashingEvaluate();
+			break;
 		}
-		if (incorrect) {
-			setMessage("Incorrect! Your preorder traversal was: " + preorderResult + " and your inorder traversal was: " + inorderResult +"",Color.Error);
-		}
-		else {
-			setMessage("Correct!",Color.Notification);
-		}
-		
-//		ArrayList<Node> tempNodes = nc.getNodes();
-//		for (int i =1 ; i < tempNodes.size(); i++) {
-//			Window.alert(tempNodes.get(i).getLabel().getText());
-//		}
-		//Window.alert("args1: " + args[0] + " args2: " + args[1]);
-		//setMessage("Current traversal: " + nc.getTraversal(0, ec.getEdges()), Color.Notification);
-//		logProb.evaluation.evaluate(logProb.title, args, 
-//			LogicalProblemCreator.getNodes().getNodes(), ec.getEdges());
 	}
 	
 	
 	
 	public void initialize() {
-		//Window.alert("Begin");
 		dragPanel = new AbsolutePanel();
-		//boundaryPanel.getElement().getStyle().setProperty("margin-left", "15%");
 		itemsInPanel = new ArrayList<Widget>();
 		canvas = new DrawingArea(Window.getClientWidth(), Window.getClientHeight());
 		boundaryPanel.add(dragPanel);
@@ -195,22 +161,58 @@ public class LogicalPanelUi extends Composite {
 		setTitle(logProb.title);
 		dragPanel.setStyleName("drag_panel");
 		canvas.setStyleName("canvas");
+		
+		ec = new EdgeCollection(logProb.edgeRules, new String[]{"", ""},
+				logProb.edgesRemovable);
+		ec.setCanvas(canvas);
+		
+		// removed check for existence of drag controller (isDrag); if problems arise,
+		// return line if (!isDrag)
+		registerDragController(ec);
+		
+		if (logProb.genre.equals("hashing")) { // need to build grid system to drag nodes to
+			hashingBoxes.removeFromParent();
+			Row row = new Row();
+			for (int i = 0; i < Integer.parseInt(logProb.arguments.split(",")[0]); i++) {
+				if (i % 12 == 0) {
+					row = new Row();
+					row.setStyleName("hashing_row");
+					row.setVisible(true);
+					hashingBoxes.add(row);
+				}
+				Column col = new Column(ColumnSize.MD_1, new Label("" + i));
+				col.setStyleName("hashing_column");
+				row.add(col);
+				SimplePanel dropPanel = new SimplePanel();   // drop target for each cell
+				dropPanel.setPixelSize(50, 50);
+				dropPanel.getElement().getStyle()
+					.setProperty("margin", "2.5px"); // account for 40x40 node in 50x50 col
+				
+				// This line adds the dropPanel to the cell, making the cell appear to be a drop zone
+				col.add(dropPanel);
+				// Add column to grid ArrayList, for later evaluation
+				grid.add(col);
+				
+				// set drop controller to dropPanel
+				HashingDropController dropController = new HashingDropController(dropPanel);
+				NodeDragController.getInstance().registerDropController(dropController);
+			}
+			dragPanel.add(hashingBoxes);
+			hashingBoxes.setVisible(true);
+		}
+		
+
 		dragPanel.add(canvas);
 		
 		dragPanel.getElement().getStyle().setProperty("min-height", "600px");
 		dragPanel.getElement().getStyle().setProperty("min-width", "600px");
 		canvas.getElement().getStyle().setProperty("margin", "0px");
-		//canvas.getElement().getStyle().setProperty("margin-left", "0px");
-		ec = new EdgeCollection(logProb.edgeRules, new String[]{"", ""},
-				logProb.edgesRemovable);
-		ec.setCanvas(canvas);
+		
 		createPanel();
 		
 	}
 	
 	public void createPanel() {
-		if (!isDrag)   					// if no drag controller exists, create one
-			registerDragController(ec);
 		nc = new NodeCollection();
 		String temp = logProb.nodes;
 		String[] nodeList = temp.split(" ");
@@ -229,26 +231,25 @@ public class LogicalPanelUi extends Composite {
 			nc.getNode(i).setNodeCollection(nc);
 			nc.getNode(i).setEdgeCollection(ec);
 		}
+		
 		addNodesToPanel();
 	}
 	
 	public void addNodesToPanel() {
-		//Window.alert("CHRISAHMAR to add");
 		xpositions = logProb.xPositions.split(",");
 		ypositions = logProb.yPositions.split(",");
 		
 		if (xpositions[0] != "" || ypositions[0] != "") {
-			
 			for (int i = 0; i < nc.size(); i++) {
 				itemsInPanel.add(nc.getNode(i).getLabel());
 				itemsInPanel.get(i).setStyleName("node");
-				nc.getNode(i).addClickHandler();
 				nc.getNode(i).setTop(Integer.parseInt(ypositions[i]));
 				nc.getNode(i).setLeft(Integer.parseInt(xpositions[i]));
-				nc.getNode(i).setNodeCollection(nc);
-				if (logProb.nodesDraggable) {
+				//nc.getNode(i).setNodeCollection(nc);
+				if (logProb.nodesDraggable) 
 					NodeDragController.getInstance().makeDraggable(nc.getNode(i).getLabel());
-				}
+				if (logProb.edgesRemovable) 
+					nc.getNode(i).addClickHandler();
 				dragPanel.add(itemsInPanel.get(i), Integer.parseInt(xpositions[i]), Integer.parseInt(ypositions[i]));
 			}
 			String[] edges = logProb.edges.split(",");
@@ -261,16 +262,71 @@ public class LogicalPanelUi extends Composite {
 		}
 		else {
 			for (int i = 0; i < nc.size(); i++) {
-				dragPanel.add(nc.getNode(i).getLabel(), 5 + (50*i),5);
+				if ((50 * (i + 1)) > 600) 
+					dragPanel.add(nc.getNode(i).getLabel(), 5 + (50 * i) - 600, 55);
+				else
+					dragPanel.add(nc.getNode(i).getLabel(), 5 + (50*i), 5);
 				itemsInPanel.add(nc.getNode(i).getLabel());
 				itemsInPanel.get(i).setStyleName("node");
-				nc.getNode(i).addClickHandler();
+				if (logProb.edgesRemovable) 
+					nc.getNode(i).addClickHandler();
 				if (logProb.nodesDraggable)
 					NodeDragController.getInstance().makeDraggable(nc.getNode(i).getLabel());
 			}
 			
 		}
 		wags.logical.view.LogicalProblem.setDragPanel(dragPanel);
+	}
+	
+	private void traversalEvaluate() {
+		String[] args = logProb.arguments.split(",");
+		Boolean incorrect = true;
+		String preorderResult = nc.getTraversal(0, ec.getEdges());
+		String inorderResult = nc.getTraversal(1, ec.getEdges());
+		String postorderResult = nc.getTraversal(2, ec.getEdges());
+		for (int i = 0; i < args.length; i++) {
+			args[i] = args[i].replace(" ", "");
+			//String traversalResult = nc.getTraversal(i, ec.getEdges());
+			//Window.alert(traversalResult);
+			if (args[i].equalsIgnoreCase(preorderResult)) { 
+				setMessage("Correct!",Color.Success);
+				incorrect = false;
+			}
+			else if(args[i].equalsIgnoreCase(inorderResult)) {
+				setMessage("Correct!",Color.Success);
+				incorrect = false;
+			}
+			else if(args[i].equalsIgnoreCase(postorderResult)) {
+				setMessage("Correct!",Color.Success);
+				incorrect = false;
+			}
+		}
+		if (incorrect) {
+			setMessage("Incorrect! Your preorder traversal was: " + preorderResult + " and your inorder traversal was: " + inorderResult +"",Color.Error);
+		}
+		else {
+			setMessage("Correct!",Color.Success);
+		}
+	}
+	
+	private void hashingEvaluate() {
+		String[] args = logProb.arguments.split(",");
+		Boolean correct = true;
+		for (int i = 1; i < args.length; i++) {
+			String[] arguments = args[i].split("\\s");   // arguments[0] is label, arguments[1] is cell number
+			int[] cellPos = {grid.get(Integer.parseInt(arguments[1])).getWidget(1).getAbsoluteLeft(), 
+					grid.get(Integer.parseInt(arguments[1])).getWidget(1).getAbsoluteTop()};
+			int[] labelPos = {nc.getNodeByLabelText(arguments[0]).getLabel().getAbsoluteLeft(), 
+					nc.getNodeByLabelText(arguments[0]).getLabel().getAbsoluteTop()};
+			if (labelPos[0] != cellPos[0] || labelPos[1] != cellPos[1]) {
+				correct = false;
+			}
+		}		
+		if (correct) {
+			setMessage("Correct!", Color.Success);
+		} else {
+			setMessage("Incorrect; not all of the nodes were in the correct positions.", Color.Error);
+		}
 	}
 	
 	public EdgeCollection getEdgeCollection(){
@@ -286,10 +342,15 @@ public class LogicalPanelUi extends Composite {
 	}
 	
 	public void registerDragController(EdgeCollection ec) {
-		NodeDragController.setFields(dragPanel, true, ec);
-		NodeDropController.setFields(dragPanel, ec);
-		NodeDragController.getInstance().registerDropController(
-			NodeDropController.getInstance());
+		if (!logProb.genre.equals("hashing"))
+		{
+			NodeDragController.setFields(dragPanel, true, ec);
+			NodeDropController.setFields(dragPanel, ec);
+			NodeDragController.getInstance().registerDropController(
+					NodeDropController.getInstance());
+		} else {
+			NodeDragController.setFields(dragPanel, false, ec);
+		}
 		isDrag = true;
 	}
 	
@@ -300,22 +361,32 @@ public class LogicalPanelUi extends Composite {
 	
 	private static void setMessageBackground(Color color) {
 		switch(color) {
+		case Success:
+			message.setStyleName("success", true);
+			message.setStyleName("notification", false);
+			message.setStyleName("warning", false);
+			message.setStyleName("error", false);
+			break;
 		case Notification:
 			message.setStyleName("notification", true);
 			message.setStyleName("warning", false);
 			message.setStyleName("error", false);
+			message.setStyleName("success", false);
 			break;
 		case Warning:
 			message.setStyleName("warning", true);
+			message.setStyleName("success", false);
 			message.setStyleName("notification", false);
 			message.setStyleName("error", false);
 			break;
 		case Error:
 			message.setStyleName("error", true);
+			message.setStyleName("success", false);
 			message.setStyleName("notification", false);
 			message.setStyleName("warning", false);
 			break;
 		case None:
+			message.setStyleName("success", false);
 			message.setStyleName("notification", false);
 			message.setStyleName("warning", false);
 			message.setStyleName("error", false);

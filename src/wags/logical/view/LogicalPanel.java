@@ -22,10 +22,7 @@ public class LogicalPanel extends FlowPanel {
 	public LogicalPanel(LogicalProblem problem, AbsolutePanel canvasContain, NodeCollection nc) {
 		this.addStyleName("boundary_panel");
 		this.setHeight("100%");
-		this.getElement().getStyle().setProperty("left", "25%");
-		this.getElement().getStyle().setProperty("right", "25%");
 		this.getElement().getStyle().setProperty("min-width", "600px");
-		this.getElement().getStyle().setProperty("opacity", "0.9");
 		logicalPanel = new LogicalPanelUi(this, problem);
 		logicalPanel.setPanel(canvasContain);
 		this.add(logicalPanel);
