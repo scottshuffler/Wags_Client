@@ -1,5 +1,7 @@
 package wags.admin;
 
+import java.util.Date;
+
 import wags.MagnetProblem;
 import wags.Notification;
 import wags.Proxy;
@@ -26,6 +28,7 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -138,7 +141,7 @@ public class ProblemCreationPanel extends Composite implements ProblemCreationPa
 			public void onSubmitComplete(SubmitCompleteEvent event) {
 				// Should have to verify overwrite each time
 				overwrite.setValue(false);
-				
+				//Window.alert("TEST");
 				WEStatus stat = new WEStatus(event.getResults());
 				
 				if(stat.getStat() == WEStatus.STATUS_SUCCESS){
@@ -152,15 +155,24 @@ public class ProblemCreationPanel extends Composite implements ProblemCreationPa
 						vtPanelHelper.remove(i);
 					}
 					numHelpers = 1;
+					//Window.alert("After Dialog");
+					cmd = new GetMagnetProblemCommand(finalTitleTxtBox.getText());
+					//Window.alert("Sending request");
+					cmd.sendRequest();
 				} else if (stat.getStat() == WEStatus.STATUS_WARNING){
 					Notification.notify(stat.getStat(), stat.getMessage());
 					verifyOverwrite();
 				} else {
 					Notification.notify(stat.getStat(), stat.getMessage());
+					//Window.alert("After Dialog");
+					AbstractServerCall cmd = new GetMagnetProblemCommand(finalTitleTxtBox.getText());
+					//Window.alert("Sending request");
+					cmd.sendRequest();
 				}
-				AbstractServerCall cmd = new GetMagnetProblemCommand(finalTitleTxtBox.getText());
-				cmd.sendRequest();
-				
+//				Window.alert("After Dialog");
+//				AbstractServerCall cmd = new GetMagnetProblemCommand(finalTitleTxtBox.getText());
+//				Window.alert("Sending request");
+//				cmd.sendRequest();
 			}
 		});
 		
@@ -172,7 +184,7 @@ public class ProblemCreationPanel extends Composite implements ProblemCreationPa
 
 			@Override
 			public void onSubmitComplete(SubmitCompleteEvent event) {
-
+				
 				String[] magnets = event.getResults().split("\n");
 
 				finalTitleTxtBox.setText(magnets[0]);
@@ -489,6 +501,10 @@ public class ProblemCreationPanel extends Composite implements ProblemCreationPa
 				overwrite.setValue(true);
 				problemCreateFormPanel.submit();
 				overwriteBox.hide();
+				//Window.alert("After Dialog");
+				AbstractServerCall cmd = new GetMagnetProblemCommand(finalTitleTxtBox.getText());
+				//Window.alert("Sending request");
+				cmd.sendRequest();
 			}
 			
 		});
@@ -498,9 +514,17 @@ public class ProblemCreationPanel extends Composite implements ProblemCreationPa
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				titleTxtBox.setText("");
-				finalTitleTxtBox.setText("");
-				titleTxtBox.setFocus(true);
+				String date = DateTimeFormat.getFormat( "h:m:s d/M/yyyy" ).format( new Date());
+				String tmpTitle = titleTxtBox.getText();
+				String tmpFinalTitle = finalTitleTxtBox.getText();
+				if (tmpTitle.equals("")) {
+					titleTxtBox.setText(date);
+				}
+				else {
+					titleTxtBox.setText(tmpTitle+ " (" + date + ")");
+				}
+				finalTitleTxtBox.setText(tmpFinalTitle+ " (" +date + ")");
+				finalTitleTxtBox.setFocus(true);
 				overwriteBox.hide();
 			}
 		});
