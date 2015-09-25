@@ -33,6 +33,9 @@ public class Node {
 	private boolean visited = false;
 	private int top = 0;
 	private int left = 0;
+	private Node parent;
+	private Node leftChild;
+	private Node rightChild;
 	
 	public Node(String value, Label label) {
 		this.value = value;
@@ -54,10 +57,6 @@ public class Node {
 	
 	public void setLeft(int left) {
 		this.left = left;
-	}
-	
-	public void setState(int state) {
-		
 	}
 	
 	@Override
@@ -205,6 +204,39 @@ public class Node {
 	public void deselected(Label l) {
 		l.removeStyleName("selected_node");
 		l.addStyleName("node");
+	}
+
+	public Node getRightChild() {
+		return rightChild;
+	}
+	
+	public void setChild(Node childNode) {
+		if (childNode.getLeft() < this.getLeft()) {
+			setLeftChild(childNode);
+		}
+		else {
+			setRightChild(childNode);
+		}
+	}
+
+	public void setRightChild(Node rightChild) {
+		this.rightChild = rightChild;
+	}
+
+	public Node getLeftChild() {
+		return leftChild;
+	}
+
+	public void setLeftChild(Node leftChild) {
+		this.leftChild = leftChild;
+	}
+
+	public Node getParent() {
+		return parent;
+	}
+
+	public void setParent(Node parent) {
+		this.parent = parent;
 	}
 }	
 

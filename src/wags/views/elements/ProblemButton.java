@@ -13,6 +13,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -43,13 +44,19 @@ public class ProblemButton extends Composite {
 		}
 		button.setText(title);
 		
+		
 		if (status == 0) {
 			statusIcon.setIcon(IconType.EXCLAMATION);
+			//statusIcon.getElement().getStyle().setColor("red");
+			//button.getElement().getStyle().setColor("red");
 			button.addStyleName("problem_due");
 		} else if (status == 1) {
 			button.addStyleName("problem_complete");
+			//statusIcon.getElement().getStyle().setColor("green");
+			//button.getElement().getStyle().setColor("green");
 		} else {
 			button.addStyleName("problem_review");
+			//button.getElement().getStyle().setColor("blue");
 		}
 		
 		button.addClickHandler(new ClickHandler() {

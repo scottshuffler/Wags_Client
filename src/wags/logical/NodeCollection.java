@@ -19,6 +19,7 @@ public class NodeCollection implements IsSerializable
 	public static final int PREORDER = 0;
 	public static final int INORDER = 1;
 	public static final int POSTORDER = 2;
+	public String traversalString;
 	
 	protected ArrayList<Node> nodes;
 	
@@ -34,13 +35,13 @@ public class NodeCollection implements IsSerializable
 	
 	public void addNodesToPanel(AbsolutePanel panel) {
 		if (!LogicalPanelUi.hasPositions())
-		{	for (int i = 0; i < nodes.size(); i++) {
+		{	
+			for (int i = 0; i < nodes.size(); i++) {
 				panel.add(nodes.get(i).getLabel(), 5 + (50 * i), 5);
 			}
 		} else {
 			for (int i = 0; i < nodes.size(); i++) {
 				if (!LogicalPanelUi.isDraggable()) {
-					Window.alert(nodes.get(i).getLabel().toString());
 					panel.add(nodes.get(i).getLabel(), 
 							nodes.get(i).getLeft(), nodes.get(i).getTop());
 				}
@@ -84,37 +85,45 @@ public class NodeCollection implements IsSerializable
 		throw new NoSuchElementException();
 	}
 	
-	public String getTraversal(int traversalType) {
+	public String getTraversal(int traversalType, ArrayList<EdgeParent> edgeList) {
 		String[] traversal = new String[nodes.size()];
-		String traversalString = "";
+		traversalString = "";
 		Node root = getNode(0);
-		
+		for (int i =0; i < edgeList.size(); i++) {
+			int n1Pos = edgeList.get(i).getN1().getTop();
+			int n2Pos = edgeList.get(i).getN2().getTop();
+			
+			if (n1Pos > n2Pos) {
+				edgeList.get(i).getN2().setChild(edgeList.get(i).getN1());
+				edgeList.get(i).getN1().setParent(edgeList.get(i).getN2());
+			}
+			else {
+				edgeList.get(i).getN1().setChild(edgeList.get(i).getN2());
+				edgeList.get(i).getN2().setParent(edgeList.get(i).getN1());
+			}
+			
+		}
 		switch (traversalType) {
 		case PREORDER:
-			ArrayList<Node> preorderNodes = new ArrayList<Node>();
 			for (int i = 0; i < nodes.size(); i++) {
 				if (getNode(i).getTop() < root.getTop())
 					root = getNode(i);
 			}
-			traversal[0] = root.getLabel().getText();
-			for (int j = 0; j < traversal.length; j++) {
-				traversalString += traversal[j];
-			}
+			preorder(root);
 			break;
 		case INORDER:
-			ArrayList<Node> inorderNodes = new ArrayList<Node>();
 			for (int i = 0; i < nodes.size(); i++) {
-				if (getNode(i).getLeft() < root.getLeft())
+				if (getNode(i).getTop() < root.getTop())
 					root = getNode(i);
 			}
-			traversal[0] = root.getLabel().getText();
-			for (int j = 0; j < traversal.length; j++) {
-				traversalString += traversal[j];
-			}
+			inorder(root);
 			break;
 		case POSTORDER:
-			ArrayList<Node> postorderNodes = new ArrayList<Node>();
-			
+			for (int i = 0; i < nodes.size(); i++) {
+				if (getNode(i).getTop() < root.getTop())
+					root = getNode(i);
+			}
+			postorder(root);
 			break;
 		default:
 			traversalString = "Incorrect traversal type; location: wags.logical.NodeCollection:getTraversal";
@@ -122,6 +131,30 @@ public class NodeCollection implements IsSerializable
 		}
 		
 		return traversalString;
+	}
+	
+	public void preorder(Node root) {
+		if (root != null) {
+			traversalString += root.getLabel().getText();
+			preorder(root.getLeftChild());
+			preorder(root.getRightChild());
+		}
+	}
+	
+	public void inorder(Node root) {
+		if (root != null) {
+			inorder(root.getLeftChild());
+			traversalString += root.getLabel().getText();
+			inorder(root.getRightChild());
+		}
+	}
+	
+	public void postorder(Node root) {
+		if (root != null) {
+			postorder(root.getLeftChild());
+			postorder(root.getRightChild());
+			traversalString += root.getLabel().getText();
+		}
 	}
 	
 	public void resetNodes() {

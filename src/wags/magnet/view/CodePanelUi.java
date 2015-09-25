@@ -15,6 +15,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -129,7 +130,6 @@ public class CodePanelUi extends Composite {
 		@Override
 		public void finalize() {
 			plainText = new StringBuilder();
-
 			buildContent(mainFunction);
 			String code = plainText.toString();
 			ResultsPanelUi.clearCodeArea();
@@ -137,6 +137,10 @@ public class CodePanelUi extends Composite {
 			code = code.replaceAll(Consts.HC_DELIMITER, "");
 			code = code.trim();
 			code = code.replace("\t", " ");
+			code = code.replace("\r", "\n");
+			code = code.replace("\n\n\n\n", "\n");
+			code = code.replace("\n\n\n", "\n");
+			code = code.replace("\n\n", "\n");
 			AbstractServerCall cmd = new MagnetReviewCommand(getSaveState(), refrigeratorMagnet.getID(), code, title);
 			cmd.sendRequest();
 			refrigeratorMagnet.tabPanel.selectTab(1);

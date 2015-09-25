@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 
 public class EdgeCollection implements IsSerializable {
+	private NodeCollection nc;
 	private String[] nodeSelectionInstructions;
 	private ArrayList<EdgeParent> edges;
 	private ArrayList<Line> lines;
@@ -147,28 +148,34 @@ public class EdgeCollection implements IsSerializable {
 	}
 
 	public void insertEdges(String[] edgePairs, NodeCollection nc) {
+		this.nc = nc;
 		EdgeUndirected eu;
-
+		
 		int[][] toBeDrawn = new int[edgePairs.length][4];
 		for (int x = 0; x < edgePairs.length; x++) {
 			eu = new EdgeUndirected(this, removable);
-			
-			//edgePairs is already split by nodes to have a line drawn between them, 
-			//now split the two node labels into separate Strings
+			// edgePairs is already split by nodes to have a line drawn between them, 
+			// now split the two node labels into separate Strings
 			String[] temp = edgePairs[x].split(" ");
-			//Next few lines seem unnecessary, but I thought it was the easiest way:
-			//basically, just take the two nodes a line is drawn between and set their
-			//x1,y1,x2,y2 coordinates respectively
+			// Next few lines seem unnecessary, but I thought it was the easiest way:
+			// basically, just take the two nodes a line is drawn between and set their
+			// x1,y1,x2,y2 coordinates respectively
 			toBeDrawn[x][0] = nc.getNodeByLabelText(temp[0]).getLeft();
 			toBeDrawn[x][1] = nc.getNodeByLabelText(temp[0]).getTop();
 			toBeDrawn[x][2] = nc.getNodeByLabelText(temp[1]).getLeft();
 			toBeDrawn[x][3] = nc.getNodeByLabelText(temp[1]).getTop();
-			eu.setN1(nc.getNodeByLabelText(temp[0]));
-			eu.setN2(nc.getNodeByLabelText(temp[1]));
-
-			edges.add((EdgeParent) eu);
 			eu.drawEdges(toBeDrawn);
-			lines.add(eu.getLine());
+//			//nc.getNodeByLabelText(temp[0]).drawEdge(nc.getNodeByLabelText(temp[1]));
+			/**EdgeUndirected eu = new EdgeUndirected(nc.getNodeByLabelText(temp[0]), 
+					nc.getNodeByLabelText(temp[1]), this, true);
+			eu.drawEdge();
+			edges.add((EdgeParent) eu);
+			lines.add(eu.getLine());*/
+			//eu.drawEdge();
+			//nc.getNodeByLabelText(temp[0]).drawEdge(nc.getNodeByLabelText(temp[1]));
+			//lines.add(eu.getLine());
+			// eu.addWeightLabel(weight);
+			
 		}
 		
 	}
@@ -330,7 +337,9 @@ public class EdgeCollection implements IsSerializable {
 	}
 	public void addWeightLabel(Label l, int x, int y, EdgeUndirected edge){
 		//dm.addWeightLabel(l, x, y);
-		graphNodeCollection.addNode(new NodeClickable(l.getText(),l, dm.getTravCont(), false, edge, this));
+		Window.alert("AWL in EC");
+		
+		graphNodeCollection.addNode(new Node(l.getText(),l));
 	}
 	public NodeCollection getGraphNodeCollection(){
 		return graphNodeCollection;
@@ -338,7 +347,7 @@ public class EdgeCollection implements IsSerializable {
 	public void clearGraphNodeCollection(){
 		graphNodeCollection.emptyNodes();
 		for(EdgeParent ep: edges){
-			((EdgeUndirected)ep).addWeightLabel();
+			((EdgeUndirected)ep).addWeightLabel("");
 		}
 	}
 	

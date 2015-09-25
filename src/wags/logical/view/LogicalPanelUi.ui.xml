@@ -30,9 +30,9 @@
 	}
 
 	.column {
-		margin-left: 0 !important;
-		height: 100%;
-		overflow: visible;
+		border: 1px solid #000;
+		height: 50px;
+		width: 50px;
 	}
 
 	.directionsContent {
@@ -58,8 +58,16 @@
 
 	}
 
-	.dragPanel {
-		height: 60%;
+	.drag_panel {
+		background: #D3D3D3;
+  		opacity: .5;
+  		min-height: 600px;
+  		min-width: 600px;
+  		width: 80%;
+  		margin-left: 20%;
+  		margin-right: 20%;
+  		height: 100%;
+  		margin-top: 1%;
 	}
 
 	.lgButton {
@@ -82,6 +90,12 @@
 		padding: 2%;
 		text-align: center;
 		width: 80%;
+	}
+
+	.rowContain {
+		margin-top: 200px;
+		padding-right: 0;
+		padding-left: 0;
 	}
 
 	.smButton {
@@ -119,6 +133,8 @@
 			<b:Paragraph ui:field="message" styleName="{style.message}" />
 	    </b:FluidRow>
 	    <g:AbsolutePanel ui:field="boundaryPanel"></g:AbsolutePanel>
+    		<new:Container styleName="{style.rowContain}" ui:field="hashingBoxes" fluid="true" visible="false">
+	        </new:Container>
     </g:FlowPanel>
        </b:Column>
 </ui:UiBinder> 

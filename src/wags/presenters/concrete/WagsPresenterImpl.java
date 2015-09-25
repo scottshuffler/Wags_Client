@@ -5,6 +5,7 @@ import wags.Common.ClientFactory;
 import wags.Common.Tokens;
 import wags.ProxyFramework.AbstractServerCall;
 import wags.ProxyFramework.CheckPasswordCommand;
+import wags.ProxyFramework.GetUsernamesCommand;
 import wags.ProxyFramework.LogoutCommand;
 import wags.presenters.interfaces.WagsPresenter;
 import wags.views.concrete.ProblemPage;
@@ -96,6 +97,7 @@ public class WagsPresenterImpl implements WagsPresenter, AcceptsOneWidget
 	public void onLogoutClick() {
 		AbstractServerCall cmd = new LogoutCommand();
 		cmd.sendRequest();
+		Window.Location.reload();
 	}
 	
 	@Override
@@ -143,6 +145,11 @@ public class WagsPresenterImpl implements WagsPresenter, AcceptsOneWidget
 	@Override
 	public void onProblemsClick() {
 		History.newItem(Tokens.CODE);
+	}
+	
+	@Override
+	public void onLogicalClick() {
+		History.newItem(Tokens.LOGICAL);
 	}
 
 }

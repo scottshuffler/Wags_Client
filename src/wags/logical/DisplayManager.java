@@ -76,7 +76,7 @@ public abstract class DisplayManager implements IsSerializable {
 	}
 	
 	protected void addProblemTextArea() {
-		TextArea t = new TextArea();https://plus.google.com/u/2/b/100469590745578195495/100469590745578195495/admin/?tab=XX
+		TextArea t = new TextArea();
 		t.setStyleName("problem_statement");
 		t.setPixelSize(598, 90);
 		t.setReadOnly(true);
