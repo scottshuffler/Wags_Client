@@ -68,14 +68,12 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 	
 	@Override
 	public void drawEdge() {
-		int leftOffset = 0;
-		int topOffset = 0;
-		
+
 		if(n1 != null && n2 != null) {
-		line = new Line((int)(n1.getLeft() + leftOffset), 
-						n1.getTop() + topOffset,
-						n2.getLeft() + leftOffset, 
-						n2.getTop() + topOffset);
+		line = new Line(n1.getLeft(), 
+						n1.getTop(),
+						n2.getLeft(), 
+						n2.getTop());
 		if (removable) {
 			line.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
@@ -83,7 +81,6 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 					selected.setStrokeColor("yellow");
 					//REMOVEEDGES
 					if(Window.confirm("Would you like to remove this edge?")) { 
-						//LogicalPanelUi.getPanel().remove(selected);
 						ec.removeEdgeFromCanvas(selected);
 					}
 					else
@@ -97,9 +94,8 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 		super.setLine(line);
 		ec.addEdge(this);
 		ec.addLine(line);
-		//addWeightLabel();
 		ec.addEdgeToCanvas(line);
-	}
+		}	
 	}
 	
 	@Override
@@ -113,6 +109,7 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 							lineDims[i][3] + OFF);
 			switch (LogicalPanelUi.getGenre()) {
 			case "traversal":
+			case "heapInsert":
 				if (removable) {
 					line.addClickHandler(new ClickHandler() {
 						public void onClick(ClickEvent event) {
@@ -122,7 +119,6 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 								LogicalPanelUi.getPanel().remove(selected);
 							else
 								selected.setStrokeColor("#444");
-								
 						}
 					});
 				}

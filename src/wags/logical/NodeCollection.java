@@ -36,15 +36,12 @@ public class NodeCollection implements IsSerializable
 	public void addNodesToPanel(AbsolutePanel panel) {
 		if (!LogicalPanelUi.hasPositions())
 		{	
-			//Window.alert("IF");
 			for (int i = 0; i < nodes.size(); i++) {
 				panel.add(nodes.get(i).getLabel(), 5 + (50 * i), 5);
 			}
 		} else {
-			//Window.alert("ELSE");
 			for (int i = 0; i < nodes.size(); i++) {
 				if (!LogicalPanelUi.isDraggable()) {
-					//Window.alert(nodes.get(i).getLabel().toString());
 					panel.add(nodes.get(i).getLabel(), 
 							nodes.get(i).getLeft(), nodes.get(i).getTop());
 				}
@@ -99,12 +96,10 @@ public class NodeCollection implements IsSerializable
 			if (n1Pos > n2Pos) {
 				edgeList.get(i).getN2().setChild(edgeList.get(i).getN1());
 				edgeList.get(i).getN1().setParent(edgeList.get(i).getN2());
-				//Window.alert("Parent: " + edgeList.get(i).getN2().getParent() + " Left Child: " + edgeList.get(i).getN2().getLeftChild() + "Right Child: " + edgeList.get(i).getN2().getRightChild() + " n1: "+ edgeList.get(i).getN1() + " n2: " + edgeList.get(i).getN2());
 			}
 			else {
 				edgeList.get(i).getN1().setChild(edgeList.get(i).getN2());
 				edgeList.get(i).getN2().setParent(edgeList.get(i).getN1());
-				//Window.alert("Parent: " + edgeList.get(i).getN1().getParent() + " Left Child: " + edgeList.get(i).getN1().getLeftChild() + " Right Child: " + edgeList.get(i).getN1().getRightChild() + " n1: "+ edgeList.get(i).getN1() + " n2: " + edgeList.get(i).getN2());
 			}
 			
 		}
@@ -115,10 +110,6 @@ public class NodeCollection implements IsSerializable
 					root = getNode(i);
 			}
 			preorder(root);
-//			traversal[0] = root.getLabel().getText();
-//			for (int j = 0; j < traversal.length; j++) {
-//				traversalString += traversal[j];
-//			}
 			break;
 		case INORDER:
 			for (int i = 0; i < nodes.size(); i++) {
@@ -126,10 +117,6 @@ public class NodeCollection implements IsSerializable
 					root = getNode(i);
 			}
 			inorder(root);
-//			traversal[0] = root.getLabel().getText();
-//			for (int j = 0; j < traversal.length; j++) {
-//				traversalString += traversal[j];
-//			}
 			break;
 		case POSTORDER:
 			for (int i = 0; i < nodes.size(); i++) {

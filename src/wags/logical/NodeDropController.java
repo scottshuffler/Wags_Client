@@ -42,4 +42,8 @@ public class NodeDropController extends AbsolutePositionDropController implement
 		LogicalPanelUi.setMessage("", Color.None);
 	}
 	
+	public void reset() {
+		dc = null;
+	}
+	
 }

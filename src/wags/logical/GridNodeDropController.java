@@ -2,6 +2,7 @@ package wags.logical;
 
 import com.allen_sauer.gwt.dnd.client.drop.GridConstrainedDropController;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -27,15 +28,27 @@ public class GridNodeDropController extends GridConstrainedDropController {
 	public static void setFields(AbsolutePanel theBoundaryPanel, int theGridX, int theGridY)
 	{
 		boundaryPanel = theBoundaryPanel;
-		gridX=theGridX;
-		gridY=theGridY;
+		gridX = theGridX;
+		gridY = theGridY;
+		
 		dc = new GridNodeDropController(boundaryPanel, gridX, gridY);
 	}
 	
+	/**
+	 * Sets up the grid drop controller
+	 * 
+	 * @param widget the drop panel
+	 * 
+	 * @param left the amount of left margin between each drop location, as a percentage 
+	 *        of the entire screen
+	 * 
+	 * @param top the amount of top margin between each drop location, as a percentage
+	 * 		  of the entire screen
+	 */
 	@Override
 	public void drop(Widget widget, int left, int top) {
+		
 		widget.getElement().getStyle().setMarginLeft(10, Unit.PX);
-		widget.getElement().getStyle().setMarginTop(10, Unit.PX);
 		left = Math.max(0, Math.min(left, boundaryPanel.getOffsetWidth() - widget.getOffsetWidth()));
 	    top = Math.max(0, Math.min(top, boundaryPanel.getOffsetHeight() - widget.getOffsetHeight()));
 	    left = (Math.round((float) left / gridX) * gridX);

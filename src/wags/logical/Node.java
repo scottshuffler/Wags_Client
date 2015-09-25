@@ -59,10 +59,6 @@ public class Node {
 		this.left = left;
 	}
 	
-	public void setState(int state) {
-		
-	}
-	
 	@Override
 	public boolean equals(Object otherNode) {
 		if (this == null || otherNode == null) {
