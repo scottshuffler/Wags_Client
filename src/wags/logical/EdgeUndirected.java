@@ -17,8 +17,6 @@ import com.google.gwt.user.client.ui.Label;
 public class EdgeUndirected extends EdgeParent implements IsSerializable
 {
 	
-	//I'm sorry about the magic, buuut the nodes are 40x40, this evens out the getLeft() and getTop() method results
-	public static final int OFF = 20;
 	public boolean removable;
 	
 	public void addWeightLabel(String incomingWeight){
@@ -63,7 +61,6 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 
 	public EdgeUndirected(EdgeCollection ec, boolean removable) {
 		super(null,null,ec,null,removable);
-		this.removable = removable;
 		}
 	
 	@Override
@@ -89,6 +86,21 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 				}
 			});
 		}
+
+		if (LogicalPanelUi.getGenre() == "mst") {
+			
+			line.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					Line selected = (Line)event.getSource();
+					
+					selected.setStrokeColor("#27f500");
+					
+				    getN1().getLabel().setStyleName("immobilized_node");
+				    getN2().getLabel().setStyleName("immobilized_node");							
+				}
+			});
+		}
+		
 		line.setStrokeColor("#444");
 		line.setStrokeWidth(3);
 		super.setLine(line);
@@ -98,15 +110,15 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 		}	
 	}
 	
-	@Override
+	/**@Override
 	public void drawEdges(int[][] lineDims) {		
 		
 		//Create edges using 2D array of line dimensions passed in by EdgeCollection
 		for (int i = 0; i < lineDims.length; i++) {
-			line = new Line(lineDims[i][0] + OFF,
-							lineDims[i][1] + OFF,
-							lineDims[i][2] + OFF,
-							lineDims[i][3] + OFF);
+			line = new Line(lineDims[i][0],
+							lineDims[i][1],
+							lineDims[i][2],
+							lineDims[i][3]);
 			switch (LogicalPanelUi.getGenre()) {
 			case "traversal":
 			case "heapInsert":
@@ -123,19 +135,6 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 					});
 				}
 				break;
-			case "mst":
-				
-				line.addClickHandler(new ClickHandler() {
-					public void onClick(ClickEvent event) {
-						Line selected = (Line)event.getSource();
-						
-						selected.setStrokeColor("#27f500");
-						
-					    getN1().getLabel().setStyleName("immobilized_node");
-					    getN2().getLabel().setStyleName("immobilized_node");							
-					}
-				});
-				break;
 			}
 			line.setStrokeColor("#444");
 			line.setStrokeWidth(3);
@@ -143,5 +142,5 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 			//addWeightLabel();
 			ec.addEdgeToCanvas(line);
 		}
-	}
+	}*/
 }
