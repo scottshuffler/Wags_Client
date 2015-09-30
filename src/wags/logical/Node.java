@@ -15,9 +15,6 @@ import wags.logical.view.LogicalPanelUi;
 import wags.logical.view.LogicalPanelUi.Color;
 
 public class Node {
-
-	public static final int LEFTOFFSET = 20;
-	public static final int TOPOFFSET = 20;
 	
 	public static final int CLICKTIME = 100;
 	private static final int OFFSET = 20;
@@ -52,11 +49,11 @@ public class Node {
 	}
 	
 	public void setTop(int top) {
-		this.top = top;
+		this.top = top + OFFSET; // add in offset to account for center of node
 	}
 	
 	public void setLeft(int left) {
-		this.left = left;
+		this.left = left + OFFSET; // add in offset to account for center of node
 	}
 	
 	@Override
@@ -95,7 +92,7 @@ public class Node {
 			// Looks bad, but isn't: Get the Node's exact pixel position off the screen, subtract the 
 			// amount its parent (canvas) is offset from the top of the screen, and add 20 for half the
 			// height of the node. Easy.
-			return label.getElement().getAbsoluteTop() - label.getElement().getOffsetParent().getAbsoluteTop() + TOPOFFSET;
+			return label.getElement().getAbsoluteTop() - label.getElement().getOffsetParent().getAbsoluteTop();
 		}
 		return top;
 	}
@@ -103,7 +100,7 @@ public class Node {
 	public int getLeft() {
 		if (left == 0) {
 			// See above comment for getTop()
-			return label.getElement().getAbsoluteLeft() - label.getElement().getOffsetParent().getAbsoluteLeft() + LEFTOFFSET;
+			return label.getElement().getAbsoluteLeft() - label.getElement().getOffsetParent().getAbsoluteLeft();
 		}
 		return left;
 	}

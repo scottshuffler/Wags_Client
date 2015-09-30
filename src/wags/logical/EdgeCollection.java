@@ -157,24 +157,7 @@ public class EdgeCollection implements IsSerializable {
 			// edgePairs is already split by nodes to have a line drawn between them, 
 			// now split the two node labels into separate Strings
 			String[] temp = edgePairs[x].split(" ");
-			// Next few lines seem unnecessary, but I thought it was the easiest way:
-			// basically, just take the two nodes a line is drawn between and set their
-			// x1,y1,x2,y2 coordinates respectively
-			toBeDrawn[x][0] = nc.getNodeByLabelText(temp[0]).getLeft();
-			toBeDrawn[x][1] = nc.getNodeByLabelText(temp[0]).getTop();
-			toBeDrawn[x][2] = nc.getNodeByLabelText(temp[1]).getLeft();
-			toBeDrawn[x][3] = nc.getNodeByLabelText(temp[1]).getTop();
-			eu.drawEdges(toBeDrawn);
-//			//nc.getNodeByLabelText(temp[0]).drawEdge(nc.getNodeByLabelText(temp[1]));
-			/**EdgeUndirected eu = new EdgeUndirected(nc.getNodeByLabelText(temp[0]), 
-					nc.getNodeByLabelText(temp[1]), this, true);
-			eu.drawEdge();
-			edges.add((EdgeParent) eu);
-			lines.add(eu.getLine());*/
-			//eu.drawEdge();
-			//nc.getNodeByLabelText(temp[0]).drawEdge(nc.getNodeByLabelText(temp[1]));
-			//lines.add(eu.getLine());
-			// eu.addWeightLabel(weight);
+			nc.getNodeByLabelText(temp[0]).drawEdge(nc.getNodeByLabelText(temp[1]));
 			
 		}
 		

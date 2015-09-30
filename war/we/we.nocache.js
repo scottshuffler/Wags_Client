@@ -299,7 +299,6 @@ function we(){
       unflattenKeylistIntoAnswers([$intern_45], $intern_56);
       unflattenKeylistIntoAnswers([$intern_43], $intern_57);
       unflattenKeylistIntoAnswers([$intern_49], $intern_58);
-
       strongName = answers[computePropValue($intern_41)];
       var idx = strongName.indexOf($intern_59);
       if (idx != -1) {
