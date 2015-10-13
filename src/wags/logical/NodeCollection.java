@@ -92,7 +92,7 @@ public class NodeCollection implements IsSerializable
 		String[] traversal = new String[nodes.size()];
 		traversalString = "";
 		Node root = getNode(0);
-		for (int i =0; i < edgeList.size(); i++) {
+		for (int i =0; i < edgeList.size(); i++) {			
 			int n1Pos = edgeList.get(i).getN1().getTop();
 			int n2Pos = edgeList.get(i).getN2().getTop();
 			
