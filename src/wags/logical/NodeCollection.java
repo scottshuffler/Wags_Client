@@ -1,7 +1,9 @@
 package wags.logical;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
+import java.util.Queue;
 
 import com.allen_sauer.gwt.dnd.client.DragController;
 import com.google.gwt.thirdparty.guava.common.collect.BinaryTreeTraverser;
@@ -19,6 +21,7 @@ public class NodeCollection implements IsSerializable
 	public static final int PREORDER = 0;
 	public static final int INORDER = 1;
 	public static final int POSTORDER = 2;
+	public static final int LATERAL = 3;
 	public String traversalString;
 	
 	protected ArrayList<Node> nodes;
@@ -89,7 +92,9 @@ public class NodeCollection implements IsSerializable
 		String[] traversal = new String[nodes.size()];
 		traversalString = "";
 		Node root = getNode(0);
+		clearTraversal(edgeList);
 		for (int i =0; i < edgeList.size(); i++) {
+			
 			int n1Pos = edgeList.get(i).getN1().getTop();
 			int n2Pos = edgeList.get(i).getN2().getTop();
 			
@@ -101,8 +106,8 @@ public class NodeCollection implements IsSerializable
 				edgeList.get(i).getN1().setChild(edgeList.get(i).getN2());
 				edgeList.get(i).getN2().setParent(edgeList.get(i).getN1());
 			}
-			
 		}
+		
 		switch (traversalType) {
 		case PREORDER:
 			for (int i = 0; i < nodes.size(); i++) {
@@ -124,6 +129,13 @@ public class NodeCollection implements IsSerializable
 					root = getNode(i);
 			}
 			postorder(root);
+			break;
+		case LATERAL:
+			for (int i = 0; i < nodes.size(); i++) {
+				if (getNode(i).getTop() < root.getTop())
+					root = getNode(i);
+			}
+			lateral(root);
 			break;
 		default:
 			traversalString = "Incorrect traversal type; location: wags.logical.NodeCollection:getTraversal";
@@ -154,6 +166,23 @@ public class NodeCollection implements IsSerializable
 			postorder(root.getLeftChild());
 			postorder(root.getRightChild());
 			traversalString += root.getLabel().getText();
+		}
+	}
+	
+	public void lateral(Node root) {		
+		Queue<Node> queue = new LinkedList<Node>();
+		if (root != null) {
+			queue.offer(root);
+			while (!queue.isEmpty()) {
+				Node node = queue.poll();
+				traversalString += node.getLabel().getText();
+				if (node.getLeftChild() != null) {
+					queue.offer(node.getLeftChild());
+				}
+				if (node.getRightChild() != null) {
+					queue.offer(node.getRightChild());
+				}
+			}
 		}
 	}
 	
@@ -211,6 +240,15 @@ public class NodeCollection implements IsSerializable
 		catch(Exception e)
 		{
 			System.out.println("Still ok");
+		}
+	}
+	
+	private void clearTraversal(ArrayList<EdgeParent> edges) {
+		for (int i = 0; i < edges.size(); i++) {
+			edges.get(i).getN1().setChild(null);
+			edges.get(i).getN1().setParent(null);
+			edges.get(i).getN2().setChild(null);
+			edges.get(i).getN2().setParent(null);
 		}
 	}
 	

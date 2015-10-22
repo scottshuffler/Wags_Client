@@ -14,6 +14,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
@@ -25,6 +26,7 @@ public class EdgeCollection implements IsSerializable {
 	private ArrayList<Line> lines;
 	private int numNodesSelected;
 	private Label firstNodeSelected;
+	private ArrayList<EdgeParent> MSTClicked;
 	//private EdgeClickListener handler;
 	private TreeTypeDisplayManager dm;
 	private HandlerRegistration[] edgeHandlers;
@@ -40,6 +42,7 @@ public class EdgeCollection implements IsSerializable {
 		this.removable = removable;
 		edges = new ArrayList<EdgeParent>();
 		lines = new ArrayList<Line>();
+		MSTClicked = new ArrayList<EdgeParent>();
 		//handler = new EdgeClickListener();
 		numNodesSelected = 0;
 	}
@@ -151,30 +154,16 @@ public class EdgeCollection implements IsSerializable {
 		this.nc = nc;
 		EdgeUndirected eu;
 		
-		int[][] toBeDrawn = new int[edgePairs.length][4];
 		for (int x = 0; x < edgePairs.length; x++) {
-			eu = new EdgeUndirected(this, removable);
+			
 			// edgePairs is already split by nodes to have a line drawn between them, 
 			// now split the two node labels into separate Strings
 			String[] temp = edgePairs[x].split(" ");
-			// Next few lines seem unnecessary, but I thought it was the easiest way:
-			// basically, just take the two nodes a line is drawn between and set their
-			// x1,y1,x2,y2 coordinates respectively
-			toBeDrawn[x][0] = nc.getNodeByLabelText(temp[0]).getLeft();
-			toBeDrawn[x][1] = nc.getNodeByLabelText(temp[0]).getTop();
-			toBeDrawn[x][2] = nc.getNodeByLabelText(temp[1]).getLeft();
-			toBeDrawn[x][3] = nc.getNodeByLabelText(temp[1]).getTop();
-			eu.drawEdges(toBeDrawn);
-//			//nc.getNodeByLabelText(temp[0]).drawEdge(nc.getNodeByLabelText(temp[1]));
-			/**EdgeUndirected eu = new EdgeUndirected(nc.getNodeByLabelText(temp[0]), 
-					nc.getNodeByLabelText(temp[1]), this, true);
+			
+			eu = new EdgeUndirected(nc.getNodeByLabelText(temp[0]), nc.getNodeByLabelText(temp[1]), this, removable);
+			if (LogicalPanelUi.getGenre() == "mst") 
+				eu.setWeight(temp[2]);
 			eu.drawEdge();
-			edges.add((EdgeParent) eu);
-			lines.add(eu.getLine());*/
-			//eu.drawEdge();
-			//nc.getNodeByLabelText(temp[0]).drawEdge(nc.getNodeByLabelText(temp[1]));
-			//lines.add(eu.getLine());
-			// eu.addWeightLabel(weight);
 			
 		}
 		
@@ -336,10 +325,10 @@ public class EdgeCollection implements IsSerializable {
 		return nodeSelectionInstructions[1];
 	}
 	public void addWeightLabel(Label l, int x, int y, EdgeUndirected edge){
-		//dm.addWeightLabel(l, x, y);
-		Window.alert("AWL in EC");
+		AbsolutePanel toAdd = (AbsolutePanel)panel.getParent();
 		
-		graphNodeCollection.addNode(new Node(l.getText(),l));
+		toAdd.add(l, x, y);
+		//graphNodeCollection.addNode(new Node(l.getText(),l));
 	}
 	public NodeCollection getGraphNodeCollection(){
 		return graphNodeCollection;
@@ -347,7 +336,7 @@ public class EdgeCollection implements IsSerializable {
 	public void clearGraphNodeCollection(){
 		graphNodeCollection.emptyNodes();
 		for(EdgeParent ep: edges){
-			((EdgeUndirected)ep).addWeightLabel("");
+			((EdgeUndirected)ep).addWeightLabel();
 		}
 	}
 	
@@ -362,4 +351,22 @@ public class EdgeCollection implements IsSerializable {
 	public void addEdge(EdgeParent edge) {
 		edges.add(edge);
 	}
+	
+	public ArrayList<EdgeParent> getMSTClicked() {
+		return MSTClicked;
+	}
+	
+	public void removeMSTClicked(EdgeParent toRemove) {
+		for (int i = 0; i < MSTClicked.size(); i++) {
+			if (toRemove.equals(MSTClicked.get(i))) {
+				MSTClicked.remove(i);
+				return;
+			}
+		}
+	}
+	
+	public void setMSTClicked(EdgeParent clicked) {
+		MSTClicked.add(clicked);
+	}
+
 }

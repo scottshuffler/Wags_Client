@@ -41,6 +41,7 @@ import wags.LogicalMicrolab;
 import wags.Common.Tokens;
 import wags.logical.EdgeCollection;
 import wags.logical.EdgeUndirected;
+import wags.logical.Evaluate;
 import wags.logical.GridNodeDropController;
 import wags.logical.HashingDropController;
 import wags.logical.Node;
@@ -98,9 +99,8 @@ public class LogicalPanelUi extends Composite {
 	@UiField Paragraph instructions;
 	@UiField static Paragraph message;
 	
-	public LogicalPanelUi(LogicalPanel panel, LogicalProblem problem) {
+	public LogicalPanelUi(LogicalPanel panel, LogicalProblem problem) {		
 		initWidget(uiBinder.createAndBindUi(this));
-		logProb = problem;
 		origProb = problem;
 		this.panel = panel;
 		
@@ -109,8 +109,27 @@ public class LogicalPanelUi extends Composite {
 		}
 		
 		count++;
-		initialize();
 		
+		
+		logProb = problem;
+		
+
+		
+		switch(logProb.genre) {
+		case "traversal":
+		case "hashing": 
+		case "heapInsert":
+		case "heapDelete":
+		case "mst":
+			initialize();			
+			break;
+		default:
+			Window.alert("Sorry, this page is not yet available in the beta edition; if you'd like " 
+					+ "to try this problem, please use the equivalent problem at the URL " 
+					+ "'cs.appstate.edu/wags/'. Thank you for your patience!");
+			Window.Location.replace("#problems&loc=code");
+			break;
+		}
 	}
 	
 	@UiHandler("backButton")
@@ -137,13 +156,23 @@ public class LogicalPanelUi extends Composite {
 	
 	@UiHandler("evaluateButton")
 	void handleEvaluateClick(ClickEvent e) {
+		String[] args = logProb.arguments.split(",");
+		Evaluate eval = new Evaluate(args);
 		switch (logProb.genre) {
 		case "traversal":
+			evaluateButton.setEnabled(!eval.traversalEvaluate(nc, ec));
+			break;
 		case  "heapInsert":
-			traversalEvaluate();
+		case "heapDelete":
+			evaluateButton.setEnabled(!eval.heapEvaluate(nc, ec));
 			break;
 		case "hashing":
-			hashingEvaluate();
+			evaluateButton.setEnabled(!eval.hashingEvaluate(nc, grid));				
+			break;
+		case "mst":
+			args = logProb.arguments.split(" ");
+			eval = new Evaluate(args);
+			evaluateButton.setEnabled(!eval.mstEvaluate(nc, ec));
 			break;
 		}
 	}
@@ -151,6 +180,7 @@ public class LogicalPanelUi extends Composite {
 	
 	
 	public void initialize() {
+		
 		dragPanel = new AbsolutePanel();
 		itemsInPanel = new ArrayList<Widget>();
 		canvas = new DrawingArea(Window.getClientWidth(), Window.getClientHeight());
@@ -216,13 +246,6 @@ public class LogicalPanelUi extends Composite {
 		nc = new NodeCollection();
 		String temp = logProb.nodes;
 		String[] nodeList = temp.split(" ");
-//		String[] edgeList = edges_temp.split(" |\\,");
-//		EdgeUndirected eu;
-//		for (int i = 0; i < edgeList.length; i++) {
-//			
-//			ec.addWeightLabel(edgeList[i], 20, 50, edge);
-//			Window.alert(edgeList[i]);
-//		}
 		for (int i = 0; i < nodeList.length; i++) {
 			nc.addNode(new Node(nodeList[i], new Label(nodeList[i])));
 		}
@@ -245,7 +268,6 @@ public class LogicalPanelUi extends Composite {
 				itemsInPanel.get(i).setStyleName("node");
 				nc.getNode(i).setTop(Integer.parseInt(ypositions[i]));
 				nc.getNode(i).setLeft(Integer.parseInt(xpositions[i]));
-				//nc.getNode(i).setNodeCollection(nc);
 				if (logProb.nodesDraggable) 
 					NodeDragController.getInstance().makeDraggable(nc.getNode(i).getLabel());
 				if (logProb.edgesRemovable) 
@@ -262,10 +284,17 @@ public class LogicalPanelUi extends Composite {
 		}
 		else {
 			for (int i = 0; i < nc.size(); i++) {
-				if ((50 * (i + 1)) > 600) 
-					dragPanel.add(nc.getNode(i).getLabel(), 5 + (50 * i) - 600, 55);
-				else
-					dragPanel.add(nc.getNode(i).getLabel(), 5 + (50*i), 5);
+				int left = 5 + (50 * i);
+				int top = 5;
+				// Account for overflow on right side of panel
+				if ((50 * (i + 1)) > 600) {
+					left -= 600; 		// reset node positions
+					top += 50;			// move extra nodes down 50px
+				}
+				dragPanel.add(nc.getNode(i).getLabel(), left, top);
+				nc.getNode(i).setLeft(left);
+				nc.getNode(i).setTop(top);
+				
 				itemsInPanel.add(nc.getNode(i).getLabel());
 				itemsInPanel.get(i).setStyleName("node");
 				if (logProb.edgesRemovable) 
@@ -276,57 +305,6 @@ public class LogicalPanelUi extends Composite {
 			
 		}
 		wags.logical.view.LogicalProblem.setDragPanel(dragPanel);
-	}
-	
-	private void traversalEvaluate() {
-		String[] args = logProb.arguments.split(",");
-		Boolean incorrect = true;
-		String preorderResult = nc.getTraversal(0, ec.getEdges());
-		String inorderResult = nc.getTraversal(1, ec.getEdges());
-		String postorderResult = nc.getTraversal(2, ec.getEdges());
-		for (int i = 0; i < args.length; i++) {
-			args[i] = args[i].replace(" ", "");
-			//String traversalResult = nc.getTraversal(i, ec.getEdges());
-			//Window.alert(traversalResult);
-			if (args[i].equalsIgnoreCase(preorderResult)) { 
-				setMessage("Correct!",Color.Success);
-				incorrect = false;
-			}
-			else if(args[i].equalsIgnoreCase(inorderResult)) {
-				setMessage("Correct!",Color.Success);
-				incorrect = false;
-			}
-			else if(args[i].equalsIgnoreCase(postorderResult)) {
-				setMessage("Correct!",Color.Success);
-				incorrect = false;
-			}
-		}
-		if (incorrect) {
-			setMessage("Incorrect! Your preorder traversal was: " + preorderResult + " and your inorder traversal was: " + inorderResult +"",Color.Error);
-		}
-		else {
-			setMessage("Correct!",Color.Success);
-		}
-	}
-	
-	private void hashingEvaluate() {
-		String[] args = logProb.arguments.split(",");
-		Boolean correct = true;
-		for (int i = 1; i < args.length; i++) {
-			String[] arguments = args[i].split("\\s");   // arguments[0] is label, arguments[1] is cell number
-			int[] cellPos = {grid.get(Integer.parseInt(arguments[1])).getWidget(1).getAbsoluteLeft(), 
-					grid.get(Integer.parseInt(arguments[1])).getWidget(1).getAbsoluteTop()};
-			int[] labelPos = {nc.getNodeByLabelText(arguments[0]).getLabel().getAbsoluteLeft(), 
-					nc.getNodeByLabelText(arguments[0]).getLabel().getAbsoluteTop()};
-			if (labelPos[0] != cellPos[0] || labelPos[1] != cellPos[1]) {
-				correct = false;
-			}
-		}		
-		if (correct) {
-			setMessage("Correct!", Color.Success);
-		} else {
-			setMessage("Incorrect; not all of the nodes were in the correct positions.", Color.Error);
-		}
 	}
 	
 	public EdgeCollection getEdgeCollection(){
@@ -427,5 +405,9 @@ public class LogicalPanelUi extends Composite {
 	
 	public static boolean isDraggable() {
 		return isDrag;
+	}
+	
+	public static boolean edgesRemovable() {
+		return logProb.edgesRemovable;
 	}
 }
