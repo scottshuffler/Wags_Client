@@ -120,10 +120,11 @@ public class CodePanelUi extends Composite {
 
 	@UiHandler("resetButton")
 	void handleResetClick(ClickEvent e) {
-		resetPopupPanel.setPopupPosition(resetButton.getAbsoluteLeft() - 160,
-				resetButton.getAbsoluteTop() - 80);
-		resetPopupPanel.setVisible(true);
-		resetPopupPanel.show();
+		Window.Location.reload();
+//		resetPopupPanel.setPopupPosition(resetButton.getAbsoluteLeft() - 160,
+//				resetButton.getAbsoluteTop() - 80);
+//		resetPopupPanel.setVisible(true);
+//		resetPopupPanel.show();
 	}
 
 	private class yesFinalizeHandler implements ClickHandler {

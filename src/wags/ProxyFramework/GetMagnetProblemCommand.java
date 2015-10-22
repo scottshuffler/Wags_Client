@@ -30,6 +30,7 @@ public class GetMagnetProblemCommand extends AbstractServerCall {
 			MagnetProblem magProblem = (MagnetProblem) status.getObject();
 			//Window.alert("No problems");
 			History.newItem(Tokens.MAGNETPROBLEM + Tokens.DELIM + "id=" + magProblem.id);
+			Window.Location.reload();
 		}
 	}
 

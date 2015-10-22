@@ -417,6 +417,7 @@ public class ProblemCreationPanel extends Composite implements ProblemCreationPa
 		//Proxy.getFileTime(lstLoadExercise.getItemText(lstLoadExercise.getSelectedIndex()), uploadStamp, helperStamp);
 	}
 	
+	
 	/**
 	 * creates a pop-up window which will open up once the user presses the delete button
 	 * and will verify with the user that they really want to delete the magnet exercise.
@@ -505,6 +506,7 @@ public class ProblemCreationPanel extends Composite implements ProblemCreationPa
 				AbstractServerCall cmd = new GetMagnetProblemCommand(finalTitleTxtBox.getText());
 				//Window.alert("Sending request");
 				cmd.sendRequest();
+				
 			}
 			
 		});
