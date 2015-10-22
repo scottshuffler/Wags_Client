@@ -58,11 +58,7 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 
 	public EdgeUndirected(EdgeCollection ec, boolean removable) {
 		super(null,null,ec,null,removable);
-<<<<<<< HEAD
 	}
-=======
-		}
->>>>>>> Scott
 	
 	@Override
 	public void drawEdge() {
@@ -103,7 +99,6 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 			});
 		}
 
-<<<<<<< HEAD
 		
 		if (LogicalPanelUi.getGenre() == "mst") {			
 			addWeightLabel();
@@ -147,20 +142,6 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 				public void onClick(ClickEvent event) {
 					line.fireEvent(event);
 				}});
-=======
-		if (LogicalPanelUi.getGenre() == "mst") {
-			
-			line.addClickHandler(new ClickHandler() {
-				public void onClick(ClickEvent event) {
-					Line selected = (Line)event.getSource();
-					
-					selected.setStrokeColor("#27f500");
-					
-				    getN1().getLabel().setStyleName("immobilized_node");
-				    getN2().getLabel().setStyleName("immobilized_node");							
-				}
-			});
->>>>>>> Scott
 		}
 		
 		line.setStrokeColor("#444");
@@ -171,8 +152,6 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 		ec.addEdgeToCanvas(line);
 		}	
 	}
-	
-<<<<<<< HEAD
 	public void setWeight(String weight) {
 		super.setWeight(Integer.parseInt(weight));
 		weightLabel = new Label(weight);
@@ -183,8 +162,6 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 		return weightLabel.getText();
 	}
 	
-=======
->>>>>>> Scott
 	/**@Override
 	public void drawEdges(int[][] lineDims) {		
 		
@@ -218,7 +195,6 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 			ec.addEdgeToCanvas(line);
 		}
 	}*/
-<<<<<<< HEAD
 	
 	private void writeMST() {
 		ArrayList<EdgeParent> MSTClicked = ec.getMSTClicked();
@@ -235,6 +211,4 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 		else
 			LogicalPanelUi.setMessage("", Color.None);
 	}
-=======
->>>>>>> Scott
 }
