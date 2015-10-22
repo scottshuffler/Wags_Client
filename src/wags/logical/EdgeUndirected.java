@@ -78,16 +78,18 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 					//REMOVEEDGES
 					if(Window.confirm("Would you like to remove this edge?")) { 
 						ec.removeEdgeFromCanvas(selected);
-						if (n1.getTop() > n2.getTop()) {
-							if (n1.getLeftChild().equals(n2))
-								n1.setLeftChild(null);
-							else 
-								n1.setRightChild(null);
-						} else {
-							if (n2.getLeftChild().equals(n1))
-								n2.setLeftChild(null);
-							else 
-								n2.setRightChild(null);
+						if (n1 != null && n2 != null) {
+							if (n1.getTop() > n2.getTop()) {
+								if (n1.getLeftChild().equals(n2))
+									n1.setLeftChild(null);
+								else 
+									n1.setRightChild(null);
+							} else {
+								if (n2.getLeftChild().equals(n1))
+									n2.setLeftChild(null);
+								else 
+									n2.setRightChild(null);
+							}
 						}
 					}
 					else

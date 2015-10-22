@@ -91,16 +91,23 @@ public class Evaluate {
 	public boolean mstEvaluate(NodeCollection nc, EdgeCollection ec) {
 		boolean correct = true;
 		ArrayList<EdgeParent> clickedEdges = ec.getMSTClicked();
+		String edgeLabel = "";
 		
 		for (int i = 0; i < args.length; i++) {
-			String edgeLabel = clickedEdges.get(i).getWeightedEdge();
+			
+			try { 
+				edgeLabel = clickedEdges.get(i).getWeightedEdge();
+			} catch (Exception e) {
+				LogicalPanelUi.setMessage("Your MST is incorrect; make sure you're reaching every node", Color.Error);
+				return false;
+			}
 			
 			if (args[i] != edgeLabel) {
 				LogicalPanelUi.setMessage("Your MST is incorrect; make sure you're reaching every node", Color.Error);
 				return false;
 			}
 		}
-		
+	
 		LogicalPanelUi.setMessage(CORRECT, Color.Success);
 		return correct;
 	}

@@ -219,16 +219,27 @@ public class Node {
 	}
 
 	public Node getRightChild() {
-		return rightChild;
+		if (rightChild != null) {
+			return rightChild;
+		} else return null;
 	}
 	
 	public void setChild(Node childNode) {
-		if (childNode.getLeft() < this.getLeft()) {
-			setLeftChild(childNode);
+		if (childNode != null) {
+			if (childNode.getLeft() < this.getLeft()) {
+				setLeftChild(childNode);
+			}
+			else {
+				setRightChild(childNode);
+			}
+		} else {
+			resetChildren();
 		}
-		else {
-			setRightChild(childNode);
-		}
+	}
+	
+	private void resetChildren() {
+		setLeftChild(null);
+		setRightChild(null);
 	}
 
 	public void setRightChild(Node rightChild) {

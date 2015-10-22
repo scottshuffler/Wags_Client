@@ -246,13 +246,6 @@ public class LogicalPanelUi extends Composite {
 		nc = new NodeCollection();
 		String temp = logProb.nodes;
 		String[] nodeList = temp.split(" ");
-//		String[] edgeList = edges_temp.split(" |\\,");
-//		EdgeUndirected eu;
-//		for (int i = 0; i < edgeList.length; i++) {
-//			
-//			ec.addWeightLabel(edgeList[i], 20, 50, edge);
-//			Window.alert(edgeList[i]);
-//		}
 		for (int i = 0; i < nodeList.length; i++) {
 			nc.addNode(new Node(nodeList[i], new Label(nodeList[i])));
 		}
