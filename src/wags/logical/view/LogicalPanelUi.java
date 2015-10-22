@@ -120,7 +120,10 @@ public class LogicalPanelUi extends Composite {
 		case "hashing": 
 		case "heapInsert":
 		case "heapDelete":
+<<<<<<< HEAD
 		case "mst":
+=======
+>>>>>>> Scott
 			initialize();			
 			break;
 		default:
@@ -160,6 +163,7 @@ public class LogicalPanelUi extends Composite {
 		Evaluate eval = new Evaluate(args);
 		switch (logProb.genre) {
 		case "traversal":
+<<<<<<< HEAD
 			evaluateButton.setEnabled(!eval.traversalEvaluate(nc, ec));
 			break;
 		case  "heapInsert":
@@ -173,6 +177,16 @@ public class LogicalPanelUi extends Composite {
 			args = logProb.arguments.split(" ");
 			eval = new Evaluate(args);
 			evaluateButton.setEnabled(!eval.mstEvaluate(nc, ec));
+=======
+			eval.traversalEvaluate(nc, ec);
+			break;
+		case  "heapInsert":
+		case "heapDelete":
+			eval.heapEvaluate(nc, ec);
+			break;
+		case "hashing":
+			eval.hashingEvaluate(nc, grid);
+>>>>>>> Scott
 			break;
 		}
 	}

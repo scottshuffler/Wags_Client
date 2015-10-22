@@ -159,11 +159,15 @@ public class EdgeCollection implements IsSerializable {
 			// edgePairs is already split by nodes to have a line drawn between them, 
 			// now split the two node labels into separate Strings
 			String[] temp = edgePairs[x].split(" ");
+<<<<<<< HEAD
 			
 			eu = new EdgeUndirected(nc.getNodeByLabelText(temp[0]), nc.getNodeByLabelText(temp[1]), this, removable);
 			if (LogicalPanelUi.getGenre() == "mst") 
 				eu.setWeight(temp[2]);
 			eu.drawEdge();
+=======
+			nc.getNodeByLabelText(temp[0]).drawEdge(nc.getNodeByLabelText(temp[1]));
+>>>>>>> Scott
 			
 		}
 		

@@ -11,14 +11,21 @@ import wags.logical.view.LogicalPanelUi.Color;
 
 public class Evaluate {
 
+<<<<<<< HEAD
 	private final String CORRECT = "Correct! Please click reset if you'd like to try again.";
+=======
+>>>>>>> Scott
 	private String[] args;
 	
 	public Evaluate(String[] arguments) {
 		args = arguments;
 	}
 	
+<<<<<<< HEAD
 	public boolean hashingEvaluate(NodeCollection nc, ArrayList<Column> grid) {
+=======
+	public void hashingEvaluate(NodeCollection nc, ArrayList<Column> grid) {
+>>>>>>> Scott
 		boolean correct = true;
 		for (int i = 1; i < args.length; i++) {
 			String[] arguments = args[i].split("\\s");   // arguments[0] is label, arguments[1] is cell number
@@ -31,6 +38,7 @@ public class Evaluate {
 			}
 		}		
 		if (correct) {
+<<<<<<< HEAD
 			LogicalPanelUi.setMessage(CORRECT, Color.Success);
 		} else {
 			LogicalPanelUi.setMessage("Incorrect; not all of the nodes were in the correct positions.", Color.Error);
@@ -39,6 +47,15 @@ public class Evaluate {
 	}
 	
 	public boolean heapEvaluate(NodeCollection nc, EdgeCollection ec) {
+=======
+			LogicalPanelUi.setMessage("Correct!", Color.Success);
+		} else {
+			LogicalPanelUi.setMessage("Incorrect; not all of the nodes were in the correct positions.", Color.Error);
+		}
+	}
+	
+	public void heapEvaluate(NodeCollection nc, EdgeCollection ec) {
+>>>>>>> Scott
 		boolean incorrect = true;
 		
 		String lateralResult = nc.getTraversal(3, ec.getEdges());
@@ -51,12 +68,20 @@ public class Evaluate {
 		if (incorrect) {
 			LogicalPanelUi.setMessage("Incorrect; make sure your edges and nodes are in the correct positions.", Color.Error);
 		} else {
+<<<<<<< HEAD
 			LogicalPanelUi.setMessage(CORRECT, Color.Success);
 		}
 		return !incorrect;
 	}
 	
 	public boolean traversalEvaluate(NodeCollection nc, EdgeCollection ec) {
+=======
+			LogicalPanelUi.setMessage("Correct!", Color.Success);
+		}
+	}
+	
+	public void traversalEvaluate(NodeCollection nc, EdgeCollection ec) {
+>>>>>>> Scott
 		boolean incorrect = true;
 		String preorderResult = nc.getTraversal(0, ec.getEdges());
 		String inorderResult = nc.getTraversal(1, ec.getEdges());
@@ -64,6 +89,7 @@ public class Evaluate {
 		for (int i = 0; i < args.length; i++) {
 			args[i] = args[i].replace(" ", "");
 			if (args[i].equalsIgnoreCase(preorderResult)) { 
+<<<<<<< HEAD
 				LogicalPanelUi.setMessage(CORRECT, Color.Success);
 				incorrect = false;
 				break;
@@ -77,12 +103,25 @@ public class Evaluate {
 				LogicalPanelUi.setMessage(CORRECT, Color.Success);
 				incorrect = false;
 				break;
+=======
+				LogicalPanelUi.setMessage("Correct!",Color.Success);
+				incorrect = false;
+			}
+			else if(args[i].equalsIgnoreCase(inorderResult)) {
+				LogicalPanelUi.setMessage("Correct!",Color.Success);
+				incorrect = false;
+			}
+			else if(args[i].equalsIgnoreCase(postorderResult)) {
+				LogicalPanelUi.setMessage("Correct!",Color.Success);
+				incorrect = false;
+>>>>>>> Scott
 			}
 		}
 		if (incorrect) {
 			LogicalPanelUi.setMessage("Incorrect! Your preorder traversal was: " + preorderResult + " and your inorder traversal was: " + inorderResult +"",Color.Error);
 		}
 		else {
+<<<<<<< HEAD
 			LogicalPanelUi.setMessage(CORRECT, Color.Success);
 		}
 		return !incorrect;
@@ -111,4 +150,11 @@ public class Evaluate {
 		LogicalPanelUi.setMessage(CORRECT, Color.Success);
 		return correct;
 	}
+=======
+			LogicalPanelUi.setMessage("Correct!",Color.Success);
+		}
+	}
+	
+	
+>>>>>>> Scott
 }
