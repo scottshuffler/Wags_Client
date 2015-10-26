@@ -111,29 +111,32 @@ public class NodeCollection implements IsSerializable
 		switch (traversalType) {
 		case PREORDER:
 			for (int i = 0; i < nodes.size(); i++) {
-				if (getNode(i).getTop() < root.getTop())
+				if (getNode(i).getTop() < root.getTop() && getNode(i).hasChildren())
 					root = getNode(i);
 			}
 			preorder(root);
 			break;
 		case INORDER:
 			for (int i = 0; i < nodes.size(); i++) {
-				if (getNode(i).getTop() < root.getTop())
+				if (getNode(i).getTop() < root.getTop() && getNode(i).hasChildren())
 					root = getNode(i);
 			}
 			inorder(root);
 			break;
 		case POSTORDER:
 			for (int i = 0; i < nodes.size(); i++) {
-				if (getNode(i).getTop() < root.getTop())
+				if (getNode(i).getTop() < root.getTop() && getNode(i).hasChildren())
 					root = getNode(i);
 			}
 			postorder(root);
 			break;
 		case LATERAL:
+			if (!root.hasChildren())
+				root = getNode(1);
 			for (int i = 0; i < nodes.size(); i++) {
-				if (getNode(i).getTop() < root.getTop())
+				if (getNode(i).getTop() < root.getTop() && getNode(i).hasChildren()) {
 					root = getNode(i);
+				}
 			}
 			lateral(root);
 			break;

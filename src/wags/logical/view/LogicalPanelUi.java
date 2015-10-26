@@ -113,8 +113,6 @@ public class LogicalPanelUi extends Composite {
 		
 		logProb = problem;
 		
-
-		
 		switch(logProb.genre) {
 		case "traversal":
 		case "hashing": 
@@ -129,7 +127,9 @@ public class LogicalPanelUi extends Composite {
 					+ "'cs.appstate.edu/wags/'. Thank you for your patience!");
 			Window.Location.replace("#problems&loc=code");
 			break;
+			
 		}
+		
 	}
 	
 	@UiHandler("backButton")
@@ -202,34 +202,9 @@ public class LogicalPanelUi extends Composite {
 		registerDragController(ec);
 		
 		if (logProb.genre.equals("hashing")) { // need to build grid system to drag nodes to
-			hashingBoxes.removeFromParent();
-			Row row = new Row();
-			for (int i = 0; i < Integer.parseInt(logProb.arguments.split(",")[0]); i++) {
-				if (i % 12 == 0) {
-					row = new Row();
-					row.setStyleName("hashing_row");
-					row.setVisible(true);
-					hashingBoxes.add(row);
-				}
-				Column col = new Column(ColumnSize.MD_1, new Label("" + i));
-				col.setStyleName("hashing_column");
-				row.add(col);
-				SimplePanel dropPanel = new SimplePanel();   // drop target for each cell
-				dropPanel.setPixelSize(50, 50);
-				dropPanel.getElement().getStyle()
-					.setProperty("margin", "2.5px"); // account for 40x40 node in 50x50 col
-				
-				// This line adds the dropPanel to the cell, making the cell appear to be a drop zone
-				col.add(dropPanel);
-				// Add column to grid ArrayList, for later evaluation
-				grid.add(col);
-				
-				// set drop controller to dropPanel
-				HashingDropController dropController = new HashingDropController(dropPanel);
-				NodeDragController.getInstance().registerDropController(dropController);
-			}
-			dragPanel.add(hashingBoxes);
-			hashingBoxes.setVisible(true);
+			buildHashingPanel();
+		} else if (logProb.genre.equals("radix")) {
+			buildRadixPanel();
 		}
 		
 
@@ -410,5 +385,40 @@ public class LogicalPanelUi extends Composite {
 	
 	public static boolean edgesRemovable() {
 		return logProb.edgesRemovable;
+	}
+	
+	private void buildHashingPanel() {
+		hashingBoxes.removeFromParent();
+		Row row = new Row();
+		for (int i = 0; i < Integer.parseInt(logProb.arguments.split(",")[0]); i++) {
+			if (i % 12 == 0) {
+				row = new Row();
+				row.setStyleName("hashing_row");
+				row.setVisible(true);
+				hashingBoxes.add(row);
+			}
+			Column col = new Column(ColumnSize.MD_1, new Label("" + i));
+			col.setStyleName("hashing_column");
+			row.add(col);
+			SimplePanel dropPanel = new SimplePanel();   // drop target for each cell
+			dropPanel.setPixelSize(50, 50);
+			dropPanel.getElement().getStyle()
+				.setProperty("margin", "2.5px"); // account for 40x40 node in 50x50 col
+			
+			// This line adds the dropPanel to the cell, making the cell appear to be a drop zone
+			col.add(dropPanel);
+			// Add column to grid ArrayList, for later evaluation
+			grid.add(col);
+			
+			// set drop controller to dropPanel
+			HashingDropController dropController = new HashingDropController(dropPanel);
+			NodeDragController.getInstance().registerDropController(dropController);
+		}
+		dragPanel.add(hashingBoxes);
+		hashingBoxes.setVisible(true);
+	}
+	
+	private void buildRadixPanel() {
+		
 	}
 }
