@@ -92,7 +92,10 @@ public class Evaluate {
 		boolean correct = true;
 		ArrayList<EdgeParent> clickedEdges = ec.getMSTClicked();
 		String edgeLabel = "";
-		
+		if (clickedEdges.size() != args.length) { // if not same number of args, don't bother checking
+			LogicalPanelUi.setMessage("Your MST is incorrect; make sure you're reaching every node", Color.Error);
+			return false;
+		}
 		for (int i = 0; i < args.length; i++) {
 			
 			try { 
