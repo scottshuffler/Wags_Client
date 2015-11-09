@@ -164,6 +164,7 @@ public class EdgeCollection implements IsSerializable {
 			if (LogicalPanelUi.getGenre() == "mst") 
 				eu.setWeight(temp[2]);
 			eu.drawEdge();
+
 			
 		}
 		

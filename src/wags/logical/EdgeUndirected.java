@@ -152,7 +152,6 @@ public class EdgeUndirected extends EdgeParent implements IsSerializable
 		ec.addEdgeToCanvas(line);
 		}	
 	}
-	
 	public void setWeight(String weight) {
 		super.setWeight(Integer.parseInt(weight));
 		weightLabel = new Label(weight);

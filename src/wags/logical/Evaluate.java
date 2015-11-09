@@ -47,6 +47,7 @@ public class Evaluate {
 	}
 	
 	public boolean heapEvaluate(NodeCollection nc, EdgeCollection ec) {
+
 		boolean incorrect = true;
 		
 		String lateralResult = nc.getTraversal(3, ec.getEdges());
@@ -171,6 +172,7 @@ public class Evaluate {
 	}
 	
 	public boolean traversalEvaluate(NodeCollection nc, EdgeCollection ec) {
+
 		boolean incorrect = true;
 		String preorderResult = nc.getTraversal(0, ec.getEdges());
 		String inorderResult = nc.getTraversal(1, ec.getEdges());
@@ -201,4 +203,5 @@ public class Evaluate {
 		}
 		return !incorrect;
 	}
+
 }

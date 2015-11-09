@@ -188,6 +188,7 @@ public class LogicalPanelUi extends Composite {
 			args = logProb.arguments.split(" ");
 			eval = new Evaluate(args);
 			evaluateButton.setEnabled(!eval.mstEvaluate(nc, ec));
+
 			break;
 		}
 	}
