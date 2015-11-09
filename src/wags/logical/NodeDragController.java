@@ -42,6 +42,11 @@ public class NodeDragController extends PickupDragController implements IsSerial
 	}
 	
 	@Override
+	public void previewDragEnd() throws VetoDragException {
+		super.previewDragEnd();
+	}
+	
+	@Override
 	public void dragEnd()
 	{
 		super.dragEnd();

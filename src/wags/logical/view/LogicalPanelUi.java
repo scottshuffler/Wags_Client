@@ -43,13 +43,15 @@ import wags.logical.EdgeCollection;
 import wags.logical.EdgeUndirected;
 import wags.logical.Evaluate;
 import wags.logical.GridNodeDropController;
-import wags.logical.HashingDropController;
 import wags.logical.Node;
 import wags.logical.NodeCollection;
 import wags.logical.NodeDragController;
 import wags.logical.NodeDropController;
 import wags.logical.NodeState;
+import wags.logical.PanelDropController;
 import wags.logical.Problem;
+import wags.logical.RadixState;
+import wags.logical.RadixState.State;
 import wags.LogicalProblem;
 
 /**
@@ -68,10 +70,12 @@ public class LogicalPanelUi extends Composite {
 	public AbsolutePanel dragPanel;
 	public ArrayList<Widget> itemsInPanel;
 	public NodeCollection nc;
+	public static RadixState state;
 	public String directions;
 	public String name;
 	public TextArea submitText;
-	private ArrayList<Column> grid = new ArrayList<Column>();;
+	private ArrayList<Column> grid = new ArrayList<Column>();
+	private SimplePanel[] radixDrops = new SimplePanel[10]; 
 	private static boolean isDrag = false;		// Boolean to find if drag controller exists
 	private LogicalMicrolab logMicro;
 	private LogicalPanel panel;
@@ -95,7 +99,9 @@ public class LogicalPanelUi extends Composite {
 	@UiField Button evaluateButton;
 	@UiField ComplexPanel layoutPanel;
 	@UiField Container hashingBoxes;
+	@UiField Container radixContain;
 	@UiField Heading title;
+	@UiField static Heading radixCounter;
 	@UiField Paragraph instructions;
 	@UiField static Paragraph message;
 	
@@ -119,6 +125,7 @@ public class LogicalPanelUi extends Composite {
 		case "heapInsert":
 		case "heapDelete":
 		case "mst":
+		case "radix":
 			initialize();			
 			break;
 		default:
@@ -127,9 +134,7 @@ public class LogicalPanelUi extends Composite {
 					+ "'cs.appstate.edu/wags/'. Thank you for your patience!");
 			Window.Location.replace("#problems&loc=code");
 			break;
-			
 		}
-		
 	}
 	
 	@UiHandler("backButton")
@@ -169,6 +174,16 @@ public class LogicalPanelUi extends Composite {
 		case "hashing":
 			evaluateButton.setEnabled(!eval.hashingEvaluate(nc, grid));				
 			break;
+		case "radix":
+			if (state == null) {
+				state = new RadixState();
+			}
+			int[] radixEvalPositions = new int[10];
+			for (int i = 0; i < 10; i++) {
+				radixEvalPositions[i] = radixDrops[i].getAbsoluteLeft();
+			}
+			evaluateButton.setEnabled(!eval.radixEvaluate(nc, radixEvalPositions, state));
+			break;
 		case "mst":
 			args = logProb.arguments.split(" ");
 			eval = new Evaluate(args);
@@ -182,6 +197,8 @@ public class LogicalPanelUi extends Composite {
 	public void initialize() {
 		
 		dragPanel = new AbsolutePanel();
+		dragPanel.getElement().getStyle().setProperty("min-height", "600px");
+		dragPanel.getElement().getStyle().setProperty("min-width", "600px");
 		itemsInPanel = new ArrayList<Widget>();
 		canvas = new DrawingArea(Window.getClientWidth(), Window.getClientHeight());
 		boundaryPanel.add(dragPanel);
@@ -208,9 +225,6 @@ public class LogicalPanelUi extends Composite {
 		
 
 		dragPanel.add(canvas);
-		
-		dragPanel.getElement().getStyle().setProperty("min-height", "600px");
-		dragPanel.getElement().getStyle().setProperty("min-width", "600px");
 		canvas.getElement().getStyle().setProperty("margin", "0px");
 		
 		createPanel();
@@ -295,7 +309,7 @@ public class LogicalPanelUi extends Composite {
 	}
 	
 	public void registerDragController(EdgeCollection ec) {
-		if (!logProb.genre.equals("hashing"))
+		if (!logProb.genre.equals("hashing") && !logProb.genre.equals("radix"))
 		{
 			NodeDragController.setFields(dragPanel, true, ec);
 			NodeDropController.setFields(dragPanel, ec);
@@ -400,7 +414,7 @@ public class LogicalPanelUi extends Composite {
 			col.setStyleName("hashing_column");
 			row.add(col);
 			SimplePanel dropPanel = new SimplePanel();   // drop target for each cell
-			dropPanel.setPixelSize(50, 50);
+			dropPanel.setPixelSize(40, 40);
 			dropPanel.getElement().getStyle()
 				.setProperty("margin", "2.5px"); // account for 40x40 node in 50x50 col
 			
@@ -410,7 +424,7 @@ public class LogicalPanelUi extends Composite {
 			grid.add(col);
 			
 			// set drop controller to dropPanel
-			HashingDropController dropController = new HashingDropController(dropPanel);
+			PanelDropController dropController = new PanelDropController(dropPanel);
 			NodeDragController.getInstance().registerDropController(dropController);
 		}
 		dragPanel.add(hashingBoxes);
@@ -418,6 +432,56 @@ public class LogicalPanelUi extends Composite {
 	}
 	
 	private void buildRadixPanel() {
+		radixContain.removeFromParent();
+		int tenth = (int)((Window.getClientWidth() * .47) * .1);
+		for (int i = 0; i < 10; i++) {
+			Label tmp = new Label("" + i);
+			tmp.getElement().getStyle().setProperty("margin", "0"); // fix centering issues
+			Column col = new Column(ColumnSize.LG_1, tmp);
+			radixContain.add(col);
+			col.setStyleName("radix_column");
+			col.setVisible(true);
+			for (int j = 0; j < 10; j++) {
+				
+				SimplePanel dropPanel = new SimplePanel();
+				dropPanel.setPixelSize(40, 40);
+				
+				// set how much space is necessary for alignment - tenth of panel (not counting node)
+				int alignOffset = (tenth > 40) ? ((tenth - 40) / 2) : 60; 
+				
+				int left = (int)((tenth * i) + alignOffset);
+				
+				// for the next line, we add the dropTarget to the dragPanel at a location of 
+				// 1/10th the width of the total dragPanel and a 1/4th offset (to centre the node)
+				dragPanel.add(dropPanel, left, (j * 50) + 100 );
+				PanelDropController dropController = new PanelDropController(dropPanel);
+				NodeDragController.getInstance().registerDropController(dropController);
+				
+				// forgot to make the dequeuing drop targets
+				if (j == 0) {
+					dropPanel = new SimplePanel();
+					dropPanel.setPixelSize(40, 40);
+					dragPanel.add(dropPanel, left, 5);
+					dropController = new PanelDropController(dropPanel);
+					NodeDragController.getInstance().registerDropController(dropController);
+					radixDrops[i] = dropPanel;
+				}
+			}
 		
+		}
+		
+		dragPanel.add(radixContain);
+		radixContain.setVisible(true);
+		
+		radixCounter.setText("Current Position: Ones");
+		radixCounter.setVisible(true);
+	}
+	
+	public static void incrementRadixCounter() {
+		if (state.getCurrentState() == State.Tens) {
+			radixCounter.setText("Current Position: Tens");
+		} else if (state.getCurrentState() == State.Hundreds) {
+			radixCounter.setText("Current Position: Hundreds");
+		}
 	}
 }
