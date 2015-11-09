@@ -8,6 +8,7 @@ import wags.magnet.view.RefrigeratorMagnet;
 
 import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class GetMagnetProblemCommand extends AbstractServerCall {
@@ -27,7 +28,9 @@ public class GetMagnetProblemCommand extends AbstractServerCall {
 		}else{
 			WEStatus status = new WEStatus(response);
 			MagnetProblem magProblem = (MagnetProblem) status.getObject();
+			//Window.alert("No problems");
 			History.newItem(Tokens.MAGNETPROBLEM + Tokens.DELIM + "id=" + magProblem.id);
+			Window.Location.reload();
 		}
 	}
 

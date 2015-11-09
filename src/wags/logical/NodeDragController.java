@@ -1,9 +1,13 @@
 package wags.logical;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+
+import wags.logical.view.LogicalPanelUi;
+import wags.logical.view.LogicalPanelUi.Color;
 
 public class NodeDragController extends PickupDragController implements IsSerializable
 {
@@ -38,10 +42,18 @@ public class NodeDragController extends PickupDragController implements IsSerial
 	}
 	
 	@Override
+	public void previewDragEnd() throws VetoDragException {
+		super.previewDragEnd();
+	}
+	
+	@Override
 	public void dragEnd()
 	{
 		super.dragEnd();
-		ec.updateEdgeDrawings();
+		LogicalPanelUi.setMessage("", Color.None);
 	}
 	
+	public void reset() {
+		dc = null;		
+	}
 }

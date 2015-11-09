@@ -15,9 +15,6 @@ import wags.logical.view.LogicalPanelUi;
 import wags.logical.view.LogicalPanelUi.Color;
 
 public class Node {
-
-	public static final int LEFTOFFSET = 20;
-	public static final int TOPOFFSET = 20;
 	
 	public static final int CLICKTIME = 100;
 	private static final int OFFSET = 20;
@@ -52,15 +49,11 @@ public class Node {
 	}
 	
 	public void setTop(int top) {
-		this.top = top;
+		this.top = top + OFFSET; // add in offset to account for center of node
 	}
 	
 	public void setLeft(int left) {
-		this.left = left;
-	}
-	
-	public void setState(int state) {
-		
+		this.left = left + OFFSET; // add in offset to account for center of node
 	}
 	
 	@Override
@@ -82,6 +75,17 @@ public class Node {
 		return false;
 	}
 	
+	public ArrayList<EdgeParent> getEdges() {
+		ArrayList<EdgeParent> edges = ec.getEdges();
+		ArrayList<EdgeParent> nodeEdges = new ArrayList<EdgeParent>();
+		for (int i = 0; i < edges.size(); i++) {
+			if ((edges.get(i).getN1() == this || edges.get(i).getN2() == this)) {
+				nodeEdges.add(edges.get(i));
+			}
+		}
+		return nodeEdges;
+	}
+	
 	public NodeState getState() {
 		return ns;
 	}
@@ -99,7 +103,7 @@ public class Node {
 			// Looks bad, but isn't: Get the Node's exact pixel position off the screen, subtract the 
 			// amount its parent (canvas) is offset from the top of the screen, and add 20 for half the
 			// height of the node. Easy.
-			return label.getElement().getAbsoluteTop() - label.getElement().getOffsetParent().getAbsoluteTop() + TOPOFFSET;
+			return label.getElement().getAbsoluteTop() - label.getElement().getOffsetParent().getAbsoluteTop();
 		}
 		return top;
 	}
@@ -107,7 +111,7 @@ public class Node {
 	public int getLeft() {
 		if (left == 0) {
 			// See above comment for getTop()
-			return label.getElement().getAbsoluteLeft() - label.getElement().getOffsetParent().getAbsoluteLeft() + LEFTOFFSET;
+			return label.getElement().getAbsoluteLeft() - label.getElement().getOffsetParent().getAbsoluteLeft();
 		}
 		return left;
 	}
@@ -196,6 +200,10 @@ public class Node {
 		this.ec = ec;
 	}
 	
+	public EdgeCollection getEdgeCollection() {
+		return ec;
+	}
+	
 	public NodeCollection getNodeCollection() {
 		return nc;
 	}
@@ -211,16 +219,27 @@ public class Node {
 	}
 
 	public Node getRightChild() {
-		return rightChild;
+		if (rightChild != null) {
+			return rightChild;
+		} else return null;
 	}
 	
 	public void setChild(Node childNode) {
-		if (childNode.getLeft() < this.getLeft()) {
-			setLeftChild(childNode);
+		if (childNode != null) {
+			if (childNode.getLeft() < this.getLeft()) {
+				setLeftChild(childNode);
+			}
+			else {
+				setRightChild(childNode);
+			}
+		} else {
+			resetChildren();
 		}
-		else {
-			setRightChild(childNode);
-		}
+	}
+	
+	private void resetChildren() {
+		setLeftChild(null);
+		setRightChild(null);
 	}
 
 	public void setRightChild(Node rightChild) {
@@ -241,6 +260,20 @@ public class Node {
 
 	public void setParent(Node parent) {
 		this.parent = parent;
+	}
+	
+	// Returns true if there is an MST Selected line other than the param line
+	public boolean MSTSelected(Line line) {		
+		ArrayList<EdgeParent> edges = getEdges();
+		
+		for (int i = 0; i < edges.size(); i++) {
+			if (line != edges.get(i).getLine()) {
+				if (edges.get(i).getLine().getStrokeColor().equals("#27f500")) 
+					return true;
+			}
+		}
+		
+		return false;
 	}
 }	
 
