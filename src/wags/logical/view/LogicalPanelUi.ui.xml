@@ -91,6 +91,16 @@
 		text-align: center;
 		width: 80%;
 	}
+	
+	.radixContain {
+		height: 100%;
+		margin-top: 75px;
+		min-width: 600px;
+		min-height: 600px;
+		padding-right: 0;
+		padding-left: 0;
+		width: 100%;
+	}
 
 	.rowContain {
 		margin-top: 200px;
@@ -115,6 +125,7 @@
 	       		<g:AbsolutePanel styleName="{style.directionsContent}">
 	       		    <new:Heading size="H4" ui:field="title" />
 	       		    <b:Paragraph ui:field="instructions" />
+	       			<new:Heading size="H4" ui:field="radixCounter" visible="false" />
 	       		</g:AbsolutePanel>
 	    	</g:ScrollPanel>
 		</b:FluidRow>	
@@ -133,8 +144,8 @@
 			<b:Paragraph ui:field="message" styleName="{style.message}" />
 	    </b:FluidRow>
 	    <g:AbsolutePanel ui:field="boundaryPanel"></g:AbsolutePanel>
-    		<new:Container styleName="{style.rowContain}" ui:field="hashingBoxes" fluid="true" visible="false">
-	        </new:Container>
+    		<new:Container styleName="{style.radixContain}" ui:field="radixContain" fluid="true" visible="false"></new:Container>
+    		<new:Container styleName="{style.rowContain}" ui:field="hashingBoxes" fluid="true" visible="false"></new:Container>
     </g:FlowPanel>
        </b:Column>
 </ui:UiBinder> 
