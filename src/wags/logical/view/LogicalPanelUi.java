@@ -96,9 +96,9 @@ public class LogicalPanelUi extends Composite {
 	@UiField AbsolutePanel boundaryPanel;
 	@UiField Button backButton;
 	@UiField Button resetButton;
-	@UiField Button addButton;
+	@UiField public static Button addButton;
 	@UiField Button removeButton;
-	@UiField Button swapButton;
+	@UiField public static Button swapButton;
 	@UiField Button evaluateButton;
 	@UiField ComplexPanel layoutPanel;
 	@UiField AbsolutePanel dequeueDrop;
@@ -160,11 +160,13 @@ public class LogicalPanelUi extends Composite {
 	void handleAddClick(ClickEvent e) { 
 		if (addButton.getText().equals("Cancel")) {
 			addButton.setText("Add Edge");
-			NodeState.toggleAdd();
+			NodeState.swap = false;
+			NodeState.manual = false;
 			setMessage("", Color.None);
 		} else {
 			addButton.setText("Cancel");
-			NodeState.toggleAdd();
+			NodeState.swap = false;
+			NodeState.manual = true;
 			setMessage("Click the first node of the edge to add", Color.Notification);
 		}
 	}
@@ -178,11 +180,13 @@ public class LogicalPanelUi extends Composite {
 	void handleSwapClick(ClickEvent e) {
 		if (swapButton.getText().equals("Cancel")) {
 			swapButton.setText("Swap Nodes");
-			NodeState.toggleSwap();
+			NodeState.manual = false;
+			NodeState.swap = false;
 			setMessage("", Color.None);
 		} else {
 			swapButton.setText("Cancel");
-			NodeState.toggleSwap();
+			NodeState.manual = false;
+			NodeState.swap = true;
 			setMessage("Click the first node that you would like to swap", Color.Notification);
 		}
 	}
