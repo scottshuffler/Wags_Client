@@ -11,6 +11,7 @@ import wags.ProxyFramework.AbstractServerCall;
 import wags.ProxyFramework.AddMagnetLinkageCommand;
 import wags.ProxyFramework.DeleteMagnetExerciseCommand;
 import wags.ProxyFramework.GetFileTimeCommand;
+import wags.ProxyFramework.GetMagnetFiles;
 import wags.ProxyFramework.GetMagnetGroupsCommand;
 import wags.ProxyFramework.GetMagnetProblemCommand;
 import wags.ProxyFramework.GetMagnetsByGroupCommand;
@@ -243,6 +244,7 @@ public class ProblemCreationPanel extends Composite implements ProblemCreationPa
 						finalTypeTxtArea,forLoop1TextArea, forLoop2TextArea, forLoop3TextArea, ifsTextArea, whilesTextArea, returnsTextArea,
 						assignmentsVarTextArea, assignmentsValTextArea, ifAllowed, elseAllowed, elseIfAllowed, forAllowed, whileAllowed, 
 						returnAllowed, assignmentAllowed, btnBasicProblem, btnAdvancedProblem, btnPrologBasicProblem, btnCBasicProblem, btnPythonBasicProblem);
+				
 				AbstractServerCall timeCmd = new GetFileTimeCommand(lstLoadExercise.getItemText(lstLoadExercise.getSelectedIndex()), uploadStamp, helperStamp);
 			    timeCmd.sendRequest();
 				// dear god help me please
@@ -280,6 +282,7 @@ public class ProblemCreationPanel extends Composite implements ProblemCreationPa
 			      }
 			    };
 			    t.schedule(160);
+			    
 			}
 		});
 		

@@ -33,6 +33,7 @@
 
 	.percentage {
 		height:100%;
+		overflow-y: auto;
 	}
 	
 	</ui:style>
