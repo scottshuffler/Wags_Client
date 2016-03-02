@@ -77,7 +77,7 @@ public class LogicalPanelUi extends Composite {
 	private ArrayList<Column> grid = new ArrayList<Column>();
 	private static PanelDropController[] radixDrops = new PanelDropController[90];
 	private static PanelDropController[] dequeueDrops = new PanelDropController[10];
-	private SimplePanel[] dequeueLocs = new SimplePanel[10];
+	public static SimplePanel[] dequeueLocs = new SimplePanel[10];
 	private static boolean isDrag = false;		// Boolean to find if drag controller exists
 	private LogicalMicrolab logMicro;
 	private LogicalPanel panel;
@@ -103,7 +103,7 @@ public class LogicalPanelUi extends Composite {
 	@UiField ComplexPanel layoutPanel;
 	@UiField AbsolutePanel dequeueDrop;
 	@UiField Container hashingBoxes;
-	@UiField Container radixContain;
+	@UiField static Container radixContain;
 	@UiField AbsolutePanel radixDrop;
 	@UiField Heading title;
 	@UiField static Heading radixCounter;
@@ -131,6 +131,7 @@ public class LogicalPanelUi extends Composite {
 		case "heapDelete":
 		case "mst":
 		case "radix":
+		case "simplepartition":
 			initialize();			
 			break;
 		default:
@@ -233,7 +234,8 @@ public class LogicalPanelUi extends Composite {
 		boundaryPanel.add(dragPanel);
 		removeButton.setVisible(logProb.edgesRemovable);
 		addButton.setVisible(logProb.edgesRemovable);
-		swapButton.setVisible(logProb.genre.equals("traversal"));
+		swapButton.setVisible(logProb.genre.equals("traversal") || logProb.genre.equals("heapInsert") 
+				|| logProb.genre.equals("headDelete"));
 		setInstructions(logProb.directions);
 		setTitle(logProb.title);
 		dragPanel.setStyleName("drag_panel");
@@ -248,9 +250,11 @@ public class LogicalPanelUi extends Composite {
 		registerDragController(ec);
 		
 		if (logProb.genre.equals("hashing")) { // need to build grid system to drag nodes to
-			buildHashingPanel();
+			LogicalProblemCreator.buildHashingPanel(hashingBoxes, logProb, grid, dragPanel);
 		} else if (logProb.genre.equals("radix")) {
-			buildRadixPanel();
+			LogicalProblemCreator.buildRadixPanel(dragPanel, radixDrop, dequeueDrop);
+		} else if (logProb.genre.equals("simplepartition")) {
+			LogicalProblemCreator.buildSimplePartitionPanel(hashingBoxes, logProb, dragPanel);
 		}
 		
 
@@ -300,8 +304,9 @@ public class LogicalPanelUi extends Composite {
 			}
 			wags.logical.view.LogicalProblem.setEdgePairs(edges);
 			wags.logical.view.LogicalProblem.setEdgeCollection(ec);
-		}
-		else {
+		} else if (logProb.genre == "simplepartition") {
+			
+		} else {
 			for (int i = 0; i < nc.size(); i++) {
 				int left = 5 + (50 * i);
 				int top = 5;
@@ -436,95 +441,6 @@ public class LogicalPanelUi extends Composite {
 	
 	public static PanelDropController[] getRadixDrops() {
 		return radixDrops;
-	}
-	
-	private void buildHashingPanel() {
-		hashingBoxes.removeFromParent();
-		Row row = new Row();
-		for (int i = 0; i < Integer.parseInt(logProb.arguments.split(",")[0]); i++) {
-			if (i % 12 == 0) {
-				row = new Row();
-				row.setStyleName("hashing_row");
-				row.setVisible(true);
-				hashingBoxes.add(row);
-			}
-			Column col = new Column(ColumnSize.MD_1, new Label("" + i));
-			col.setStyleName("hashing_column");
-			row.add(col);
-			SimplePanel dropPanel = new SimplePanel();   // drop target for each cell
-			dropPanel.setPixelSize(40, 40);
-			dropPanel.getElement().getStyle()
-				.setProperty("margin", "2.5px"); // account for 40x40 node in 50x50 col
-			
-			// This line adds the dropPanel to the cell, making the cell appear to be a drop zone
-			col.add(dropPanel);
-			// Add column to grid ArrayList, for later evaluation
-			grid.add(col);
-			
-			// set drop controller to dropPanel
-			PanelDropController dropController = new PanelDropController(dropPanel);
-			NodeDragController.getInstance().registerDropController(dropController);
-		}
-		dragPanel.add(hashingBoxes);
-		hashingBoxes.setVisible(true);
-	}
-	
-	private void buildRadixPanel() {
-		
-		state = new RadixState();
-		
-		radixContain.removeFromParent();
-		int tenth = (int)((Window.getClientWidth() * .47) * .1);
-		for (int i = 0; i < 10; i++) {
-			Label tmp = new Label("" + i);         // column number
-			tmp.getElement().getStyle().setProperty("margin", "0"); // fix centering issues
-			Column col = new Column(ColumnSize.LG_1, tmp);
-			radixDrop.add(col);
-			col.setStyleName("radix_column");
-			col.setVisible(true);
-			
-			for (int j = 0; j < 9; j++) {
-				
-				// set how much space is necessary for alignment - tenth of panel (not counting node)
-				int alignOffset = (tenth > 40) ? ((tenth - 40) / 2) : 60; 
-				
-				int left = (int)((tenth * i) + alignOffset);
-				
-				// if the droptarget is for the dequeuing operation rather than enqueuing
-				if (j == 0) {
-					SimplePanel dropPanel = new SimplePanel();
-					dropPanel.setPixelSize(40, 40);
-					dequeueDrop.add(dropPanel, left, 5);
-					PanelDropController dropController = new PanelDropController(dropPanel);
-					// we don't register dequeuing drop controllers, however; wait until it's
-					// time to dequeue
-					dequeueLocs[i] = dropPanel;
-					dequeueDrops[i] = dropController;
-					radixDrops[i * 9] = dropController;
-				}
-				
-				SimplePanel dropPanel = new SimplePanel();
-				dropPanel.setPixelSize(40, 40);
-					
-				// for the next line, we add the dropTarget to the dragPanel at a location of 
-				// 1/10th the width of the total dragPanel and a 1/4th offset (to centre the node)
-				radixDrop.add(dropPanel, left, (j * 50));
-				PanelDropController dropController = new PanelDropController(dropPanel);
-				NodeDragController.getInstance().registerDropController(dropController);
-				int loc = (i * 9) + j;
-				radixDrops[loc] = dropController;
-		
-			}
-			
-		}
-		
-		radixContain.add(dequeueDrop);
-		radixContain.add(radixDrop);
-		dragPanel.add(radixContain);
-		radixContain.setVisible(true);
-		
-		radixCounter.setText("Current Position: Ones");
-		radixCounter.setVisible(true);
 	}
 	
 	public static void incrementRadixCounter() {

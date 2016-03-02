@@ -20,15 +20,12 @@ public class NodeDragController extends PickupDragController implements IsSerial
 	private static AbsolutePanel boundaryPanel; 
 	private static EdgeCollection ec;
 	private static boolean allowDroppingOnBoundaryPanel;
-	private static ArrayList<DropController> drops;
 	private Widget currentDropController;
 	
 	public static NodeDragController getInstance()
 	{
 		if (dc == null)
 			dc = new NodeDragController(boundaryPanel, allowDroppingOnBoundaryPanel);
-		if (drops == null)
-			drops = new ArrayList<DropController>();
 			
 		dc.setBehaviorDragStartSensitivity(1); // make double clicking work
 		
@@ -38,7 +35,6 @@ public class NodeDragController extends PickupDragController implements IsSerial
 	private NodeDragController(AbsolutePanel boundaryPanel, boolean allowDroppingOnBoundaryPanel)
 	{
 		super(boundaryPanel, allowDroppingOnBoundaryPanel);
-		drops = new ArrayList<DropController>();
 	}
 	
 	public static void setFields(AbsolutePanel theBoundaryPanel,
@@ -58,19 +54,16 @@ public class NodeDragController extends PickupDragController implements IsSerial
 	@Override 
 	public void registerDropController(DropController dropController) {
 		super.registerDropController(dropController);
-		drops.add(dropController);
 	}
 	
 	@Override 
 	public void unregisterDropController(DropController dropController) {
 		super.unregisterDropController(dropController);
-		drops.remove(dropController);
 	}
 	
 	@Override
 	public void unregisterDropControllers() {
 		super.unregisterDropControllers();
-		drops.clear();
 	}
 	
 	@Override
@@ -84,10 +77,6 @@ public class NodeDragController extends PickupDragController implements IsSerial
 	{
 		super.dragEnd();
 		LogicalPanelUi.setMessage("", Color.None);
-	}
-	
-	public static ArrayList<DropController> getDropControllers() {
-		return drops;
 	}
 	
 	public Widget getLastDropController() {

@@ -1,14 +1,7 @@
 package wags.logical;
 
-import java.util.ArrayList;
-
 import wags.logical.view.LogicalPanelUi;
 import wags.logical.view.LogicalPanelUi.Color;
-import wags.logical.view.LogicalProblem;
-
-import com.allen_sauer.gwt.dnd.client.drop.DropController;
-
-import com.google.gwt.user.client.Window;
 
 /**
  * 
@@ -123,14 +116,15 @@ public class NodeState extends NodeCollection {
 	}
 	
 	public void swapNodes(Node toSwap) {
-		ArrayList<DropController> drops = NodeDragController.getDropControllers();
-		for (DropController i : drops) {
-			Window.alert(i.getDropTarget().toString());
-		}
 		
-		LogicalPanelUi.setMessage("Swapping nodes: " + node.getLabel().getText() 
-				+ " and " + toSwap.getLabel().getText(), Color.Notification);
+		
+		String temp = toSwap.getLabel().getText();
+		toSwap.getLabel().setText(node.getLabel().getText());
+		node.getLabel().setText(temp);
 		toSwap.getState().notClicked();
+		
+		LogicalPanelUi.setMessage("Swapped nodes: " + node.getLabel().getText() 
+				+ " and " + toSwap.getLabel().getText(), Color.Notification);
 		
 		LogicalPanelUi.swapButton.setText("Swap Nodes");
 		toggleSwap(false);
