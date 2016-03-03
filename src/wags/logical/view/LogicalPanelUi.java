@@ -219,6 +219,9 @@ public class LogicalPanelUi extends Composite {
 			eval = new Evaluate(args);
 			evaluateButton.setEnabled(!eval.mstEvaluate(nc, ec));
 			break;
+		case "simplepartition":
+			evaluateButton.setEnabled(!eval.simplePartitionEvaluate(LogicalProblemCreator.cols));
+			break;
 		}
 	}
 	

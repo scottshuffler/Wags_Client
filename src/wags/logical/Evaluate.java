@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import org.gwtbootstrap3.client.ui.Column;
 
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import wags.logical.RadixState;
 import wags.logical.RadixState.State;
@@ -223,5 +225,33 @@ public class Evaluate {
 			LogicalPanelUi.setMessage(CORRECT, Color.Success);
 		}
 		return !incorrect;
+	}
+	
+	public boolean simplePartitionEvaluate(ArrayList<Column> cols) {
+		boolean pointersJoined = false;
+		int num = -1;
+		
+		for (Column col : cols) {
+			if (col.getWidgetCount() > 3) 
+				pointersJoined = true;
+			int numcheck = Integer.parseInt(((Label) ((SimplePanel) col.getWidget(1)).getWidget()).getText());
+			
+			// if previous one is not negative, this one should not be negative either
+			if (num > 0 && numcheck < 0) {
+				String error = "Incorrect. Remember that all negatives should be to the left of all positives";
+				LogicalPanelUi.setMessage(error, Color.Error);
+				return false;
+			}
+			num = numcheck;
+		}
+		
+		if (pointersJoined) {
+			LogicalPanelUi.setMessage(CORRECT, Color.Success);
+			return true;
+		} else {
+			String error = "Remember that partitioning does not finish until the pointers 'cross-over' or become equal";
+			LogicalPanelUi.setMessage(error, Color.Error);
+			return false;
+		}
 	}
 }

@@ -136,14 +136,14 @@
 		</b:FluidRow>	
 		<b:FluidRow styleName="{style.allButtonPanel}">
 	    	<b:FluidRow styleName="{style.buttonPanelLeft}">
-	        	<g:Button ui:field="backButton" styleName="{style.smButton}" height="28px">Back</g:Button>
-	        	<g:Button ui:field="resetButton" styleName="{style.smButton}" height="28px">Reset</g:Button>
+	        	<g:Button ui:field="backButton" styleName="btn btn-small {style.smButton}" height="28px">Back</g:Button>
+	        	<g:Button ui:field="resetButton" styleName="btn btn-small {style.smButton}" height="28px">Reset</g:Button>
 	    	</b:FluidRow>
 	    	<b:FluidRow styleName="{style.buttonPanelRight}">
-	      		<g:Button ui:field="addButton" styleName="{style.smButton}" height="28px">Add Edge</g:Button>
-	      		<g:Button ui:field="removeButton" styleName="{style.smButton}" height="28px">Remove Edge</g:Button>
-	      		<g:Button ui:field="swapButton" styleName="{style.smButton}" height="28px">Swap Nodes</g:Button>
-	       		<g:Button ui:field="evaluateButton" styleName="{style.lgButton}" height="28px">Evaluate</g:Button>
+	      		<g:Button ui:field="addButton" styleName="btn btn-small {style.smButton}" height="28px">Add Edge</g:Button>
+	      		<g:Button ui:field="removeButton" styleName="btn btn-small {style.smButton}" height="28px">Remove Edge</g:Button>
+	      		<g:Button ui:field="swapButton" styleName="btn btn-small {style.smButton}" height="28px">Swap Nodes</g:Button>
+	       		<g:Button ui:field="evaluateButton" styleName="btn btn-large {style.lgButton}" height="28px">Evaluate</g:Button>
 	   		</b:FluidRow>
 	    </b:FluidRow>
 	    <b:FluidRow>
