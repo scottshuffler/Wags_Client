@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import org.gwtbootstrap3.client.ui.Column;
 
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import wags.logical.RadixState;
 import wags.logical.RadixState.State;
@@ -14,9 +16,6 @@ import wags.logical.view.LogicalPanelUi.Color;
 
 public class Evaluate {
 
-	private final int ONES = 1;
-	private final int TENS = 10;
-	private final int HUNDREDS = 100;
 	private final String CORRECT = "Correct! Please click reset if you'd like to try again.";
 	private final String INCDEQUEUE = "You have dequeued in the wrong order. "
 			+ "Remember to dequeue the buckets from lowest number to highest number, top to bottom.";
@@ -108,7 +107,7 @@ public class Evaluate {
 		
 		switch (state.getCurrentState()) {
 		case Ones:
-			state.advance(checkRadix(ONES, nc, positions));
+			state.advance(checkRadix(3, nc, positions));
 			break;
 		case DOnes:
 			if (state.advance(checkDequeue(3, nc, positions))) {
@@ -116,7 +115,7 @@ public class Evaluate {
 			}
 			break;
 		case Tens:
-			state.advance(checkRadix(TENS, nc, positions));
+			state.advance(checkRadix(4, nc, positions));
 			break;
 		case DTens:
 			if (state.advance(checkDequeue(4, nc, positions))) {
@@ -124,7 +123,7 @@ public class Evaluate {
 			}
 			break;
 		case Hundreds:
-			state.advance(checkRadix(HUNDREDS, nc, positions));
+			state.advance(checkRadix(5, nc, positions));
 			break;
 		case DHundreds:
 			if (state.advance(checkDequeue(5, nc, positions))) {
@@ -154,15 +153,41 @@ public class Evaluate {
 		return true;
 	}
 	
-	private boolean checkRadix(int radix, NodeCollection nc, int[] positions) {
+	private boolean checkRadix(int argNum, NodeCollection nc, int[] positions) {
+		String[] checkPos = args[argNum].split(" ");
+		int radix = 1;
+		
+		if (argNum == 4) 
+			radix = 10;
+		else if (argNum == 5)
+			radix = 100;
 		
 		for (int i = 0; i < nc.size(); i++) {
 			int num = Integer.parseInt(nc.getNode(i).toString());
 			num = ((num / radix) % 10);
 			if (nc.getNode(i).getLabel().getAbsoluteLeft() != positions[num]) {
-				LogicalPanelUi.setMessage("The node " + nc.getNode(i).toString() 
+				LogicalPanelUi.setMessage("The node " + nc.getNode(i).toString()
 						+ " is not in the correct bucket.", Color.Error);
 				return false;
+			} 
+		}
+		
+		// Logic for checking position inside of buckets
+		for (int i = 0; i < 10; i++) {
+			ArrayList<String> withNum = new ArrayList<String>();
+			for (String str : checkPos) {
+				if (((Integer.parseInt(str) / radix) % 10) == i) {
+					withNum.add(str);
+				}
+			}
+			for (int j = 0; j < withNum.size() - 1; j++) {
+				if (nc.getNodeByLabelText(withNum.get(j)).getLabel().getAbsoluteTop() >
+						nc.getNodeByLabelText(withNum.get(j + 1)).getLabel().getAbsoluteTop()) {
+					LogicalPanelUi.setMessage("The node " + withNum.get(j) + " is not in the correct place in its column. Check the order " 
+					+ "of each radix column and make sure you place the nodes as you come to them.", Color.Error);
+					return false;
+					
+				}
 			}
 		}
 		
@@ -200,5 +225,33 @@ public class Evaluate {
 			LogicalPanelUi.setMessage(CORRECT, Color.Success);
 		}
 		return !incorrect;
+	}
+	
+	public boolean simplePartitionEvaluate(ArrayList<Column> cols) {
+		boolean pointersJoined = false;
+		int num = -1;
+		
+		for (Column col : cols) {
+			if (col.getWidgetCount() > 3) 
+				pointersJoined = true;
+			int numcheck = Integer.parseInt(((Label) ((SimplePanel) col.getWidget(1)).getWidget()).getText());
+			
+			// if previous one is not negative, this one should not be negative either
+			if (num > 0 && numcheck < 0) {
+				String error = "Incorrect. Remember that all negatives should be to the left of all positives";
+				LogicalPanelUi.setMessage(error, Color.Error);
+				return false;
+			}
+			num = numcheck;
+		}
+		
+		if (pointersJoined) {
+			LogicalPanelUi.setMessage(CORRECT, Color.Success);
+			return true;
+		} else {
+			String error = "Remember that partitioning does not finish until the pointers 'cross-over' or become equal";
+			LogicalPanelUi.setMessage(error, Color.Error);
+			return false;
+		}
 	}
 }
